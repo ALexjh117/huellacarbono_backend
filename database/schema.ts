@@ -7,19 +7,67 @@
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
+export class ActividadSchema extends BaseModel {
+  static $columns = ['descripcion', 'estado', 'fechaCreacion', 'idActividad', 'idProceso', 'nombre'] as const
+  $columns = ActividadSchema.$columns
+  @column()
+  declare descripcion: string | null
+  @column()
+  declare estado: boolean
+  @column.dateTime()
+  declare fechaCreacion: DateTime
+  @column({ isPrimary: true })
+  declare idActividad: bigint | number
+  @column()
+  declare idProceso: bigint | number
+  @column()
+  declare nombre: string
+}
+
+export class AlcanceEmisionSchema extends BaseModel {
+  static $columns = ['codigo', 'descripcion', 'estado', 'idAlcance', 'nombre'] as const
+  $columns = AlcanceEmisionSchema.$columns
+  @column()
+  declare codigo: string
+  @column()
+  declare descripcion: string | null
+  @column()
+  declare estado: boolean
+  @column({ isPrimary: true })
+  declare idAlcance: number
+  @column()
+  declare nombre: string
+}
+
+export class AuditoriaSchema extends BaseModel {
+  static $columns = ['accion', 'direccionIp', 'entidad', 'fecha', 'idAuditoria', 'idEntidad', 'idUsuario', 'modulo', 'userAgent', 'valorAnterior', 'valorNuevo'] as const
+  $columns = AuditoriaSchema.$columns
+  @column()
+  declare accion: string
+  @column()
+  declare direccionIp: string | null
+  @column()
+  declare entidad: string
+  @column.dateTime()
+  declare fecha: DateTime
+  @column({ isPrimary: true })
+  declare idAuditoria: bigint | number
+  @column()
+  declare idEntidad: bigint | number | null
+  @column()
+  declare idUsuario: bigint | number | null
+  @column()
+  declare modulo: string
+  @column()
+  declare userAgent: string | null
+  @column()
+  declare valorAnterior: any | null
+  @column()
+  declare valorNuevo: any | null
+}
+
 export class AuthAccessTokenSchema extends BaseModel {
-  static $columns = [
-    'abilities',
-    'createdAt',
-    'expiresAt',
-    'hash',
-    'id',
-    'lastUsedAt',
-    'name',
-    'tokenableId',
-    'type',
-    'updatedAt',
-  ] as const
+  static $columns = ['abilities', 'createdAt', 'expiresAt', 'hash', 'id', 'lastUsedAt', 'name', 'tokenableId', 'type', 'updatedAt'] as const
   $columns = AuthAccessTokenSchema.$columns
   @column()
   declare abilities: string
@@ -36,11 +84,544 @@ export class AuthAccessTokenSchema extends BaseModel {
   @column()
   declare name: string | null
   @column()
-  declare tokenableId: number
+  declare tokenableId: bigint | number
   @column()
   declare type: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
+}
+
+export class CalculoCarbonoSchema extends BaseModel {
+  static $columns = ['estado', 'fechaCalculo', 'idCalculoCarbono', 'idOrganizacion', 'idPeriodo', 'idUnidadResultado', 'idUsuario', 'idVersion', 'observacion', 'totalCo2E'] as const
+  $columns = CalculoCarbonoSchema.$columns
+  @column()
+  declare estado: string
+  @column.dateTime()
+  declare fechaCalculo: DateTime
+  @column({ isPrimary: true })
+  declare idCalculoCarbono: bigint | number
+  @column()
+  declare idOrganizacion: bigint | number
+  @column()
+  declare idPeriodo: bigint | number
+  @column()
+  declare idUnidadResultado: number | null
+  @column()
+  declare idUsuario: bigint | number
+  @column()
+  declare idVersion: bigint | number
+  @column()
+  declare observacion: string | null
+  @column()
+  declare totalCo2E: string | null
+}
+
+export class CalculoCarbonoDatoSchema extends BaseModel {
+  static $columns = ['idCalculoCarbono', 'idDatoCarbono'] as const
+  $columns = CalculoCarbonoDatoSchema.$columns
+  @column({ isPrimary: true })
+  declare idCalculoCarbono: bigint | number
+  @column()
+  declare idDatoCarbono: bigint | number
+}
+
+export class CalculoCarbonoFactorSchema extends BaseModel {
+  static $columns = ['idCalculoCarbono', 'idFactorEmision', 'valorAplicado'] as const
+  $columns = CalculoCarbonoFactorSchema.$columns
+  @column({ isPrimary: true })
+  declare idCalculoCarbono: bigint | number
+  @column()
+  declare idFactorEmision: bigint | number
+  @column()
+  declare valorAplicado: string
+}
+
+export class CalculoHidricoSchema extends BaseModel {
+  static $columns = ['estado', 'fechaCalculo', 'idCalculoHidrico', 'idOrganizacion', 'idPeriodo', 'idUnidadResultado', 'idUsuario', 'idVersion', 'observacion', 'totalHuella'] as const
+  $columns = CalculoHidricoSchema.$columns
+  @column()
+  declare estado: string
+  @column.dateTime()
+  declare fechaCalculo: DateTime
+  @column({ isPrimary: true })
+  declare idCalculoHidrico: bigint | number
+  @column()
+  declare idOrganizacion: bigint | number
+  @column()
+  declare idPeriodo: bigint | number
+  @column()
+  declare idUnidadResultado: number | null
+  @column()
+  declare idUsuario: bigint | number
+  @column()
+  declare idVersion: bigint | number
+  @column()
+  declare observacion: string | null
+  @column()
+  declare totalHuella: string | null
+}
+
+export class CalculoHidricoDatoSchema extends BaseModel {
+  static $columns = ['idCalculoHidrico', 'idDatoHidrico'] as const
+  $columns = CalculoHidricoDatoSchema.$columns
+  @column({ isPrimary: true })
+  declare idCalculoHidrico: bigint | number
+  @column()
+  declare idDatoHidrico: bigint | number
+}
+
+export class CalculoHidricoParametroSchema extends BaseModel {
+  static $columns = ['idCalculoHidrico', 'idParametroHidrico', 'valorAplicado'] as const
+  $columns = CalculoHidricoParametroSchema.$columns
+  @column({ isPrimary: true })
+  declare idCalculoHidrico: bigint | number
+  @column()
+  declare idParametroHidrico: bigint | number
+  @column()
+  declare valorAplicado: string
+}
+
+export class ComponenteHidricoSchema extends BaseModel {
+  static $columns = ['codigo', 'descripcion', 'estado', 'idComponenteHidrico', 'nombre'] as const
+  $columns = ComponenteHidricoSchema.$columns
+  @column()
+  declare codigo: string
+  @column()
+  declare descripcion: string | null
+  @column()
+  declare estado: boolean
+  @column({ isPrimary: true })
+  declare idComponenteHidrico: number
+  @column()
+  declare nombre: string
+}
+
+export class DatoActividadCarbonoSchema extends BaseModel {
+  static $columns = ['cantidad', 'estadoRegistro', 'fechaActualizacion', 'fechaDato', 'fechaRegistro', 'fuenteDato', 'idActividad', 'idAlcance', 'idDatoCarbono', 'idFuenteEmision', 'idPeriodo', 'idUnidad', 'idUsuarioRegistro', 'observacion'] as const
+  $columns = DatoActividadCarbonoSchema.$columns
+  @column()
+  declare cantidad: string
+  @column()
+  declare estadoRegistro: string
+  @column.dateTime()
+  declare fechaActualizacion: DateTime
+  @column.date()
+  declare fechaDato: DateTime | null
+  @column.dateTime()
+  declare fechaRegistro: DateTime
+  @column()
+  declare fuenteDato: string | null
+  @column()
+  declare idActividad: bigint | number
+  @column()
+  declare idAlcance: number
+  @column({ isPrimary: true })
+  declare idDatoCarbono: bigint | number
+  @column()
+  declare idFuenteEmision: bigint | number
+  @column()
+  declare idPeriodo: bigint | number
+  @column()
+  declare idUnidad: number
+  @column()
+  declare idUsuarioRegistro: bigint | number
+  @column()
+  declare observacion: string | null
+}
+
+export class DatoHidricoSchema extends BaseModel {
+  static $columns = ['cantidad', 'estadoRegistro', 'fechaActualizacion', 'fechaDato', 'fechaRegistro', 'fuenteDato', 'idActividad', 'idDatoHidrico', 'idPeriodo', 'idTipoAgua', 'idUnidad', 'idUsuarioRegistro', 'observacion'] as const
+  $columns = DatoHidricoSchema.$columns
+  @column()
+  declare cantidad: string
+  @column()
+  declare estadoRegistro: string
+  @column.dateTime()
+  declare fechaActualizacion: DateTime
+  @column.date()
+  declare fechaDato: DateTime | null
+  @column.dateTime()
+  declare fechaRegistro: DateTime
+  @column()
+  declare fuenteDato: string | null
+  @column()
+  declare idActividad: bigint | number
+  @column({ isPrimary: true })
+  declare idDatoHidrico: bigint | number
+  @column()
+  declare idPeriodo: bigint | number
+  @column()
+  declare idTipoAgua: number
+  @column()
+  declare idUnidad: number
+  @column()
+  declare idUsuarioRegistro: bigint | number
+  @column()
+  declare observacion: string | null
+}
+
+export class DepartamentoSchema extends BaseModel {
+  static $columns = ['codigo', 'estado', 'idDepartamento', 'nombre'] as const
+  $columns = DepartamentoSchema.$columns
+  @column()
+  declare codigo: string
+  @column()
+  declare estado: boolean
+  @column({ isPrimary: true })
+  declare idDepartamento: number
+  @column()
+  declare nombre: string
+}
+
+export class FactorEmisionSchema extends BaseModel {
+  static $columns = ['codigo', 'estado', 'fechaCreacion', 'fechaFinVigencia', 'fechaInicioVigencia', 'fuente', 'idFactorEmision', 'idFuenteEmision', 'idUnidadEntrada', 'idUnidadSalida', 'idVersion', 'nombre', 'region', 'valor'] as const
+  $columns = FactorEmisionSchema.$columns
+  @column()
+  declare codigo: string
+  @column()
+  declare estado: boolean
+  @column.dateTime()
+  declare fechaCreacion: DateTime
+  @column.date()
+  declare fechaFinVigencia: DateTime | null
+  @column.date()
+  declare fechaInicioVigencia: DateTime
+  @column()
+  declare fuente: string | null
+  @column({ isPrimary: true })
+  declare idFactorEmision: bigint | number
+  @column()
+  declare idFuenteEmision: bigint | number
+  @column()
+  declare idUnidadEntrada: number
+  @column()
+  declare idUnidadSalida: number
+  @column()
+  declare idVersion: bigint | number
+  @column()
+  declare nombre: string
+  @column()
+  declare region: string | null
+  @column()
+  declare valor: string
+}
+
+export class FuenteEmisionSchema extends BaseModel {
+  static $columns = ['categoria', 'codigo', 'descripcion', 'estado', 'idFuenteEmision', 'nombre'] as const
+  $columns = FuenteEmisionSchema.$columns
+  @column()
+  declare categoria: string | null
+  @column()
+  declare codigo: string
+  @column()
+  declare descripcion: string | null
+  @column()
+  declare estado: boolean
+  @column({ isPrimary: true })
+  declare idFuenteEmision: bigint | number
+  @column()
+  declare nombre: string
+}
+
+export class MetodologiaSchema extends BaseModel {
+  static $columns = ['codigo', 'descripcion', 'entidadFuente', 'estado', 'fechaCreacion', 'idMetodologia', 'nombre', 'tipo'] as const
+  $columns = MetodologiaSchema.$columns
+  @column()
+  declare codigo: string
+  @column()
+  declare descripcion: string | null
+  @column()
+  declare entidadFuente: string | null
+  @column()
+  declare estado: boolean
+  @column.dateTime()
+  declare fechaCreacion: DateTime
+  @column({ isPrimary: true })
+  declare idMetodologia: bigint | number
+  @column()
+  declare nombre: string
+  @column()
+  declare tipo: string
+}
+
+export class MetodologiaVersionSchema extends BaseModel {
+  static $columns = ['descripcion', 'estado', 'fechaCreacion', 'fechaFinVigencia', 'fechaInicioVigencia', 'idMetodologia', 'idVersion', 'numeroVersion'] as const
+  $columns = MetodologiaVersionSchema.$columns
+  @column()
+  declare descripcion: string | null
+  @column()
+  declare estado: boolean
+  @column.dateTime()
+  declare fechaCreacion: DateTime
+  @column.date()
+  declare fechaFinVigencia: DateTime | null
+  @column.date()
+  declare fechaInicioVigencia: DateTime
+  @column()
+  declare idMetodologia: bigint | number
+  @column({ isPrimary: true })
+  declare idVersion: bigint | number
+  @column()
+  declare numeroVersion: string
+}
+
+export class MunicipioSchema extends BaseModel {
+  static $columns = ['codigo', 'estado', 'idDepartamento', 'idMunicipio', 'nombre'] as const
+  $columns = MunicipioSchema.$columns
+  @column()
+  declare codigo: string
+  @column()
+  declare estado: boolean
+  @column()
+  declare idDepartamento: number
+  @column({ isPrimary: true })
+  declare idMunicipio: number
+  @column()
+  declare nombre: string
+}
+
+export class OrganizacionSchema extends BaseModel {
+  static $columns = ['correo', 'direccion', 'estado', 'fechaCreacion', 'idMunicipio', 'idOrganizacion', 'nit', 'nombre', 'nombreCorto', 'representanteCorreo', 'representanteNombre', 'representanteNumeroDocumento', 'representanteTelefono', 'representanteTipoDocumento', 'sectorEconomico', 'telefono', 'tipo'] as const
+  $columns = OrganizacionSchema.$columns
+  @column()
+  declare correo: string | null
+  @column()
+  declare direccion: string | null
+  @column()
+  declare estado: boolean
+  @column.dateTime()
+  declare fechaCreacion: DateTime
+  @column()
+  declare idMunicipio: number
+  @column({ isPrimary: true })
+  declare idOrganizacion: bigint | number
+  @column()
+  declare nit: string
+  @column()
+  declare nombre: string
+  @column()
+  declare nombreCorto: string | null
+  @column()
+  declare representanteCorreo: string | null
+  @column()
+  declare representanteNombre: string | null
+  @column()
+  declare representanteNumeroDocumento: string | null
+  @column()
+  declare representanteTelefono: string | null
+  @column()
+  declare representanteTipoDocumento: string | null
+  @column()
+  declare sectorEconomico: string | null
+  @column()
+  declare telefono: string | null
+  @column()
+  declare tipo: string
+}
+
+export class ParametroHidricoSchema extends BaseModel {
+  static $columns = ['codigo', 'estado', 'fechaFinVigencia', 'fechaInicioVigencia', 'fuente', 'idParametroHidrico', 'idUnidad', 'idVersion', 'nombre', 'valor'] as const
+  $columns = ParametroHidricoSchema.$columns
+  @column()
+  declare codigo: string
+  @column()
+  declare estado: boolean
+  @column.date()
+  declare fechaFinVigencia: DateTime | null
+  @column.date()
+  declare fechaInicioVigencia: DateTime
+  @column()
+  declare fuente: string | null
+  @column({ isPrimary: true })
+  declare idParametroHidrico: bigint | number
+  @column()
+  declare idUnidad: number | null
+  @column()
+  declare idVersion: bigint | number
+  @column()
+  declare nombre: string
+  @column()
+  declare valor: string
+}
+
+export class PeriodoMedicionSchema extends BaseModel {
+  static $columns = ['estado', 'fechaCreacion', 'fechaFin', 'fechaInicio', 'idOrganizacion', 'idPeriodo', 'nombre'] as const
+  $columns = PeriodoMedicionSchema.$columns
+  @column()
+  declare estado: string
+  @column.dateTime()
+  declare fechaCreacion: DateTime
+  @column.date()
+  declare fechaFin: DateTime
+  @column.date()
+  declare fechaInicio: DateTime
+  @column()
+  declare idOrganizacion: bigint | number
+  @column({ isPrimary: true })
+  declare idPeriodo: bigint | number
+  @column()
+  declare nombre: string
+}
+
+export class PermisoSchema extends BaseModel {
+  static $columns = ['codigo', 'fechaCreacion', 'idPermiso', 'nombre'] as const
+  $columns = PermisoSchema.$columns
+  @column()
+  declare codigo: string
+  @column.dateTime()
+  declare fechaCreacion: DateTime
+  @column({ isPrimary: true })
+  declare idPermiso: number
+  @column()
+  declare nombre: string
+}
+
+export class ProcesoSchema extends BaseModel {
+  static $columns = ['descripcion', 'estado', 'fechaCreacion', 'idProceso', 'idSede', 'nombre'] as const
+  $columns = ProcesoSchema.$columns
+  @column()
+  declare descripcion: string | null
+  @column()
+  declare estado: boolean
+  @column.dateTime()
+  declare fechaCreacion: DateTime
+  @column({ isPrimary: true })
+  declare idProceso: bigint | number
+  @column()
+  declare idSede: bigint | number
+  @column()
+  declare nombre: string
+}
+
+export class ResultadoCarbonoSchema extends BaseModel {
+  static $columns = ['fechaCreacion', 'idActividad', 'idAlcance', 'idCalculoCarbono', 'idFuenteEmision', 'idResultadoCarbono', 'idUnidad', 'valorCo2E'] as const
+  $columns = ResultadoCarbonoSchema.$columns
+  @column.dateTime()
+  declare fechaCreacion: DateTime
+  @column()
+  declare idActividad: bigint | number | null
+  @column()
+  declare idAlcance: number
+  @column()
+  declare idCalculoCarbono: bigint | number
+  @column()
+  declare idFuenteEmision: bigint | number
+  @column({ isPrimary: true })
+  declare idResultadoCarbono: bigint | number
+  @column()
+  declare idUnidad: number
+  @column()
+  declare valorCo2E: string
+}
+
+export class ResultadoHidricoSchema extends BaseModel {
+  static $columns = ['fechaCreacion', 'idActividad', 'idCalculoHidrico', 'idComponenteHidrico', 'idResultadoHidrico', 'idUnidad', 'valor'] as const
+  $columns = ResultadoHidricoSchema.$columns
+  @column.dateTime()
+  declare fechaCreacion: DateTime
+  @column()
+  declare idActividad: bigint | number | null
+  @column()
+  declare idCalculoHidrico: bigint | number
+  @column()
+  declare idComponenteHidrico: number
+  @column({ isPrimary: true })
+  declare idResultadoHidrico: bigint | number
+  @column()
+  declare idUnidad: number
+  @column()
+  declare valor: string
+}
+
+export class RolSchema extends BaseModel {
+  static $columns = ['descripcion', 'estado', 'fechaCreacion', 'idRol', 'nombre'] as const
+  $columns = RolSchema.$columns
+  @column()
+  declare descripcion: string | null
+  @column()
+  declare estado: boolean
+  @column.dateTime()
+  declare fechaCreacion: DateTime
+  @column({ isPrimary: true })
+  declare idRol: number
+  @column()
+  declare nombre: string
+}
+
+export class RolPermisoSchema extends BaseModel {
+  static $columns = ['fechaAsignacion', 'idPermiso', 'idRol'] as const
+  $columns = RolPermisoSchema.$columns
+  @column.dateTime()
+  declare fechaAsignacion: DateTime
+  @column()
+  declare idPermiso: number
+  @column({ isPrimary: true })
+  declare idRol: number
+}
+
+export class SedeSchema extends BaseModel {
+  static $columns = ['codigo', 'correo', 'direccion', 'estado', 'fechaCreacion', 'idOrganizacion', 'idSede', 'nombre', 'responsableCargo', 'responsableCorreo', 'responsableNombre', 'responsableTelefono', 'telefono'] as const
+  $columns = SedeSchema.$columns
+  @column()
+  declare codigo: string | null
+  @column()
+  declare correo: string | null
+  @column()
+  declare direccion: string | null
+  @column()
+  declare estado: boolean
+  @column.dateTime()
+  declare fechaCreacion: DateTime
+  @column()
+  declare idOrganizacion: bigint | number
+  @column({ isPrimary: true })
+  declare idSede: bigint | number
+  @column()
+  declare nombre: string
+  @column()
+  declare responsableCargo: string | null
+  @column()
+  declare responsableCorreo: string | null
+  @column()
+  declare responsableNombre: string | null
+  @column()
+  declare responsableTelefono: string | null
+  @column()
+  declare telefono: string | null
+}
+
+export class TipoAguaSchema extends BaseModel {
+  static $columns = ['codigo', 'descripcion', 'estado', 'idTipoAgua', 'nombre'] as const
+  $columns = TipoAguaSchema.$columns
+  @column()
+  declare codigo: string
+  @column()
+  declare descripcion: string | null
+  @column()
+  declare estado: boolean
+  @column({ isPrimary: true })
+  declare idTipoAgua: number
+  @column()
+  declare nombre: string
+}
+
+export class UnidadMedidaSchema extends BaseModel {
+  static $columns = ['codigo', 'estado', 'factorBase', 'idUnidad', 'magnitud', 'nombre', 'simbolo'] as const
+  $columns = UnidadMedidaSchema.$columns
+  @column()
+  declare codigo: string
+  @column()
+  declare estado: boolean
+  @column()
+  declare factorBase: string
+  @column({ isPrimary: true })
+  declare idUnidad: number
+  @column()
+  declare magnitud: string
+  @column()
+  declare nombre: string
+  @column()
+  declare simbolo: string
 }
 
 export class UserSchema extends BaseModel {
@@ -58,4 +639,49 @@ export class UserSchema extends BaseModel {
   declare password: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
+}
+
+export class UsuarioSchema extends BaseModel {
+  static $columns = ['apellidos', 'correo', 'estado', 'fechaActualizacion', 'fechaCreacion', 'fechaUltimoAcceso', 'idUsuario', 'nombres', 'passwordHash'] as const
+  $columns = UsuarioSchema.$columns
+  @column()
+  declare apellidos: string
+  @column()
+  declare correo: string
+  @column()
+  declare estado: boolean
+  @column.dateTime()
+  declare fechaActualizacion: DateTime
+  @column.dateTime()
+  declare fechaCreacion: DateTime
+  @column.dateTime()
+  declare fechaUltimoAcceso: DateTime | null
+  @column({ isPrimary: true })
+  declare idUsuario: bigint | number
+  @column()
+  declare nombres: string
+  @column()
+  declare passwordHash: string
+}
+
+export class UsuarioRolSchema extends BaseModel {
+  static $columns = ['fechaAsignacion', 'idRol', 'idUsuario'] as const
+  $columns = UsuarioRolSchema.$columns
+  @column.dateTime()
+  declare fechaAsignacion: DateTime
+  @column()
+  declare idRol: number
+  @column({ isPrimary: true })
+  declare idUsuario: bigint | number
+}
+
+export class UsuarioSedeSchema extends BaseModel {
+  static $columns = ['fechaAsignacion', 'idSede', 'idUsuario'] as const
+  $columns = UsuarioSedeSchema.$columns
+  @column.dateTime()
+  declare fechaAsignacion: DateTime
+  @column()
+  declare idSede: bigint | number
+  @column({ isPrimary: true })
+  declare idUsuario: bigint | number
 }

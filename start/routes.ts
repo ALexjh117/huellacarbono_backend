@@ -1,15 +1,10 @@
-/*
-|--------------------------------------------------------------------------
-| Routes file
-|--------------------------------------------------------------------------
-|
-| The routes file is used for defining the HTTP routes.
-|
-*/
-
 import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
-import { controllers } from '#generated/controllers'
+import AccessTokensController from '#controllers/access_tokens_controller'
+import PermissionsController from '#controllers/permissions_controller'
+import ProfileController from '#controllers/profile_controller'
+import RolesController from '#controllers/roles_controller'
+import UsersController from '#controllers/users_controller'
 
 router.get('/', () => {
   return { hello: 'world' }
@@ -19,19 +14,86 @@ router
   .group(() => {
     router
       .group(() => {
-        router.post('signup', [controllers.NewAccount, 'store'])
-        router.post('login', [controllers.AccessTokens, 'store'])
+        router.post('login', [AccessTokensController, 'store']).as('login')
       })
       .prefix('auth')
       .as('auth')
 
     router
       .group(() => {
-        router.get('profile', [controllers.Profile, 'show'])
-        router.post('logout', [controllers.AccessTokens, 'destroy'])
+        router.get('profile', [ProfileController, 'show']).as('show')
+        router.post('logout', [AccessTokensController, 'destroy']).as('logout')
       })
       .prefix('account')
-      .as('profile')
+      .as('account')
       .use(middleware.auth())
+      .use(middleware.account())
+
+    router
+      .group(() => {
+        router
+          .get('options', [UsersController, 'options'])
+          .as('options')
+          .use(middleware.permission('usuario.ver'))
+        router
+          .get('/', [UsersController, 'index'])
+          .as('index')
+          .use(middleware.permission('usuario.ver'))
+        router
+          .post('/', [UsersController, 'store'])
+          .as('store')
+          .use(middleware.permission('usuario.crear'))
+        router
+          .put(':id/roles', [UsersController, 'syncRoles'])
+          .as('roles')
+          .use(middleware.permission('usuario.editar'))
+        router
+          .get(':id', [UsersController, 'show'])
+          .as('show')
+          .use(middleware.permission('usuario.ver'))
+        router
+          .patch(':id', [UsersController, 'update'])
+          .as('update')
+          .use(middleware.permission('usuario.editar'))
+      })
+      .prefix('users')
+      .as('users')
+      .use(middleware.auth())
+      .use(middleware.account())
+
+    router
+      .group(() => {
+        router
+          .get('/', [RolesController, 'index'])
+          .as('index')
+          .use(middleware.permission('rol.ver'))
+        router
+          .post('/', [RolesController, 'store'])
+          .as('store')
+          .use(middleware.permission('rol.crear'))
+        router
+          .put(':id/permissions', [RolesController, 'syncPermissions'])
+          .as('permissions')
+          .use(middleware.permission('rol.editar'))
+        router
+          .get(':id', [RolesController, 'show'])
+          .as('show')
+          .use(middleware.permission('rol.ver'))
+        router
+          .patch(':id', [RolesController, 'update'])
+          .as('update')
+          .use(middleware.permission('rol.editar'))
+      })
+      .prefix('roles')
+      .as('roles')
+      .use(middleware.auth())
+      .use(middleware.account())
+
+    router
+      .get('permissions', [PermissionsController, 'index'])
+      .as('permissions.index')
+      .use(middleware.auth())
+      .use(middleware.account())
+      .use(middleware.permission('rol.ver'))
   })
   .prefix('/api/v1')
