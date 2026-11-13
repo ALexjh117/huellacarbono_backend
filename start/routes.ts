@@ -1,9 +1,11 @@
 import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
 import AccessTokensController from '#controllers/access_tokens_controller'
+import OrganizacionesController from '#controllers/organizaciones_controller'
 import PermissionsController from '#controllers/permissions_controller'
 import ProfileController from '#controllers/profile_controller'
 import RolesController from '#controllers/roles_controller'
+import SedesController from '#controllers/sedes_controller'
 import UsersController from '#controllers/users_controller'
 
 router.get('/', () => {
@@ -86,6 +88,64 @@ router
       })
       .prefix('roles')
       .as('roles')
+      .use(middleware.auth())
+      .use(middleware.account())
+
+    router
+      .group(() => {
+        router
+          .get('/', [OrganizacionesController, 'index'])
+          .as('index')
+          .use(middleware.permission('organizacion.ver'))
+        router
+          .post('/', [OrganizacionesController, 'store'])
+          .as('store')
+          .use(middleware.permission('organizacion.crear'))
+        router
+          .get(':id', [OrganizacionesController, 'show'])
+          .as('show')
+          .use(middleware.permission('organizacion.ver'))
+        router
+          .patch(':id', [OrganizacionesController, 'update'])
+          .as('update')
+          .use(middleware.permission('organizacion.editar'))
+        router
+          .delete(':id', [OrganizacionesController, 'destroy'])
+          .as('destroy')
+          .use(middleware.permission('organizacion.eliminar'))
+      })
+      .prefix('organizaciones')
+      .as('organizaciones')
+      .where('id', router.matchers.number())
+      .use(middleware.auth())
+      .use(middleware.account())
+
+    router
+      .group(() => {
+        router
+          .get('/', [SedesController, 'index'])
+          .as('index')
+          .use(middleware.permission('sede.ver'))
+        router
+          .post('/', [SedesController, 'store'])
+          .as('store')
+          .use(middleware.permission('sede.crear'))
+        router
+          .get(':id', [SedesController, 'show'])
+          .as('show')
+          .use(middleware.permission('sede.ver'))
+        router
+          .patch(':id', [SedesController, 'update'])
+          .as('update')
+          .use(middleware.permission('sede.editar'))
+        router
+          .delete(':id', [SedesController, 'destroy'])
+          .as('destroy')
+          .use(middleware.permission('sede.eliminar'))
+      })
+      .prefix('sedes')
+      .as('sedes')
+      .where('id', router.matchers.number())
       .use(middleware.auth())
       .use(middleware.account())
 

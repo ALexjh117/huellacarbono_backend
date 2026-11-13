@@ -190,6 +190,136 @@ export interface Registry {
       rawResponse: ExtractRawResponse<unknown>
     }
   }
+  'organizaciones.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/organizaciones'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'organizaciones.store': {
+    methods: ["POST"]
+    pattern: '/api/v1/organizaciones'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'organizaciones.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/organizaciones/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'organizaciones.update': {
+    methods: ["PATCH"]
+    pattern: '/api/v1/organizaciones/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'organizaciones.destroy': {
+    methods: ["DELETE"]
+    pattern: '/api/v1/organizaciones/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'sedes.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/sedes'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'sedes.store': {
+    methods: ["POST"]
+    pattern: '/api/v1/sedes'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'sedes.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/sedes/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'sedes.update': {
+    methods: ["PATCH"]
+    pattern: '/api/v1/sedes/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'sedes.destroy': {
+    methods: ["DELETE"]
+    pattern: '/api/v1/sedes/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
   'permissions.index': {
     methods: ["GET","HEAD"]
     pattern: '/api/v1/permissions'

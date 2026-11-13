@@ -18,6 +18,16 @@ export type ScannedRoutes = {
     'roles.permissions': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'roles.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'roles.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'organizaciones.index': { paramsTuple?: []; params?: {} }
+    'organizaciones.store': { paramsTuple?: []; params?: {} }
+    'organizaciones.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'organizaciones.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'organizaciones.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'sedes.index': { paramsTuple?: []; params?: {} }
+    'sedes.store': { paramsTuple?: []; params?: {} }
+    'sedes.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'sedes.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'sedes.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'permissions.index': { paramsTuple?: []; params?: {} }
   }
   GET: {
@@ -27,6 +37,10 @@ export type ScannedRoutes = {
     'users.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'roles.index': { paramsTuple?: []; params?: {} }
     'roles.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'organizaciones.index': { paramsTuple?: []; params?: {} }
+    'organizaciones.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'sedes.index': { paramsTuple?: []; params?: {} }
+    'sedes.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'permissions.index': { paramsTuple?: []; params?: {} }
   }
   HEAD: {
@@ -36,6 +50,10 @@ export type ScannedRoutes = {
     'users.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'roles.index': { paramsTuple?: []; params?: {} }
     'roles.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'organizaciones.index': { paramsTuple?: []; params?: {} }
+    'organizaciones.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'sedes.index': { paramsTuple?: []; params?: {} }
+    'sedes.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'permissions.index': { paramsTuple?: []; params?: {} }
   }
   POST: {
@@ -43,6 +61,8 @@ export type ScannedRoutes = {
     'account.logout': { paramsTuple?: []; params?: {} }
     'users.store': { paramsTuple?: []; params?: {} }
     'roles.store': { paramsTuple?: []; params?: {} }
+    'organizaciones.store': { paramsTuple?: []; params?: {} }
+    'sedes.store': { paramsTuple?: []; params?: {} }
   }
   PUT: {
     'users.roles': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -51,6 +71,12 @@ export type ScannedRoutes = {
   PATCH: {
     'users.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'roles.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'organizaciones.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'sedes.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+  }
+  DELETE: {
+    'organizaciones.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'sedes.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
 }
 declare module '@adonisjs/core/types/http' {

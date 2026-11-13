@@ -32,6 +32,14 @@ export const PERMISSIONS = [
   { code: 'rol.ver', name: 'Ver roles', roles: [ADMIN] },
   { code: 'rol.crear', name: 'Crear roles', roles: [ADMIN] },
   { code: 'rol.editar', name: 'Actualizar roles', roles: [ADMIN] },
+  { code: 'organizacion.ver', name: 'Ver organizaciones', roles: [ADMIN] },
+  { code: 'organizacion.crear', name: 'Crear organizaciones', roles: [ADMIN] },
+  { code: 'organizacion.editar', name: 'Editar organizaciones', roles: [ADMIN] },
+  { code: 'organizacion.eliminar', name: 'Eliminar organizaciones', roles: [ADMIN] },
+  { code: 'sede.ver', name: 'Ver sedes', roles: [ADMIN] },
+  { code: 'sede.crear', name: 'Crear sedes', roles: [ADMIN] },
+  { code: 'sede.editar', name: 'Editar sedes', roles: [ADMIN] },
+  { code: 'sede.eliminar', name: 'Eliminar sedes', roles: [ADMIN] },
 ] as const
 
 export type PermissionCode = (typeof PERMISSIONS)[number]['code']

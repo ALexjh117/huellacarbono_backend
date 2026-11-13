@@ -24,6 +24,20 @@ export interface ApiDefinition {
     show: typeof routes['roles.show']
     update: typeof routes['roles.update']
   }
+  organizaciones: {
+    index: typeof routes['organizaciones.index']
+    store: typeof routes['organizaciones.store']
+    show: typeof routes['organizaciones.show']
+    update: typeof routes['organizaciones.update']
+    destroy: typeof routes['organizaciones.destroy']
+  }
+  sedes: {
+    index: typeof routes['sedes.index']
+    store: typeof routes['sedes.store']
+    show: typeof routes['sedes.show']
+    update: typeof routes['sedes.update']
+    destroy: typeof routes['sedes.destroy']
+  }
   permissions: {
     index: typeof routes['permissions.index']
   }
