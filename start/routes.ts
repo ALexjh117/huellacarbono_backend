@@ -6,6 +6,8 @@ import ProfileController from '#controllers/profile_controller'
 import RolesController from '#controllers/roles_controller'
 import UsersController from '#controllers/users_controller'
 
+const MunicipiosController = () => import('#controllers/municipios_controller')
+
 router.get('/', () => {
   return { hello: 'world' }
 })
@@ -86,6 +88,17 @@ router
       })
       .prefix('roles')
       .as('roles')
+      .use(middleware.auth())
+      .use(middleware.account())
+
+    router
+      .group(() => {
+        router.get('options', [MunicipiosController, 'options']).as('options')
+        router.get('/', [MunicipiosController, 'index']).as('index')
+        router.get(':id', [MunicipiosController, 'show']).as('show')
+      })
+      .prefix('municipios')
+      .as('municipios')
       .use(middleware.auth())
       .use(middleware.account())
 

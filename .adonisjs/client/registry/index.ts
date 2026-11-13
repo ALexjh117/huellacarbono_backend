@@ -92,6 +92,24 @@ const routes = {
     tokens: [[0,"api"],[0,"v1"],[0,"roles"],[1,"id"]],
     types: placeholder as Registry['roles.update']['types'],
   },
+  'municipios.options': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/v1/municipios/options',
+    tokens: [[0,"api"],[0,"v1"],[0,"municipios"],[0,"options"]],
+    types: placeholder as Registry['municipios.options']['types'],
+  },
+  'municipios.index': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/v1/municipios',
+    tokens: [[0,"api"],[0,"v1"],[0,"municipios"]],
+    types: placeholder as Registry['municipios.index']['types'],
+  },
+  'municipios.show': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/v1/municipios/:id',
+    tokens: [[0,"api"],[0,"v1"],[0,"municipios"],[1,"id"]],
+    types: placeholder as Registry['municipios.show']['types'],
+  },
   'permissions.index': {
     methods: ["GET","HEAD"],
     pattern: '/api/v1/permissions',

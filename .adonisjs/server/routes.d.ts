@@ -18,6 +18,9 @@ export type ScannedRoutes = {
     'roles.permissions': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'roles.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'roles.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'municipios.options': { paramsTuple?: []; params?: {} }
+    'municipios.index': { paramsTuple?: []; params?: {} }
+    'municipios.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'permissions.index': { paramsTuple?: []; params?: {} }
   }
   GET: {
@@ -27,6 +30,9 @@ export type ScannedRoutes = {
     'users.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'roles.index': { paramsTuple?: []; params?: {} }
     'roles.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'municipios.options': { paramsTuple?: []; params?: {} }
+    'municipios.index': { paramsTuple?: []; params?: {} }
+    'municipios.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'permissions.index': { paramsTuple?: []; params?: {} }
   }
   HEAD: {
@@ -36,6 +42,9 @@ export type ScannedRoutes = {
     'users.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'roles.index': { paramsTuple?: []; params?: {} }
     'roles.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'municipios.options': { paramsTuple?: []; params?: {} }
+    'municipios.index': { paramsTuple?: []; params?: {} }
+    'municipios.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'permissions.index': { paramsTuple?: []; params?: {} }
   }
   POST: {

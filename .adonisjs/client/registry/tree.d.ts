@@ -24,6 +24,11 @@ export interface ApiDefinition {
     show: typeof routes['roles.show']
     update: typeof routes['roles.update']
   }
+  municipios: {
+    options: typeof routes['municipios.options']
+    index: typeof routes['municipios.index']
+    show: typeof routes['municipios.show']
+  }
   permissions: {
     index: typeof routes['permissions.index']
   }

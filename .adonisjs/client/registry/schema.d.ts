@@ -190,6 +190,45 @@ export interface Registry {
       rawResponse: ExtractRawResponse<unknown>
     }
   }
+  'municipios.options': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/municipios/options'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/municipio').optionsQueryValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/municipios_controller').default['options']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/municipios_controller').default['options']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/municipios_controller').default['options']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'municipios.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/municipios'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/municipio').listMunicipiosValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/municipios_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/municipios_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/municipios_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'municipios.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/municipios/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/municipios_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/municipios_controller').default['show']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/municipios_controller').default['show']>>>
+    }
+  }
   'permissions.index': {
     methods: ["GET","HEAD"]
     pattern: '/api/v1/permissions'
