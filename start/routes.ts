@@ -1,5 +1,6 @@
 import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
+import { controllers } from '#generated/controllers'
 import AccessTokensController from '#controllers/access_tokens_controller'
 import PermissionsController from '#controllers/permissions_controller'
 import ProfileController from '#controllers/profile_controller'
@@ -86,6 +87,34 @@ router
       })
       .prefix('roles')
       .as('roles')
+      .use(middleware.auth())
+      .use(middleware.account())
+
+    router
+      .group(() => {
+        router
+          .get('/', [controllers.UnidadesMedida, 'index'])
+          .as('index')
+          .use(middleware.permission('unidad_medida.ver'))
+        router
+          .post('/', [controllers.UnidadesMedida, 'store'])
+          .as('store')
+          .use(middleware.permission('unidad_medida.crear'))
+        router
+          .get(':id', [controllers.UnidadesMedida, 'show'])
+          .as('show')
+          .use(middleware.permission('unidad_medida.ver'))
+        router
+          .patch(':id', [controllers.UnidadesMedida, 'update'])
+          .as('update')
+          .use(middleware.permission('unidad_medida.editar'))
+        router
+          .delete(':id', [controllers.UnidadesMedida, 'destroy'])
+          .as('destroy')
+          .use(middleware.permission('unidad_medida.eliminar'))
+      })
+      .prefix('measurement-units')
+      .as('measurement-units')
       .use(middleware.auth())
       .use(middleware.account())
 

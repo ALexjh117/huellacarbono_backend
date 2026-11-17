@@ -190,6 +190,71 @@ export interface Registry {
       rawResponse: ExtractRawResponse<unknown>
     }
   }
+  'measurement-units.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/measurement-units'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/usuario').listQueryValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/unidades_medida_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/unidades_medida_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/unidades_medida_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'measurement-units.store': {
+    methods: ["POST"]
+    pattern: '/api/v1/measurement-units'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/unidad_medida').createMeasurementUnitValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/unidad_medida').createMeasurementUnitValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/unidades_medida_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/unidades_medida_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/unidades_medida_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'measurement-units.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/measurement-units/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/unidades_medida_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/unidades_medida_controller').default['show']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/unidades_medida_controller').default['show']>>>
+    }
+  }
+  'measurement-units.update': {
+    methods: ["PATCH"]
+    pattern: '/api/v1/measurement-units/:id'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/unidad_medida').updateMeasurementUnitValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/unidad_medida').updateMeasurementUnitValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/unidades_medida_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/unidades_medida_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/unidades_medida_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'measurement-units.destroy': {
+    methods: ["DELETE"]
+    pattern: '/api/v1/measurement-units/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/unidades_medida_controller').default['destroy']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/unidades_medida_controller').default['destroy']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/unidades_medida_controller').default['destroy']>>>
+    }
+  }
   'permissions.index': {
     methods: ["GET","HEAD"]
     pattern: '/api/v1/permissions'

@@ -8,5 +8,6 @@ export const controllers = {
   Permissions: () => import('#controllers/permissions_controller'),
   Profile: () => import('#controllers/profile_controller'),
   Roles: () => import('#controllers/roles_controller'),
+  UnidadesMedida: () => import('#controllers/unidades_medida_controller'),
   Users: () => import('#controllers/users_controller'),
 }

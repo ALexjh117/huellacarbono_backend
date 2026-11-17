@@ -92,6 +92,36 @@ const routes = {
     tokens: [[0,"api"],[0,"v1"],[0,"roles"],[1,"id"]],
     types: placeholder as Registry['roles.update']['types'],
   },
+  'measurement-units.index': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/v1/measurement-units',
+    tokens: [[0,"api"],[0,"v1"],[0,"measurement-units"]],
+    types: placeholder as Registry['measurement-units.index']['types'],
+  },
+  'measurement-units.store': {
+    methods: ["POST"],
+    pattern: '/api/v1/measurement-units',
+    tokens: [[0,"api"],[0,"v1"],[0,"measurement-units"]],
+    types: placeholder as Registry['measurement-units.store']['types'],
+  },
+  'measurement-units.show': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/v1/measurement-units/:id',
+    tokens: [[0,"api"],[0,"v1"],[0,"measurement-units"],[1,"id"]],
+    types: placeholder as Registry['measurement-units.show']['types'],
+  },
+  'measurement-units.update': {
+    methods: ["PATCH"],
+    pattern: '/api/v1/measurement-units/:id',
+    tokens: [[0,"api"],[0,"v1"],[0,"measurement-units"],[1,"id"]],
+    types: placeholder as Registry['measurement-units.update']['types'],
+  },
+  'measurement-units.destroy': {
+    methods: ["DELETE"],
+    pattern: '/api/v1/measurement-units/:id',
+    tokens: [[0,"api"],[0,"v1"],[0,"measurement-units"],[1,"id"]],
+    types: placeholder as Registry['measurement-units.destroy']['types'],
+  },
   'permissions.index': {
     methods: ["GET","HEAD"],
     pattern: '/api/v1/permissions',
