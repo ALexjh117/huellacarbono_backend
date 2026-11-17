@@ -1,4 +1,7 @@
 import { HttpContext } from '@adonisjs/core/http'
+import pg from 'pg'
+
+pg.types.setTypeParser(20, (value) => Number.parseInt(value, 10))
 import { BaseSerializer } from '@adonisjs/core/transformers'
 import { type SimplePaginatorMetaKeys } from '@adonisjs/lucid/types/querybuilder'
 
