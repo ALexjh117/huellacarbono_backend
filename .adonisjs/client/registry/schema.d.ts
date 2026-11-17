@@ -268,6 +268,617 @@ export interface Registry {
       rawResponse: ExtractRawResponse<unknown>
     }
   }
+  'territorio.departamentos': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/territorio/departamentos'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'territorio.municipios': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/territorio/municipios'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'organizaciones.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/organizaciones'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'organizaciones.store': {
+    methods: ["POST"]
+    pattern: '/api/v1/organizaciones'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'organizaciones.sedes.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/organizaciones/:id/sedes'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'organizaciones.sedes.store': {
+    methods: ["POST"]
+    pattern: '/api/v1/organizaciones/:id/sedes'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'organizaciones.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/organizaciones/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'organizaciones.update': {
+    methods: ["PATCH"]
+    pattern: '/api/v1/organizaciones/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'sedes.procesos.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/sedes/:id/procesos'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'sedes.procesos.store': {
+    methods: ["POST"]
+    pattern: '/api/v1/sedes/:id/procesos'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'sedes.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/sedes/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'sedes.update': {
+    methods: ["PATCH"]
+    pattern: '/api/v1/sedes/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'sedes.usuarios': {
+    methods: ["PUT"]
+    pattern: '/api/v1/sedes/:id/usuarios'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'procesos.actividades.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/procesos/:id/actividades'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'procesos.actividades.store': {
+    methods: ["POST"]
+    pattern: '/api/v1/procesos/:id/actividades'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'procesos.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/procesos/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'procesos.update': {
+    methods: ["PATCH"]
+    pattern: '/api/v1/procesos/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'actividades.update': {
+    methods: ["PATCH"]
+    pattern: '/api/v1/actividades/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'tiposAgua.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/tipos-agua'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'tiposAgua.store': {
+    methods: ["POST"]
+    pattern: '/api/v1/tipos-agua'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'tiposAgua.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/tipos-agua/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'tiposAgua.update': {
+    methods: ["PATCH"]
+    pattern: '/api/v1/tipos-agua/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'componentesHidricos.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/componentes-hidricos'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'componentesHidricos.store': {
+    methods: ["POST"]
+    pattern: '/api/v1/componentes-hidricos'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'componentesHidricos.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/componentes-hidricos/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'componentesHidricos.update': {
+    methods: ["PATCH"]
+    pattern: '/api/v1/componentes-hidricos/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'alcancesEmision.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/alcances-emision'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'alcancesEmision.store': {
+    methods: ["POST"]
+    pattern: '/api/v1/alcances-emision'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'alcancesEmision.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/alcances-emision/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'alcancesEmision.update': {
+    methods: ["PATCH"]
+    pattern: '/api/v1/alcances-emision/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'metodologias.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/metodologias'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'metodologias.store': {
+    methods: ["POST"]
+    pattern: '/api/v1/metodologias'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'metodologias.versiones': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/metodologias/:id/versiones'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'metodologias.versiones.store': {
+    methods: ["POST"]
+    pattern: '/api/v1/metodologias/:id/versiones'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'metodologias.versiones.update': {
+    methods: ["PATCH"]
+    pattern: '/api/v1/metodologias/:id/versiones/:versionId'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue, ParamValue]
+      params: { id: ParamValue; versionId: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'metodologias.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/metodologias/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'metodologias.update': {
+    methods: ["PATCH"]
+    pattern: '/api/v1/metodologias/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'factoresEmision.opciones': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/factores-emision/opciones'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'factoresEmision.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/factores-emision'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'factoresEmision.store': {
+    methods: ["POST"]
+    pattern: '/api/v1/factores-emision'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'factoresEmision.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/factores-emision/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'factoresEmision.update': {
+    methods: ["PATCH"]
+    pattern: '/api/v1/factores-emision/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'parametrosHidricos.opciones': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/parametros-hidricos/opciones'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'parametrosHidricos.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/parametros-hidricos'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'parametrosHidricos.store': {
+    methods: ["POST"]
+    pattern: '/api/v1/parametros-hidricos'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'parametrosHidricos.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/parametros-hidricos/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'parametrosHidricos.update': {
+    methods: ["PATCH"]
+    pattern: '/api/v1/parametros-hidricos/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
 }
 
 export namespace Route {

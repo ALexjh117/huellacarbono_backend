@@ -22,7 +22,7 @@ export default class UnidadMedida extends BaseModel {
    * factor_base es DECIMAL(24, 12). PostgreSQL lo devuelve como texto para
    * no perder precisión, por lo que se conserva como string.
    */
-  @column()
+  @column({ columnName: 'factor_base' })
   declare factorBase: string
 
   @column()
