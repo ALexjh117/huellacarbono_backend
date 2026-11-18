@@ -61,6 +61,11 @@ export type ScannedRoutes = {
     'metodologias.versiones.update': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'versionId': ParamValue} }
     'metodologias.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'metodologias.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'fuentesEmision.index': { paramsTuple?: []; params?: {} }
+    'fuentesEmision.store': { paramsTuple?: []; params?: {} }
+    'fuentesEmision.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'fuentesEmision.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'fuentesEmision.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'factoresEmision.opciones': { paramsTuple?: []; params?: {} }
     'factoresEmision.index': { paramsTuple?: []; params?: {} }
     'factoresEmision.store': { paramsTuple?: []; params?: {} }
@@ -100,6 +105,8 @@ export type ScannedRoutes = {
     'metodologias.index': { paramsTuple?: []; params?: {} }
     'metodologias.versiones': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'metodologias.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'fuentesEmision.index': { paramsTuple?: []; params?: {} }
+    'fuentesEmision.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'factoresEmision.opciones': { paramsTuple?: []; params?: {} }
     'factoresEmision.index': { paramsTuple?: []; params?: {} }
     'factoresEmision.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -135,6 +142,8 @@ export type ScannedRoutes = {
     'metodologias.index': { paramsTuple?: []; params?: {} }
     'metodologias.versiones': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'metodologias.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'fuentesEmision.index': { paramsTuple?: []; params?: {} }
+    'fuentesEmision.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'factoresEmision.opciones': { paramsTuple?: []; params?: {} }
     'factoresEmision.index': { paramsTuple?: []; params?: {} }
     'factoresEmision.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -157,6 +166,7 @@ export type ScannedRoutes = {
     'alcancesEmision.store': { paramsTuple?: []; params?: {} }
     'metodologias.store': { paramsTuple?: []; params?: {} }
     'metodologias.versiones.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'fuentesEmision.store': { paramsTuple?: []; params?: {} }
     'factoresEmision.store': { paramsTuple?: []; params?: {} }
     'parametrosHidricos.store': { paramsTuple?: []; params?: {} }
   }
@@ -178,11 +188,13 @@ export type ScannedRoutes = {
     'alcancesEmision.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'metodologias.versiones.update': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'versionId': ParamValue} }
     'metodologias.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'fuentesEmision.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'factoresEmision.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'parametrosHidricos.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   DELETE: {
     'measurement-units.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'fuentesEmision.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
 }
 declare module '@adonisjs/core/types/http' {

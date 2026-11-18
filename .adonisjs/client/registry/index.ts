@@ -350,6 +350,36 @@ const routes = {
     tokens: [[0,"api"],[0,"v1"],[0,"metodologias"],[1,"id"]],
     types: placeholder as Registry['metodologias.update']['types'],
   },
+  'fuentesEmision.index': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/v1/fuentes-emision',
+    tokens: [[0,"api"],[0,"v1"],[0,"fuentes-emision"]],
+    types: placeholder as Registry['fuentesEmision.index']['types'],
+  },
+  'fuentesEmision.store': {
+    methods: ["POST"],
+    pattern: '/api/v1/fuentes-emision',
+    tokens: [[0,"api"],[0,"v1"],[0,"fuentes-emision"]],
+    types: placeholder as Registry['fuentesEmision.store']['types'],
+  },
+  'fuentesEmision.show': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/v1/fuentes-emision/:id',
+    tokens: [[0,"api"],[0,"v1"],[0,"fuentes-emision"],[1,"id"]],
+    types: placeholder as Registry['fuentesEmision.show']['types'],
+  },
+  'fuentesEmision.update': {
+    methods: ["PATCH"],
+    pattern: '/api/v1/fuentes-emision/:id',
+    tokens: [[0,"api"],[0,"v1"],[0,"fuentes-emision"],[1,"id"]],
+    types: placeholder as Registry['fuentesEmision.update']['types'],
+  },
+  'fuentesEmision.destroy': {
+    methods: ["DELETE"],
+    pattern: '/api/v1/fuentes-emision/:id',
+    tokens: [[0,"api"],[0,"v1"],[0,"fuentes-emision"],[1,"id"]],
+    types: placeholder as Registry['fuentesEmision.destroy']['types'],
+  },
   'factoresEmision.opciones': {
     methods: ["GET","HEAD"],
     pattern: '/api/v1/factores-emision/opciones',

@@ -749,6 +749,71 @@ export interface Registry {
       rawResponse: ExtractRawResponse<unknown>
     }
   }
+  'fuentesEmision.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/fuentes-emision'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/catalogo').listCatalogoValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/fuentes_emision_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/fuentes_emision_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/fuentes_emision_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'fuentesEmision.store': {
+    methods: ["POST"]
+    pattern: '/api/v1/fuentes-emision'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/fuente_emision').createFuenteEmisionValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/fuente_emision').createFuenteEmisionValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/fuentes_emision_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/fuentes_emision_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/fuentes_emision_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'fuentesEmision.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/fuentes-emision/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/fuentes_emision_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/fuentes_emision_controller').default['show']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/fuentes_emision_controller').default['show']>>>
+    }
+  }
+  'fuentesEmision.update': {
+    methods: ["PATCH"]
+    pattern: '/api/v1/fuentes-emision/:id'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/fuente_emision').updateFuenteEmisionValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/fuente_emision').updateFuenteEmisionValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/fuentes_emision_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/fuentes_emision_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/fuentes_emision_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'fuentesEmision.destroy': {
+    methods: ["DELETE"]
+    pattern: '/api/v1/fuentes-emision/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/fuentes_emision_controller').default['destroy']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/fuentes_emision_controller').default['destroy']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/fuentes_emision_controller').default['destroy']>>>
+    }
+  }
   'factoresEmision.opciones': {
     methods: ["GET","HEAD"]
     pattern: '/api/v1/factores-emision/opciones'

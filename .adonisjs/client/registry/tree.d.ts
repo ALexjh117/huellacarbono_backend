@@ -96,6 +96,13 @@ export interface ApiDefinition {
     show: typeof routes['metodologias.show']
     update: typeof routes['metodologias.update']
   }
+  fuentesEmision: {
+    index: typeof routes['fuentesEmision.index']
+    store: typeof routes['fuentesEmision.store']
+    show: typeof routes['fuentesEmision.show']
+    update: typeof routes['fuentesEmision.update']
+    destroy: typeof routes['fuentesEmision.destroy']
+  }
   factoresEmision: {
     opciones: typeof routes['factoresEmision.opciones']
     index: typeof routes['factoresEmision.index']

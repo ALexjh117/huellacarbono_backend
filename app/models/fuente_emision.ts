@@ -1,8 +1,8 @@
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 
 /**
- * La tabla la consultan los factores de emisión.
- * El CRUD de fuentes de emisión vive en otro módulo.
+ * Su CRUD vive en el módulo de fuentes de emisión. La tabla también es
+ * referenciada por factores, datos y resultados de carbono.
  */
 export default class FuenteEmision extends BaseModel {
   static table = 'fuente_emision'

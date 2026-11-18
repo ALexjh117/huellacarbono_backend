@@ -20,6 +20,8 @@ import SedesController from '#controllers/sedes_controller'
 import TerritorioController from '#controllers/territorio_controller'
 import UsersController from '#controllers/users_controller'
 
+const FuentesEmisionController = () => import('#controllers/fuentes_emision_controller')
+
 router.get('/', () => {
   return { hello: 'world' }
 })
@@ -352,6 +354,34 @@ router
       })
       .prefix('metodologias')
       .as('metodologias')
+      .use(middleware.auth())
+      .use(middleware.account())
+
+    router
+      .group(() => {
+        router
+          .get('/', [FuentesEmisionController, 'index'])
+          .as('index')
+          .use(middleware.permission('fuente_emision.ver'))
+        router
+          .post('/', [FuentesEmisionController, 'store'])
+          .as('store')
+          .use(middleware.permission('fuente_emision.crear'))
+        router
+          .get(':id', [FuentesEmisionController, 'show'])
+          .as('show')
+          .use(middleware.permission('fuente_emision.ver'))
+        router
+          .patch(':id', [FuentesEmisionController, 'update'])
+          .as('update')
+          .use(middleware.permission('fuente_emision.editar'))
+        router
+          .delete(':id', [FuentesEmisionController, 'destroy'])
+          .as('destroy')
+          .use(middleware.permission('fuente_emision.eliminar'))
+      })
+      .prefix('fuentes-emision')
+      .as('fuentesEmision')
       .use(middleware.auth())
       .use(middleware.account())
 
