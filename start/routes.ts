@@ -131,6 +131,70 @@ router
       .use(middleware.auth())
       .use(middleware.account())
 
+    /**
+     * Catálogos de datos de actividad: proyectos (= organizaciones),
+     * actividades y periodos por proyecto, y fuentes/alcances globales.
+     * De solo lectura; todos exigen `dato_actividad.ver`.
+     */
+    router
+      .group(() => {
+        router
+          .get('projects', [controllers.DatosActividadCatalogos, 'projects'])
+          .as('projects')
+          .use(middleware.permission('dato_actividad.ver'))
+        router
+          .get('activities', [controllers.DatosActividadCatalogos, 'activities'])
+          .as('activities')
+          .use(middleware.permission('dato_actividad.ver'))
+        router
+          .get('periods', [controllers.DatosActividadCatalogos, 'periods'])
+          .as('periods')
+          .use(middleware.permission('dato_actividad.ver'))
+        router
+          .get('emission-sources', [controllers.DatosActividadCatalogos, 'emissionSources'])
+          .as('emission-sources')
+          .use(middleware.permission('dato_actividad.ver'))
+        router
+          .get('emission-scopes', [controllers.DatosActividadCatalogos, 'emissionScopes'])
+          .as('emission-scopes')
+          .use(middleware.permission('dato_actividad.ver'))
+      })
+      .as('catalogos')
+      .use(middleware.auth())
+      .use(middleware.account())
+
+    /**
+     * Registro de datos de actividad. El listado siempre exige `projectId`
+     * para no mezclar datos de distintos proyectos.
+     */
+    router
+      .group(() => {
+        router
+          .get('/', [controllers.DatoActividad, 'index'])
+          .as('index')
+          .use(middleware.permission('dato_actividad.ver'))
+        router
+          .post('/', [controllers.DatoActividad, 'store'])
+          .as('store')
+          .use(middleware.permission('dato_actividad.crear'))
+        router
+          .get(':id', [controllers.DatoActividad, 'show'])
+          .as('show')
+          .use(middleware.permission('dato_actividad.ver'))
+        router
+          .patch(':id', [controllers.DatoActividad, 'update'])
+          .as('update')
+          .use(middleware.permission('dato_actividad.editar'))
+        router
+          .delete(':id', [controllers.DatoActividad, 'destroy'])
+          .as('destroy')
+          .use(middleware.permission('dato_actividad.eliminar'))
+      })
+      .prefix('activity-data')
+      .as('activity-data')
+      .use(middleware.auth())
+      .use(middleware.account())
+
     router
       .get('permissions', [PermissionsController, 'index'])
       .as('permissions.index')

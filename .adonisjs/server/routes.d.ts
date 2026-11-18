@@ -23,6 +23,16 @@ export type ScannedRoutes = {
     'measurement-units.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'measurement-units.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'measurement-units.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'catalogos.projects': { paramsTuple?: []; params?: {} }
+    'catalogos.activities': { paramsTuple?: []; params?: {} }
+    'catalogos.periods': { paramsTuple?: []; params?: {} }
+    'catalogos.emission-sources': { paramsTuple?: []; params?: {} }
+    'catalogos.emission-scopes': { paramsTuple?: []; params?: {} }
+    'activity-data.index': { paramsTuple?: []; params?: {} }
+    'activity-data.store': { paramsTuple?: []; params?: {} }
+    'activity-data.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'activity-data.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'activity-data.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'permissions.index': { paramsTuple?: []; params?: {} }
     'territorio.departamentos': { paramsTuple?: []; params?: {} }
     'territorio.municipios': { paramsTuple?: []; params?: {} }
@@ -81,6 +91,13 @@ export type ScannedRoutes = {
     'roles.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'measurement-units.index': { paramsTuple?: []; params?: {} }
     'measurement-units.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'catalogos.projects': { paramsTuple?: []; params?: {} }
+    'catalogos.activities': { paramsTuple?: []; params?: {} }
+    'catalogos.periods': { paramsTuple?: []; params?: {} }
+    'catalogos.emission-sources': { paramsTuple?: []; params?: {} }
+    'catalogos.emission-scopes': { paramsTuple?: []; params?: {} }
+    'activity-data.index': { paramsTuple?: []; params?: {} }
+    'activity-data.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'permissions.index': { paramsTuple?: []; params?: {} }
     'territorio.departamentos': { paramsTuple?: []; params?: {} }
     'territorio.municipios': { paramsTuple?: []; params?: {} }
@@ -116,6 +133,13 @@ export type ScannedRoutes = {
     'roles.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'measurement-units.index': { paramsTuple?: []; params?: {} }
     'measurement-units.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'catalogos.projects': { paramsTuple?: []; params?: {} }
+    'catalogos.activities': { paramsTuple?: []; params?: {} }
+    'catalogos.periods': { paramsTuple?: []; params?: {} }
+    'catalogos.emission-sources': { paramsTuple?: []; params?: {} }
+    'catalogos.emission-scopes': { paramsTuple?: []; params?: {} }
+    'activity-data.index': { paramsTuple?: []; params?: {} }
+    'activity-data.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'permissions.index': { paramsTuple?: []; params?: {} }
     'territorio.departamentos': { paramsTuple?: []; params?: {} }
     'territorio.municipios': { paramsTuple?: []; params?: {} }
@@ -148,6 +172,7 @@ export type ScannedRoutes = {
     'users.store': { paramsTuple?: []; params?: {} }
     'roles.store': { paramsTuple?: []; params?: {} }
     'measurement-units.store': { paramsTuple?: []; params?: {} }
+    'activity-data.store': { paramsTuple?: []; params?: {} }
     'organizaciones.store': { paramsTuple?: []; params?: {} }
     'organizaciones.sedes.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'sedes.procesos.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -169,6 +194,7 @@ export type ScannedRoutes = {
     'users.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'roles.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'measurement-units.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'activity-data.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'organizaciones.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'sedes.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'procesos.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -183,6 +209,7 @@ export type ScannedRoutes = {
   }
   DELETE: {
     'measurement-units.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'activity-data.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
 }
 declare module '@adonisjs/core/types/http' {
