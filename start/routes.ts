@@ -1,9 +1,23 @@
 import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
+import { controllers } from '#generated/controllers'
 import AccessTokensController from '#controllers/access_tokens_controller'
+import ActividadesController from '#controllers/actividades_controller'
+import {
+  AlcancesEmisionController,
+  ComponentesHidricosController,
+  TiposAguaController,
+} from '#controllers/catalogos_controller'
+import FactoresEmisionController from '#controllers/factores_emision_controller'
+import MetodologiasController from '#controllers/metodologias_controller'
+import OrganizacionesController from '#controllers/organizaciones_controller'
+import ParametrosHidricosController from '#controllers/parametros_hidricos_controller'
+import ProcesosController from '#controllers/procesos_controller'
 import PermissionsController from '#controllers/permissions_controller'
 import ProfileController from '#controllers/profile_controller'
 import RolesController from '#controllers/roles_controller'
+import SedesController from '#controllers/sedes_controller'
+import TerritorioController from '#controllers/territorio_controller'
 import UsersController from '#controllers/users_controller'
 
 router.get('/', () => {
@@ -90,10 +104,375 @@ router
       .use(middleware.account())
 
     router
+      .group(() => {
+        router
+          .get('/', [controllers.UnidadesMedida, 'index'])
+          .as('index')
+          .use(middleware.permission('unidad_medida.ver'))
+        router
+          .post('/', [controllers.UnidadesMedida, 'store'])
+          .as('store')
+          .use(middleware.permission('unidad_medida.crear'))
+        router
+          .get(':id', [controllers.UnidadesMedida, 'show'])
+          .as('show')
+          .use(middleware.permission('unidad_medida.ver'))
+        router
+          .patch(':id', [controllers.UnidadesMedida, 'update'])
+          .as('update')
+          .use(middleware.permission('unidad_medida.editar'))
+        router
+          .delete(':id', [controllers.UnidadesMedida, 'destroy'])
+          .as('destroy')
+          .use(middleware.permission('unidad_medida.eliminar'))
+      })
+      .prefix('measurement-units')
+      .as('measurement-units')
+      .use(middleware.auth())
+      .use(middleware.account())
+
+    /**
+     * Catálogos de datos de actividad: proyectos (= organizaciones),
+     * actividades y periodos por proyecto, y fuentes/alcances globales.
+     * De solo lectura; todos exigen `dato_actividad.ver`.
+     */
+    router
+      .group(() => {
+        router
+          .get('projects', [controllers.DatosActividadCatalogos, 'projects'])
+          .as('projects')
+          .use(middleware.permission('dato_actividad.ver'))
+        router
+          .get('activities', [controllers.DatosActividadCatalogos, 'activities'])
+          .as('activities')
+          .use(middleware.permission('dato_actividad.ver'))
+        router
+          .get('periods', [controllers.DatosActividadCatalogos, 'periods'])
+          .as('periods')
+          .use(middleware.permission('dato_actividad.ver'))
+        router
+          .get('emission-sources', [controllers.DatosActividadCatalogos, 'emissionSources'])
+          .as('emission-sources')
+          .use(middleware.permission('dato_actividad.ver'))
+        router
+          .get('emission-scopes', [controllers.DatosActividadCatalogos, 'emissionScopes'])
+          .as('emission-scopes')
+          .use(middleware.permission('dato_actividad.ver'))
+      })
+      .as('catalogos')
+      .use(middleware.auth())
+      .use(middleware.account())
+
+    /**
+     * Registro de datos de actividad. El listado siempre exige `projectId`
+     * para no mezclar datos de distintos proyectos.
+     */
+    router
+      .group(() => {
+        router
+          .get('/', [controllers.DatoActividad, 'index'])
+          .as('index')
+          .use(middleware.permission('dato_actividad.ver'))
+        router
+          .post('/', [controllers.DatoActividad, 'store'])
+          .as('store')
+          .use(middleware.permission('dato_actividad.crear'))
+        router
+          .get(':id', [controllers.DatoActividad, 'show'])
+          .as('show')
+          .use(middleware.permission('dato_actividad.ver'))
+        router
+          .patch(':id', [controllers.DatoActividad, 'update'])
+          .as('update')
+          .use(middleware.permission('dato_actividad.editar'))
+        router
+          .delete(':id', [controllers.DatoActividad, 'destroy'])
+          .as('destroy')
+          .use(middleware.permission('dato_actividad.eliminar'))
+      })
+      .prefix('activity-data')
+      .as('activity-data')
+      .use(middleware.auth())
+      .use(middleware.account())
+
+    router
       .get('permissions', [PermissionsController, 'index'])
       .as('permissions.index')
       .use(middleware.auth())
       .use(middleware.account())
       .use(middleware.permission('rol.ver'))
+
+    router
+      .group(() => {
+        router
+          .get('departamentos', [TerritorioController, 'departamentos'])
+          .as('departamentos')
+          .use(middleware.permission('organizacion.ver'))
+        router
+          .get('municipios', [TerritorioController, 'municipios'])
+          .as('municipios')
+          .use(middleware.permission('organizacion.ver'))
+      })
+      .prefix('territorio')
+      .as('territorio')
+      .use(middleware.auth())
+      .use(middleware.account())
+
+    router
+      .group(() => {
+        router
+          .get('/', [OrganizacionesController, 'index'])
+          .as('index')
+          .use(middleware.permission('organizacion.ver'))
+        router
+          .post('/', [OrganizacionesController, 'store'])
+          .as('store')
+          .use(middleware.permission('organizacion.crear'))
+        router
+          .get(':id/sedes', [SedesController, 'index'])
+          .as('sedes.index')
+          .use(middleware.permission('sede.ver'))
+        router
+          .post(':id/sedes', [SedesController, 'store'])
+          .as('sedes.store')
+          .use(middleware.permission('sede.crear'))
+        router
+          .get(':id', [OrganizacionesController, 'show'])
+          .as('show')
+          .use(middleware.permission('organizacion.ver'))
+        router
+          .patch(':id', [OrganizacionesController, 'update'])
+          .as('update')
+          .use(middleware.permission('organizacion.editar'))
+      })
+      .prefix('organizaciones')
+      .as('organizaciones')
+      .use(middleware.auth())
+      .use(middleware.account())
+
+    router
+      .group(() => {
+        router
+          .get(':id/procesos', [ProcesosController, 'index'])
+          .as('procesos.index')
+          .use(middleware.permission('proceso.ver'))
+        router
+          .post(':id/procesos', [ProcesosController, 'store'])
+          .as('procesos.store')
+          .use(middleware.permission('proceso.crear'))
+        router
+          .get(':id', [SedesController, 'show'])
+          .as('show')
+          .use(middleware.permission('sede.ver'))
+        router
+          .patch(':id', [SedesController, 'update'])
+          .as('update')
+          .use(middleware.permission('sede.editar'))
+        router
+          .put(':id/usuarios', [SedesController, 'syncUsuarios'])
+          .as('usuarios')
+          .use(middleware.permission('sede.editar'))
+      })
+      .prefix('sedes')
+      .as('sedes')
+      .use(middleware.auth())
+      .use(middleware.account())
+
+    router
+      .group(() => {
+        router
+          .get(':id/actividades', [ActividadesController, 'index'])
+          .as('actividades.index')
+          .use(middleware.permission('actividad.ver'))
+        router
+          .post(':id/actividades', [ActividadesController, 'store'])
+          .as('actividades.store')
+          .use(middleware.permission('actividad.crear'))
+        router
+          .get(':id', [ProcesosController, 'show'])
+          .as('show')
+          .use(middleware.permission('proceso.ver'))
+        router
+          .patch(':id', [ProcesosController, 'update'])
+          .as('update')
+          .use(middleware.permission('proceso.editar'))
+      })
+      .prefix('procesos')
+      .as('procesos')
+      .use(middleware.auth())
+      .use(middleware.account())
+
+    router
+      .group(() => {
+        router
+          .patch(':id', [ActividadesController, 'update'])
+          .as('update')
+          .use(middleware.permission('actividad.editar'))
+      })
+      .prefix('actividades')
+      .as('actividades')
+      .use(middleware.auth())
+      .use(middleware.account())
+
+    router
+      .group(() => {
+        router.get('/', [TiposAguaController, 'index']).as('index').use(middleware.permission('tipo_agua.ver'))
+        router
+          .post('/', [TiposAguaController, 'store'])
+          .as('store')
+          .use(middleware.permission('tipo_agua.crear'))
+        router
+          .get(':id', [TiposAguaController, 'show'])
+          .as('show')
+          .use(middleware.permission('tipo_agua.ver'))
+        router
+          .patch(':id', [TiposAguaController, 'update'])
+          .as('update')
+          .use(middleware.permission('tipo_agua.editar'))
+      })
+      .prefix('tipos-agua')
+      .as('tiposAgua')
+      .use(middleware.auth())
+      .use(middleware.account())
+
+    router
+      .group(() => {
+        router
+          .get('/', [ComponentesHidricosController, 'index'])
+          .as('index')
+          .use(middleware.permission('componente_hidrico.ver'))
+        router
+          .post('/', [ComponentesHidricosController, 'store'])
+          .as('store')
+          .use(middleware.permission('componente_hidrico.crear'))
+        router
+          .get(':id', [ComponentesHidricosController, 'show'])
+          .as('show')
+          .use(middleware.permission('componente_hidrico.ver'))
+        router
+          .patch(':id', [ComponentesHidricosController, 'update'])
+          .as('update')
+          .use(middleware.permission('componente_hidrico.editar'))
+      })
+      .prefix('componentes-hidricos')
+      .as('componentesHidricos')
+      .use(middleware.auth())
+      .use(middleware.account())
+
+    router
+      .group(() => {
+        router
+          .get('/', [AlcancesEmisionController, 'index'])
+          .as('index')
+          .use(middleware.permission('alcance_emision.ver'))
+        router
+          .post('/', [AlcancesEmisionController, 'store'])
+          .as('store')
+          .use(middleware.permission('alcance_emision.crear'))
+        router
+          .get(':id', [AlcancesEmisionController, 'show'])
+          .as('show')
+          .use(middleware.permission('alcance_emision.ver'))
+        router
+          .patch(':id', [AlcancesEmisionController, 'update'])
+          .as('update')
+          .use(middleware.permission('alcance_emision.editar'))
+      })
+      .prefix('alcances-emision')
+      .as('alcancesEmision')
+      .use(middleware.auth())
+      .use(middleware.account())
+
+    router
+      .group(() => {
+        router
+          .get('/', [MetodologiasController, 'index'])
+          .as('index')
+          .use(middleware.permission('metodologia.ver'))
+        router
+          .post('/', [MetodologiasController, 'store'])
+          .as('store')
+          .use(middleware.permission('metodologia.crear'))
+        router
+          .get(':id/versiones', [MetodologiasController, 'versiones'])
+          .as('versiones')
+          .use(middleware.permission('metodologia.ver'))
+        router
+          .post(':id/versiones', [MetodologiasController, 'crearVersion'])
+          .as('versiones.store')
+          .use(middleware.permission('metodologia.crear'))
+        router
+          .patch(':id/versiones/:versionId', [MetodologiasController, 'actualizarVersion'])
+          .as('versiones.update')
+          .use(middleware.permission('metodologia.editar'))
+        router
+          .get(':id', [MetodologiasController, 'show'])
+          .as('show')
+          .use(middleware.permission('metodologia.ver'))
+        router
+          .patch(':id', [MetodologiasController, 'update'])
+          .as('update')
+          .use(middleware.permission('metodologia.editar'))
+      })
+      .prefix('metodologias')
+      .as('metodologias')
+      .use(middleware.auth())
+      .use(middleware.account())
+
+    router
+      .group(() => {
+        router
+          .get('opciones', [FactoresEmisionController, 'opciones'])
+          .as('opciones')
+          .use(middleware.permission('factor_emision.ver'))
+        router
+          .get('/', [FactoresEmisionController, 'index'])
+          .as('index')
+          .use(middleware.permission('factor_emision.ver'))
+        router
+          .post('/', [FactoresEmisionController, 'store'])
+          .as('store')
+          .use(middleware.permission('factor_emision.crear'))
+        router
+          .get(':id', [FactoresEmisionController, 'show'])
+          .as('show')
+          .use(middleware.permission('factor_emision.ver'))
+        router
+          .patch(':id', [FactoresEmisionController, 'update'])
+          .as('update')
+          .use(middleware.permission('factor_emision.editar'))
+      })
+      .prefix('factores-emision')
+      .as('factoresEmision')
+      .use(middleware.auth())
+      .use(middleware.account())
+
+    router
+      .group(() => {
+        router
+          .get('opciones', [ParametrosHidricosController, 'opciones'])
+          .as('opciones')
+          .use(middleware.permission('parametro_hidrico.ver'))
+        router
+          .get('/', [ParametrosHidricosController, 'index'])
+          .as('index')
+          .use(middleware.permission('parametro_hidrico.ver'))
+        router
+          .post('/', [ParametrosHidricosController, 'store'])
+          .as('store')
+          .use(middleware.permission('parametro_hidrico.crear'))
+        router
+          .get(':id', [ParametrosHidricosController, 'show'])
+          .as('show')
+          .use(middleware.permission('parametro_hidrico.ver'))
+        router
+          .patch(':id', [ParametrosHidricosController, 'update'])
+          .as('update')
+          .use(middleware.permission('parametro_hidrico.editar'))
+      })
+      .prefix('parametros-hidricos')
+      .as('parametrosHidricos')
+      .use(middleware.auth())
+      .use(middleware.account())
   })
   .prefix('/api/v1')

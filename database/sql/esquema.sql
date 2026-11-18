@@ -358,6 +358,7 @@ CREATE TABLE dato_actividad_carbono (
   fecha_dato DATE,
   fuente_dato VARCHAR(255),
   observacion TEXT,
+  que_se_copia VARCHAR(255),
   estado_registro VARCHAR(20) NOT NULL DEFAULT 'REGISTRADO',
   fecha_registro TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
   fecha_actualizacion TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,

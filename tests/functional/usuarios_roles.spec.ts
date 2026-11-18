@@ -50,7 +50,7 @@ function payload<T>(response: { body: () => unknown }) {
 async function login(client: ApiClient, email: string, password = PASSWORD) {
   const response = await client.post('/api/v1/auth/login').json({ email, password })
   response.assertStatus(200)
-  return response.body().data.token as string
+  return (response.body() as { data: { token: string } }).data.token
 }
 
 test.group('Usuarios y roles', (group) => {
