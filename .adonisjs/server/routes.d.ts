@@ -23,6 +23,16 @@ export type ScannedRoutes = {
     'measurement-units.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'measurement-units.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'measurement-units.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'catalogos.projects': { paramsTuple?: []; params?: {} }
+    'catalogos.activities': { paramsTuple?: []; params?: {} }
+    'catalogos.periods': { paramsTuple?: []; params?: {} }
+    'catalogos.emission-sources': { paramsTuple?: []; params?: {} }
+    'catalogos.emission-scopes': { paramsTuple?: []; params?: {} }
+    'activity-data.index': { paramsTuple?: []; params?: {} }
+    'activity-data.store': { paramsTuple?: []; params?: {} }
+    'activity-data.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'activity-data.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'activity-data.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'permissions.index': { paramsTuple?: []; params?: {} }
   }
   GET: {
@@ -34,6 +44,13 @@ export type ScannedRoutes = {
     'roles.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'measurement-units.index': { paramsTuple?: []; params?: {} }
     'measurement-units.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'catalogos.projects': { paramsTuple?: []; params?: {} }
+    'catalogos.activities': { paramsTuple?: []; params?: {} }
+    'catalogos.periods': { paramsTuple?: []; params?: {} }
+    'catalogos.emission-sources': { paramsTuple?: []; params?: {} }
+    'catalogos.emission-scopes': { paramsTuple?: []; params?: {} }
+    'activity-data.index': { paramsTuple?: []; params?: {} }
+    'activity-data.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'permissions.index': { paramsTuple?: []; params?: {} }
   }
   HEAD: {
@@ -45,6 +62,13 @@ export type ScannedRoutes = {
     'roles.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'measurement-units.index': { paramsTuple?: []; params?: {} }
     'measurement-units.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'catalogos.projects': { paramsTuple?: []; params?: {} }
+    'catalogos.activities': { paramsTuple?: []; params?: {} }
+    'catalogos.periods': { paramsTuple?: []; params?: {} }
+    'catalogos.emission-sources': { paramsTuple?: []; params?: {} }
+    'catalogos.emission-scopes': { paramsTuple?: []; params?: {} }
+    'activity-data.index': { paramsTuple?: []; params?: {} }
+    'activity-data.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'permissions.index': { paramsTuple?: []; params?: {} }
   }
   POST: {
@@ -53,6 +77,7 @@ export type ScannedRoutes = {
     'users.store': { paramsTuple?: []; params?: {} }
     'roles.store': { paramsTuple?: []; params?: {} }
     'measurement-units.store': { paramsTuple?: []; params?: {} }
+    'activity-data.store': { paramsTuple?: []; params?: {} }
   }
   PUT: {
     'users.roles': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -62,9 +87,11 @@ export type ScannedRoutes = {
     'users.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'roles.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'measurement-units.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'activity-data.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   DELETE: {
     'measurement-units.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'activity-data.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
 }
 declare module '@adonisjs/core/types/http' {

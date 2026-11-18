@@ -36,6 +36,10 @@ export const PERMISSIONS = [
   { code: 'unidad_medida.crear', name: 'Crear unidades de medida', roles: [ADMIN] },
   { code: 'unidad_medida.editar', name: 'Actualizar unidades de medida', roles: [ADMIN] },
   { code: 'unidad_medida.eliminar', name: 'Eliminar unidades de medida', roles: [ADMIN] },
+  { code: 'dato_actividad.ver', name: 'Ver datos de actividad', roles: [ADMIN] },
+  { code: 'dato_actividad.crear', name: 'Crear datos de actividad', roles: [ADMIN] },
+  { code: 'dato_actividad.editar', name: 'Actualizar datos de actividad', roles: [ADMIN] },
+  { code: 'dato_actividad.eliminar', name: 'Eliminar datos de actividad', roles: [ADMIN] },
 ] as const
 
 export type PermissionCode = (typeof PERMISSIONS)[number]['code']

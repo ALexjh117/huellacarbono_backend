@@ -197,7 +197,7 @@ export class ComponenteHidricoSchema extends BaseModel {
 }
 
 export class DatoActividadCarbonoSchema extends BaseModel {
-  static $columns = ['cantidad', 'estadoRegistro', 'fechaActualizacion', 'fechaDato', 'fechaRegistro', 'fuenteDato', 'idActividad', 'idAlcance', 'idDatoCarbono', 'idFuenteEmision', 'idPeriodo', 'idUnidad', 'idUsuarioRegistro', 'observacion'] as const
+  static $columns = ['cantidad', 'estadoRegistro', 'fechaActualizacion', 'fechaDato', 'fechaRegistro', 'fuenteDato', 'idActividad', 'idAlcance', 'idDatoCarbono', 'idFuenteEmision', 'idPeriodo', 'idUnidad', 'idUsuarioRegistro', 'observacion', 'queSeCopia'] as const
   $columns = DatoActividadCarbonoSchema.$columns
   @column()
   declare cantidad: string
@@ -227,6 +227,8 @@ export class DatoActividadCarbonoSchema extends BaseModel {
   declare idUsuarioRegistro: bigint | number
   @column()
   declare observacion: string | null
+  @column()
+  declare queSeCopia: string | null
 }
 
 export class DatoHidricoSchema extends BaseModel {

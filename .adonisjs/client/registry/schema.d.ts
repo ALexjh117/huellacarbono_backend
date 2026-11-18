@@ -255,6 +255,136 @@ export interface Registry {
       rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/unidades_medida_controller').default['destroy']>>>
     }
   }
+  'catalogos.projects': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/projects'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/catalogos_controller').default['projects']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/catalogos_controller').default['projects']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/catalogos_controller').default['projects']>>>
+    }
+  }
+  'catalogos.activities': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/activities'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/dato_actividad').projectQueryValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/catalogos_controller').default['activities']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/catalogos_controller').default['activities']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/catalogos_controller').default['activities']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'catalogos.periods': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/periods'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/dato_actividad').projectQueryValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/catalogos_controller').default['periods']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/catalogos_controller').default['periods']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/catalogos_controller').default['periods']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'catalogos.emission-sources': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/emission-sources'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/catalogos_controller').default['emissionSources']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/catalogos_controller').default['emissionSources']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/catalogos_controller').default['emissionSources']>>>
+    }
+  }
+  'catalogos.emission-scopes': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/emission-scopes'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/catalogos_controller').default['emissionScopes']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/catalogos_controller').default['emissionScopes']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/catalogos_controller').default['emissionScopes']>>>
+    }
+  }
+  'activity-data.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/activity-data'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/dato_actividad').listQueryValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/dato_actividad_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/dato_actividad_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/dato_actividad_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'activity-data.store': {
+    methods: ["POST"]
+    pattern: '/api/v1/activity-data'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/dato_actividad').createDatoActividadValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/dato_actividad').createDatoActividadValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/dato_actividad_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/dato_actividad_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/dato_actividad_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'activity-data.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/activity-data/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/dato_actividad_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/dato_actividad_controller').default['show']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/dato_actividad_controller').default['show']>>>
+    }
+  }
+  'activity-data.update': {
+    methods: ["PATCH"]
+    pattern: '/api/v1/activity-data/:id'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/dato_actividad').updateDatoActividadValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/dato_actividad').updateDatoActividadValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/dato_actividad_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/dato_actividad_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/dato_actividad_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'activity-data.destroy': {
+    methods: ["DELETE"]
+    pattern: '/api/v1/activity-data/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/dato_actividad_controller').default['destroy']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/dato_actividad_controller').default['destroy']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/dato_actividad_controller').default['destroy']>>>
+    }
+  }
   'permissions.index': {
     methods: ["GET","HEAD"]
     pattern: '/api/v1/permissions'
