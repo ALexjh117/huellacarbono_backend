@@ -410,6 +410,84 @@ const routes = {
     tokens: [[0,"api"],[0,"v1"],[0,"parametros-hidricos"],[1,"id"]],
     types: placeholder as Registry['parametrosHidricos.update']['types'],
   },
+  'datosActividadCarbono.opciones': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/v1/datos-actividad-carbono/opciones',
+    tokens: [[0,"api"],[0,"v1"],[0,"datos-actividad-carbono"],[0,"opciones"]],
+    types: placeholder as Registry['datosActividadCarbono.opciones']['types'],
+  },
+  'datosActividadCarbono.index': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/v1/datos-actividad-carbono',
+    tokens: [[0,"api"],[0,"v1"],[0,"datos-actividad-carbono"]],
+    types: placeholder as Registry['datosActividadCarbono.index']['types'],
+  },
+  'datosActividadCarbono.store': {
+    methods: ["POST"],
+    pattern: '/api/v1/datos-actividad-carbono',
+    tokens: [[0,"api"],[0,"v1"],[0,"datos-actividad-carbono"]],
+    types: placeholder as Registry['datosActividadCarbono.store']['types'],
+  },
+  'datosActividadCarbono.show': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/v1/datos-actividad-carbono/:id',
+    tokens: [[0,"api"],[0,"v1"],[0,"datos-actividad-carbono"],[1,"id"]],
+    types: placeholder as Registry['datosActividadCarbono.show']['types'],
+  },
+  'datosActividadCarbono.update': {
+    methods: ["PATCH"],
+    pattern: '/api/v1/datos-actividad-carbono/:id',
+    tokens: [[0,"api"],[0,"v1"],[0,"datos-actividad-carbono"],[1,"id"]],
+    types: placeholder as Registry['datosActividadCarbono.update']['types'],
+  },
+  'calculosCarbono.opciones': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/v1/calculos-carbono/opciones',
+    tokens: [[0,"api"],[0,"v1"],[0,"calculos-carbono"],[0,"opciones"]],
+    types: placeholder as Registry['calculosCarbono.opciones']['types'],
+  },
+  'calculosCarbono.index': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/v1/calculos-carbono',
+    tokens: [[0,"api"],[0,"v1"],[0,"calculos-carbono"]],
+    types: placeholder as Registry['calculosCarbono.index']['types'],
+  },
+  'calculosCarbono.resumen': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/v1/calculos-carbono/resumen',
+    tokens: [[0,"api"],[0,"v1"],[0,"calculos-carbono"],[0,"resumen"]],
+    types: placeholder as Registry['calculosCarbono.resumen']['types'],
+  },
+  'calculosCarbono.store': {
+    methods: ["POST"],
+    pattern: '/api/v1/calculos-carbono',
+    tokens: [[0,"api"],[0,"v1"],[0,"calculos-carbono"]],
+    types: placeholder as Registry['calculosCarbono.store']['types'],
+  },
+  'calculosCarbono.informe': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/v1/calculos-carbono/:id/informe',
+    tokens: [[0,"api"],[0,"v1"],[0,"calculos-carbono"],[1,"id"],[0,"informe"]],
+    types: placeholder as Registry['calculosCarbono.informe']['types'],
+  },
+  'calculosCarbono.reduccion': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/v1/calculos-carbono/:id/reduccion',
+    tokens: [[0,"api"],[0,"v1"],[0,"calculos-carbono"],[1,"id"],[0,"reduccion"]],
+    types: placeholder as Registry['calculosCarbono.reduccion']['types'],
+  },
+  'calculosCarbono.guardarReduccion': {
+    methods: ["PUT"],
+    pattern: '/api/v1/calculos-carbono/:id/reduccion',
+    tokens: [[0,"api"],[0,"v1"],[0,"calculos-carbono"],[1,"id"],[0,"reduccion"]],
+    types: placeholder as Registry['calculosCarbono.guardarReduccion']['types'],
+  },
+  'calculosCarbono.show': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/v1/calculos-carbono/:id',
+    tokens: [[0,"api"],[0,"v1"],[0,"calculos-carbono"],[1,"id"]],
+    types: placeholder as Registry['calculosCarbono.show']['types'],
+  },
 } as const satisfies Record<string, AdonisEndpoint>
 
 export { routes }

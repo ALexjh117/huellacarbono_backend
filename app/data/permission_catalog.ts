@@ -66,6 +66,11 @@ export const PERMISSIONS = [
   { code: 'parametro_hidrico.ver', name: 'Ver parámetros hídricos', roles: [ADMIN] },
   { code: 'parametro_hidrico.crear', name: 'Crear parámetros hídricos', roles: [ADMIN] },
   { code: 'parametro_hidrico.editar', name: 'Actualizar parámetros hídricos', roles: [ADMIN] },
+  { code: 'calculo_carbono.ver', name: 'Ver cálculos de carbono', roles: [ADMIN] },
+  { code: 'calculo_carbono.crear', name: 'Calcular la huella de carbono', roles: [ADMIN] },
+  { code: 'dato_actividad_carbono.ver', name: 'Ver papeles de carbono', roles: [ADMIN] },
+  { code: 'dato_actividad_carbono.crear', name: 'Registrar papeles de carbono', roles: [ADMIN] },
+  { code: 'dato_actividad_carbono.editar', name: 'Actualizar papeles de carbono', roles: [ADMIN] },
 ] as const
 
 export type PermissionCode = (typeof PERMISSIONS)[number]['code']

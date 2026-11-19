@@ -7,6 +7,25 @@
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
+export class AccionReduccionSchema extends BaseModel {
+  static $columns = ['estrategia', 'fechaCreacion', 'idAccionReduccion', 'idCalculoCarbono', 'idFuenteEmision', 'indicador', 'meta'] as const
+  $columns = AccionReduccionSchema.$columns
+  @column()
+  declare estrategia: string
+  @column.dateTime()
+  declare fechaCreacion: DateTime
+  @column({ isPrimary: true })
+  declare idAccionReduccion: bigint | number
+  @column()
+  declare idCalculoCarbono: bigint | number
+  @column()
+  declare idFuenteEmision: bigint | number | null
+  @column()
+  declare indicador: string
+  @column()
+  declare meta: string
+}
+
 export class ActividadSchema extends BaseModel {
   static $columns = ['descripcion', 'estado', 'fechaCreacion', 'idActividad', 'idProceso', 'nombre'] as const
   $columns = ActividadSchema.$columns
@@ -92,7 +111,7 @@ export class AuthAccessTokenSchema extends BaseModel {
 }
 
 export class CalculoCarbonoSchema extends BaseModel {
-  static $columns = ['estado', 'fechaCalculo', 'idCalculoCarbono', 'idOrganizacion', 'idPeriodo', 'idUnidadResultado', 'idUsuario', 'idVersion', 'observacion', 'totalCo2E'] as const
+  static $columns = ['estado', 'fechaCalculo', 'idCalculoCarbono', 'idOrganizacion', 'idPeriodo', 'idUnidadResultado', 'idUsuario', 'idVersion', 'observacion', 'totalCo2E', 'unidadFuncional', 'unidadesProducidas'] as const
   $columns = CalculoCarbonoSchema.$columns
   @column()
   declare estado: string
@@ -114,6 +133,10 @@ export class CalculoCarbonoSchema extends BaseModel {
   declare observacion: string | null
   @column()
   declare totalCo2E: string | null
+  @column()
+  declare unidadFuncional: string | null
+  @column()
+  declare unidadesProducidas: string | null
 }
 
 export class CalculoCarbonoDatoSchema extends BaseModel {

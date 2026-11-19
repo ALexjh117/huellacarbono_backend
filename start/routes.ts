@@ -2,6 +2,8 @@ import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
 import { controllers } from '#generated/controllers'
 import AccessTokensController from '#controllers/access_tokens_controller'
+import CalculosCarbonoController from '#controllers/calculos_carbono_controller'
+import DatosActividadCarbonoController from '#controllers/datos_actividad_carbono_controller'
 import ActividadesController from '#controllers/actividades_controller'
 import {
   AlcancesEmisionController,
@@ -408,6 +410,74 @@ router
       })
       .prefix('parametros-hidricos')
       .as('parametrosHidricos')
+      .use(middleware.auth())
+      .use(middleware.account())
+
+    router
+      .group(() => {
+        router
+          .get('opciones', [DatosActividadCarbonoController, 'opciones'])
+          .as('opciones')
+          .use(middleware.permission('dato_actividad_carbono.ver'))
+        router
+          .get('/', [DatosActividadCarbonoController, 'index'])
+          .as('index')
+          .use(middleware.permission('dato_actividad_carbono.ver'))
+        router
+          .post('/', [DatosActividadCarbonoController, 'store'])
+          .as('store')
+          .use(middleware.permission('dato_actividad_carbono.crear'))
+        router
+          .get(':id', [DatosActividadCarbonoController, 'show'])
+          .as('show')
+          .use(middleware.permission('dato_actividad_carbono.ver'))
+        router
+          .patch(':id', [DatosActividadCarbonoController, 'update'])
+          .as('update')
+          .use(middleware.permission('dato_actividad_carbono.editar'))
+      })
+      .prefix('datos-actividad-carbono')
+      .as('datosActividadCarbono')
+      .use(middleware.auth())
+      .use(middleware.account())
+
+    router
+      .group(() => {
+        router
+          .get('opciones', [CalculosCarbonoController, 'opciones'])
+          .as('opciones')
+          .use(middleware.permission('calculo_carbono.ver'))
+        router
+          .get('/', [CalculosCarbonoController, 'index'])
+          .as('index')
+          .use(middleware.permission('calculo_carbono.ver'))
+        router
+          .get('resumen', [CalculosCarbonoController, 'resumen'])
+          .as('resumen')
+          .use(middleware.permission('calculo_carbono.ver'))
+        router
+          .post('/', [CalculosCarbonoController, 'store'])
+          .as('store')
+          .use(middleware.permission('calculo_carbono.crear'))
+        router
+          .get(':id/informe', [CalculosCarbonoController, 'informe'])
+          .as('informe')
+          .use(middleware.permission('calculo_carbono.ver'))
+        router
+          .get(':id/reduccion', [CalculosCarbonoController, 'reduccion'])
+          .as('reduccion')
+          .use(middleware.permission('calculo_carbono.ver'))
+        router
+          .put(':id/reduccion', [CalculosCarbonoController, 'guardarReduccion'])
+          .as('guardarReduccion')
+          .use(middleware.permission('calculo_carbono.crear'))
+        router
+          .get(':id', [CalculosCarbonoController, 'show'])
+          .as('show')
+          .use(middleware.permission('calculo_carbono.ver'))
+      })
+      .prefix('calculos-carbono')
+      .as('calculosCarbono')
       .use(middleware.auth())
       .use(middleware.account())
   })

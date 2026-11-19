@@ -110,4 +110,21 @@ export interface ApiDefinition {
     show: typeof routes['parametrosHidricos.show']
     update: typeof routes['parametrosHidricos.update']
   }
+  datosActividadCarbono: {
+    opciones: typeof routes['datosActividadCarbono.opciones']
+    index: typeof routes['datosActividadCarbono.index']
+    store: typeof routes['datosActividadCarbono.store']
+    show: typeof routes['datosActividadCarbono.show']
+    update: typeof routes['datosActividadCarbono.update']
+  }
+  calculosCarbono: {
+    opciones: typeof routes['calculosCarbono.opciones']
+    index: typeof routes['calculosCarbono.index']
+    resumen: typeof routes['calculosCarbono.resumen']
+    store: typeof routes['calculosCarbono.store']
+    informe: typeof routes['calculosCarbono.informe']
+    reduccion: typeof routes['calculosCarbono.reduccion']
+    guardarReduccion: typeof routes['calculosCarbono.guardarReduccion']
+    show: typeof routes['calculosCarbono.show']
+  }
 }

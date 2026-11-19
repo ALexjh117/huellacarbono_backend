@@ -71,6 +71,19 @@ export type ScannedRoutes = {
     'parametrosHidricos.store': { paramsTuple?: []; params?: {} }
     'parametrosHidricos.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'parametrosHidricos.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'datosActividadCarbono.opciones': { paramsTuple?: []; params?: {} }
+    'datosActividadCarbono.index': { paramsTuple?: []; params?: {} }
+    'datosActividadCarbono.store': { paramsTuple?: []; params?: {} }
+    'datosActividadCarbono.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'datosActividadCarbono.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'calculosCarbono.opciones': { paramsTuple?: []; params?: {} }
+    'calculosCarbono.index': { paramsTuple?: []; params?: {} }
+    'calculosCarbono.resumen': { paramsTuple?: []; params?: {} }
+    'calculosCarbono.store': { paramsTuple?: []; params?: {} }
+    'calculosCarbono.informe': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'calculosCarbono.reduccion': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'calculosCarbono.guardarReduccion': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'calculosCarbono.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   GET: {
     'account.show': { paramsTuple?: []; params?: {} }
@@ -106,6 +119,15 @@ export type ScannedRoutes = {
     'parametrosHidricos.opciones': { paramsTuple?: []; params?: {} }
     'parametrosHidricos.index': { paramsTuple?: []; params?: {} }
     'parametrosHidricos.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'datosActividadCarbono.opciones': { paramsTuple?: []; params?: {} }
+    'datosActividadCarbono.index': { paramsTuple?: []; params?: {} }
+    'datosActividadCarbono.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'calculosCarbono.opciones': { paramsTuple?: []; params?: {} }
+    'calculosCarbono.index': { paramsTuple?: []; params?: {} }
+    'calculosCarbono.resumen': { paramsTuple?: []; params?: {} }
+    'calculosCarbono.informe': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'calculosCarbono.reduccion': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'calculosCarbono.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   HEAD: {
     'account.show': { paramsTuple?: []; params?: {} }
@@ -141,6 +163,15 @@ export type ScannedRoutes = {
     'parametrosHidricos.opciones': { paramsTuple?: []; params?: {} }
     'parametrosHidricos.index': { paramsTuple?: []; params?: {} }
     'parametrosHidricos.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'datosActividadCarbono.opciones': { paramsTuple?: []; params?: {} }
+    'datosActividadCarbono.index': { paramsTuple?: []; params?: {} }
+    'datosActividadCarbono.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'calculosCarbono.opciones': { paramsTuple?: []; params?: {} }
+    'calculosCarbono.index': { paramsTuple?: []; params?: {} }
+    'calculosCarbono.resumen': { paramsTuple?: []; params?: {} }
+    'calculosCarbono.informe': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'calculosCarbono.reduccion': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'calculosCarbono.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   POST: {
     'auth.login': { paramsTuple?: []; params?: {} }
@@ -159,11 +190,14 @@ export type ScannedRoutes = {
     'metodologias.versiones.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'factoresEmision.store': { paramsTuple?: []; params?: {} }
     'parametrosHidricos.store': { paramsTuple?: []; params?: {} }
+    'datosActividadCarbono.store': { paramsTuple?: []; params?: {} }
+    'calculosCarbono.store': { paramsTuple?: []; params?: {} }
   }
   PUT: {
     'users.roles': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'roles.permissions': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'sedes.usuarios': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'calculosCarbono.guardarReduccion': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   PATCH: {
     'users.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -180,6 +214,7 @@ export type ScannedRoutes = {
     'metodologias.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'factoresEmision.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'parametrosHidricos.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'datosActividadCarbono.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
   DELETE: {
     'measurement-units.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }

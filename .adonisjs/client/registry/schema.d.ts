@@ -879,6 +879,175 @@ export interface Registry {
       rawResponse: ExtractRawResponse<unknown>
     }
   }
+  'datosActividadCarbono.opciones': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/datos-actividad-carbono/opciones'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'datosActividadCarbono.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/datos-actividad-carbono'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'datosActividadCarbono.store': {
+    methods: ["POST"]
+    pattern: '/api/v1/datos-actividad-carbono'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'datosActividadCarbono.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/datos-actividad-carbono/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'datosActividadCarbono.update': {
+    methods: ["PATCH"]
+    pattern: '/api/v1/datos-actividad-carbono/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'calculosCarbono.opciones': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/calculos-carbono/opciones'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'calculosCarbono.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/calculos-carbono'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'calculosCarbono.resumen': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/calculos-carbono/resumen'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'calculosCarbono.store': {
+    methods: ["POST"]
+    pattern: '/api/v1/calculos-carbono'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'calculosCarbono.informe': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/calculos-carbono/:id/informe'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'calculosCarbono.reduccion': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/calculos-carbono/:id/reduccion'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'calculosCarbono.guardarReduccion': {
+    methods: ["PUT"]
+    pattern: '/api/v1/calculos-carbono/:id/reduccion'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
+  'calculosCarbono.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/calculos-carbono/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+      rawResponse: ExtractRawResponse<unknown>
+    }
+  }
 }
 
 export namespace Route {

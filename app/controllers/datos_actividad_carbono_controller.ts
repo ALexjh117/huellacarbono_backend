@@ -1,0 +1,85 @@
+import DatoActividadCarbonoService from '#services/dato_actividad_carbono_service'
+import { fechaTexto } from '#services/catalogo_reglas'
+import DatoActividadCarbonoTransformer from '#transformers/dato_actividad_carbono_transformer'
+import {
+  createDatoActividadCarbonoValidator,
+  listDatoActividadCarbonoValidator,
+  opcionesDatoActividadCarbonoValidator,
+  updateDatoActividadCarbonoValidator,
+} from '#validators/dato_actividad_carbono'
+import { Exception } from '@adonisjs/core/exceptions'
+import type { HttpContext } from '@adonisjs/core/http'
+
+function resourceId(value: string) {
+  const id = Number(value)
+  if (!Number.isInteger(id) || id < 1) {
+    throw new Exception('El papel de carbono no existe', { status: 404, code: 'E_NOT_FOUND' })
+  }
+  return id
+}
+
+export default class DatosActividadCarbonoController {
+  async index({ request, serialize }: HttpContext) {
+    const query = await request.validateUsing(listDatoActividadCarbonoValidator, {
+      data: {
+        organizacionId: request.input('organizacionId'),
+        periodoId: request.input('periodoId'),
+      },
+    })
+    const datos = await new DatoActividadCarbonoService().list(query.organizacionId, query.periodoId)
+    return serialize(DatoActividadCarbonoTransformer.transform(datos))
+  }
+
+  async opciones({ request, serialize }: HttpContext) {
+    const query = await request.validateUsing(opcionesDatoActividadCarbonoValidator, {
+      data: { organizacionId: request.input('organizacionId') },
+    })
+    const opciones = await new DatoActividadCarbonoService().opciones(query.organizacionId)
+    return serialize({
+      periodos: opciones.periodos.map((periodo) => ({
+        id: periodo.id,
+        nombre: periodo.nombre,
+        fechaInicio: fechaTexto(periodo.fechaInicio),
+        fechaFin: fechaTexto(periodo.fechaFin),
+        estado: periodo.estado,
+      })),
+      actividades: opciones.actividades.map((actividad) => ({
+        id: actividad.id,
+        nombre: actividad.nombre,
+        procesoNombre: actividad.proceso.nombre,
+      })),
+      fuentes: opciones.fuentes.map((fuente) => ({
+        id: fuente.id,
+        codigo: fuente.codigo,
+        nombre: fuente.nombre,
+      })),
+      alcances: opciones.alcances.map((alcance) => ({
+        id: alcance.id,
+        codigo: alcance.codigo,
+        nombre: alcance.nombre,
+      })),
+      unidades: opciones.unidades.map((unidad) => ({
+        id: unidad.id,
+        simbolo: unidad.simbolo,
+        nombre: unidad.nombre,
+      })),
+    })
+  }
+
+  async show({ params, serialize }: HttpContext) {
+    const dato = await new DatoActividadCarbonoService().show(resourceId(params.id))
+    return serialize(DatoActividadCarbonoTransformer.transform(dato))
+  }
+
+  async store({ auth, request, serialize }: HttpContext) {
+    const payload = await request.validateUsing(createDatoActividadCarbonoValidator)
+    const dato = await new DatoActividadCarbonoService().crear(auth.getUserOrFail().id, payload)
+    return serialize(DatoActividadCarbonoTransformer.transform(dato))
+  }
+
+  async update({ params, request, serialize }: HttpContext) {
+    const payload = await request.validateUsing(updateDatoActividadCarbonoValidator)
+    const dato = await new DatoActividadCarbonoService().actualizar(resourceId(params.id), payload)
+    return serialize(DatoActividadCarbonoTransformer.transform(dato))
+  }
+}
