@@ -51,13 +51,11 @@ export default class AccessTokensController {
         })
       }
     } else {
-      // Si quieres que el captcha sea obligatorio, descomenta esto:
-      /*
-      return response.badRequest({
+      /*return response.badRequest({
         success: false,
         message: 'El token de seguridad es requerido.',
-      })
-      */
+      })*/
+      
     }
 
     // Lógica normal de Login
