@@ -31,4 +31,6 @@ export default await Env.create(new URL('../', import.meta.url), {
   DB_USER: Env.schema.string(),
   DB_PASSWORD: Env.schema.string.optional(),
   DB_DATABASE: Env.schema.string(),
+
+  RECAPTCHA_SECRET_KEY: Env.schema.string(),
 })
