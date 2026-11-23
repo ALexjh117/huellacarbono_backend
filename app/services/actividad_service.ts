@@ -1,6 +1,7 @@
 import Actividad from '#models/actividad'
 import Proceso from '#models/proceso'
 import { rethrowDatabaseError } from '#services/database_error'
+import { exigirAccesoActividad, exigirAccesoProceso } from '#services/access_control'
 import { Exception } from '@adonisjs/core/exceptions'
 import db from '@adonisjs/lucid/services/db'
 
@@ -33,14 +34,16 @@ async function tieneMediciones(actividadId: number) {
 }
 
 export default class ActividadService {
-  async list(procesoId: number, includeInactive: boolean) {
+  async list(usuarioId: number, procesoId: number, includeInactive: boolean) {
+    await exigirAccesoProceso(usuarioId, procesoId)
     await this.assertProceso(procesoId)
     const actividades = Actividad.query().where('procesoId', procesoId).orderBy('nombre', 'asc')
     if (!includeInactive) actividades.where('estado', true)
     return actividades
   }
 
-  async show(id: number) {
+  async show(id: number, usuarioId: number) {
+    await exigirAccesoActividad(usuarioId, id)
     const actividad = await Actividad.find(id)
     if (!actividad) {
       throw new Exception('La actividad no existe', { status: 404, code: 'E_NOT_FOUND' })
@@ -48,7 +51,8 @@ export default class ActividadService {
     return actividad
   }
 
-  async create(procesoId: number, payload: Payload) {
+  async create(usuarioId: number, procesoId: number, payload: Payload) {
+    await exigirAccesoProceso(usuarioId, procesoId)
     const proceso = await this.assertProceso(procesoId)
     if (!proceso.estado) {
       throw new Exception('El proceso está inactivo', { status: 409, code: 'E_CONFLICT' })
@@ -70,11 +74,8 @@ export default class ActividadService {
     }
   }
 
-  async update(id: number, payload: Payload) {
-    const actividad = await Actividad.find(id)
-    if (!actividad) {
-      throw new Exception('La actividad no existe', { status: 404, code: 'E_NOT_FOUND' })
-    }
+  async update(id: number, usuarioId: number, payload: Payload) {
+    const actividad = await this.show(id, usuarioId)
 
     if (payload.active === false && !actividad.estado) {
       throw new Exception('La actividad ya está inactiva', { status: 409, code: 'E_CONFLICT' })
@@ -99,7 +100,8 @@ export default class ActividadService {
       await this.assertNombreLibre(actividad.procesoId, nombre, actividad.id)
       actividad.nombre = nombre
     }
-    if (payload.descripcion !== undefined) actividad.descripcion = limpiar(payload.descripcion) ?? null
+    if (payload.descripcion !== undefined)
+      actividad.descripcion = limpiar(payload.descripcion) ?? null
     if (payload.active !== undefined) actividad.estado = payload.active
 
     try {

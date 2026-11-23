@@ -2,6 +2,7 @@ import Organizacion from '#models/organizacion'
 import Sede from '#models/sede'
 import Usuario from '#models/usuario'
 import { rethrowDatabaseError } from '#services/database_error'
+import { exigirAccesoOrganizacion, exigirAccesoSede } from '#services/access_control'
 import { Exception } from '@adonisjs/core/exceptions'
 import db from '@adonisjs/lucid/services/db'
 
@@ -28,7 +29,8 @@ function limpiar(valor: Texto): string | null | undefined {
 }
 
 export default class SedeService {
-  async list(organizacionId: number, includeInactive: boolean) {
+  async list(usuarioId: number, organizacionId: number, includeInactive: boolean) {
+    await exigirAccesoOrganizacion(usuarioId, organizacionId)
     await this.assertOrganizacion(organizacionId)
 
     const sedes = Sede.query()
@@ -48,7 +50,8 @@ export default class SedeService {
     return sedes
   }
 
-  async show(id: number) {
+  async show(id: number, usuarioId: number) {
+    await exigirAccesoSede(usuarioId, id)
     const sede = await Sede.query()
       .where('id', id)
       .preload('usuarios', (usuarios) => {
@@ -63,7 +66,8 @@ export default class SedeService {
     return sede
   }
 
-  async create(organizacionId: number, payload: SedePayload) {
+  async create(usuarioId: number, organizacionId: number, payload: SedePayload) {
+    await exigirAccesoOrganizacion(usuarioId, organizacionId)
     await this.assertOrganizacionActiva(organizacionId)
     const nombre = payload.nombre!.trim()
     const codigo = limpiar(payload.codigo) ?? null
@@ -84,17 +88,14 @@ export default class SedeService {
         responsableTelefono: limpiar(payload.responsableTelefono) ?? null,
         estado: true,
       })
-      return await this.show(sede.id)
+      return await this.show(sede.id, usuarioId)
     } catch (error) {
       rethrowDatabaseError(error, 'No se pudo crear la sede')
     }
   }
 
-  async update(id: number, payload: SedePayload) {
-    const sede = await Sede.find(id)
-    if (!sede) {
-      throw new Exception('La sede no existe', { status: 404, code: 'E_NOT_FOUND' })
-    }
+  async update(id: number, usuarioId: number, payload: SedePayload) {
+    const sede = await this.show(id, usuarioId)
 
     if (payload.active === false && !sede.estado) {
       throw new Exception('La sede ya está inactiva', { status: 409, code: 'E_CONFLICT' })
@@ -145,14 +146,11 @@ export default class SedeService {
       rethrowDatabaseError(error, 'No se pudo actualizar la sede')
     }
 
-    return this.show(sede.id)
+    return this.show(sede.id, usuarioId)
   }
 
-  async syncUsuarios(id: number, userIds: number[]) {
-    const sede = await Sede.find(id)
-    if (!sede) {
-      throw new Exception('La sede no existe', { status: 404, code: 'E_NOT_FOUND' })
-    }
+  async syncUsuarios(id: number, usuarioId: number, userIds: number[]) {
+    const sede = await this.show(id, usuarioId)
     if (!sede.estado) {
       throw new Exception('No se pueden asignar usuarios a una sede inactiva', {
         status: 409,
@@ -177,7 +175,7 @@ export default class SedeService {
       rethrowDatabaseError(error, 'No se pudieron asignar los usuarios')
     }
 
-    return this.show(sede.id)
+    return this.show(sede.id, usuarioId)
   }
 
   private asignar(

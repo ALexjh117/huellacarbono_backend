@@ -30,7 +30,8 @@ async function prepararAdmin(client: ApiClient, email: string) {
   await admin.load('permisos')
   const asignados = new Set(admin.permisos.map((permiso) => permiso.codigo))
   const faltantes = permisos.filter((permiso) => !asignados.has(permiso.codigo))
-  if (faltantes.length) await admin.related('permisos').attach(faltantes.map((permiso) => permiso.id))
+  if (faltantes.length)
+    await admin.related('permisos').attach(faltantes.map((permiso) => permiso.id))
 
   const user = await Usuario.create({
     nombres: 'Prueba',
@@ -43,11 +44,12 @@ async function prepararAdmin(client: ApiClient, email: string) {
 
   const response = await client.post('/api/v1/auth/login').json({ email, password: PASSWORD })
   response.assertStatus(200)
-  return response.body().data.token as string
+  return (response.body() as { data: { token: string } }).data.token
 }
 
 async function sedeDePrueba() {
-  const usados = new Set((await Departamento.all()).map((item) => item.codigo))
+  const departamentos = await Departamento.all()
+  const usados = new Set(departamentos.map((item) => item.codigo))
   let codigo = '00'
   for (let indice = 0; indice < 100; indice += 1) {
     const candidato = String(indice).padStart(2, '0')

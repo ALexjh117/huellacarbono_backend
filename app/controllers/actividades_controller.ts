@@ -24,30 +24,33 @@ function bandera(valor: unknown) {
 }
 
 export default class ActividadesController {
-  async index({ params, request, serialize }: HttpContext) {
+  async index({ auth, params, request, serialize }: HttpContext) {
     const query = await request.validateUsing(listHijosValidator, {
       data: { includeInactive: bandera(request.input('includeInactive')) },
     })
     const actividades = await new ActividadService().list(
+      auth.getUserOrFail().id,
       resourceId(params.id, 'El proceso no existe'),
       query.includeInactive ?? false
     )
     return serialize(ActividadTransformer.transform(actividades))
   }
 
-  async store({ params, request, serialize }: HttpContext) {
+  async store({ auth, params, request, serialize }: HttpContext) {
     const payload = await request.validateUsing(createActividadValidator)
     const actividad = await new ActividadService().create(
+      auth.getUserOrFail().id,
       resourceId(params.id, 'El proceso no existe'),
       payload
     )
     return serialize(ActividadTransformer.transform(actividad))
   }
 
-  async update({ params, request, serialize }: HttpContext) {
+  async update({ auth, params, request, serialize }: HttpContext) {
     const payload = await request.validateUsing(updateActividadValidator)
     const actividad = await new ActividadService().update(
       resourceId(params.id, 'La actividad no existe'),
+      auth.getUserOrFail().id,
       payload
     )
     return serialize(ActividadTransformer.transform(actividad))
