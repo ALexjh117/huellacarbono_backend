@@ -12,6 +12,7 @@ import type ComponenteHidricoTransformer from '#transformers/componente_hidrico_
 import type DatoActividadCarbonoTransformer from '#transformers/dato_actividad_carbono_transformer'
 import type DepartamentoTransformer from '#transformers/departamento_transformer'
 import type FactorEmisionTransformer from '#transformers/factor_emision_transformer'
+import type ImportacionFactorTransformer from '#transformers/importacion_factor_transformer'
 import type MetodologiaTransformer from '#transformers/metodologia_transformer'
 import type MetodologiaVersionTransformer from '#transformers/metodologia_version_transformer'
 import type MunicipioTransformer from '#transformers/municipio_transformer'
@@ -52,6 +53,10 @@ export namespace Data {
   export type FactorEmision = InferData<FactorEmisionTransformer>
   export namespace FactorEmision {
     export type Variants = InferVariants<FactorEmisionTransformer>
+  }
+  export type ImportacionFactor = InferData<ImportacionFactorTransformer>
+  export namespace ImportacionFactor {
+    export type Variants = InferVariants<ImportacionFactorTransformer>
   }
   export type Metodologia = InferData<MetodologiaTransformer>
   export namespace Metodologia {
