@@ -1,6 +1,7 @@
 import type FactorEmision from '#models/factor_emision'
 import { decimalTexto, fechaTexto } from '#services/catalogo_reglas'
 import { BaseTransformer } from '@adonisjs/core/transformers'
+import { normalizarEspecieGas } from '#services/emissions/gas_validation'
 
 export default class FactorEmisionTransformer extends BaseTransformer<FactorEmision> {
   toObject() {
@@ -25,8 +26,17 @@ export default class FactorEmisionTransformer extends BaseTransformer<FactorEmis
       codigo: this.resource.codigo,
       nombre: this.resource.nombre,
       valor: decimalTexto(this.resource.valor),
+      gas: this.resource.gas,
+      gasEspecifico: normalizarEspecieGas(this.resource.gasEspecifico),
+      estadoAprobacion: this.resource.estadoAprobacion,
       fuente: this.resource.fuente,
       region: this.resource.region,
+      institucionResponsable: this.resource.institucionResponsable,
+      anioPublicacion: this.resource.anioPublicacion,
+      anioAplicacion: this.resource.anioAplicacion,
+      origen: this.resource.origen,
+      importacionId: this.resource.importacionId,
+      sectorCategoria: this.resource.sectorCategoria,
       fechaInicioVigencia: fechaTexto(this.resource.fechaInicioVigencia),
       fechaFinVigencia: fechaTexto(this.resource.fechaFinVigencia),
       active: this.resource.estado,

@@ -3,6 +3,8 @@ import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
 import Actividad from '#models/actividad'
 import AlcanceEmision from '#models/alcance_emision'
+import ActividadEmision from '#models/actividad_emision'
+import SubcategoriaEmision from '#models/subcategoria_emision'
 import FuenteEmision from '#models/fuente_emision'
 import PeriodoMedicion from '#models/periodo_medicion'
 import UnidadMedida from '#models/unidad_medida'
@@ -25,6 +27,12 @@ export default class DatoActividadCarbono extends BaseModel {
   @column({ columnName: 'id_alcance' })
   declare alcanceId: number
 
+  @column({ columnName: 'id_actividad_emision' })
+  declare actividadEmisionId: number | null
+
+  @column({ columnName: 'id_subcategoria_emision' })
+  declare subcategoriaEmisionId: number | null
+
   @column({ columnName: 'id_unidad' })
   declare unidadId: number
 
@@ -33,6 +41,9 @@ export default class DatoActividadCarbono extends BaseModel {
 
   @column()
   declare cantidad: string
+
+  @column({ columnName: 'parametros_calculo' })
+  declare parametrosCalculo: Record<string, string | number | boolean | null>
 
   @column.date({ columnName: 'fecha_dato' })
   declare fechaDato: DateTime | null
@@ -63,6 +74,12 @@ export default class DatoActividadCarbono extends BaseModel {
 
   @belongsTo(() => AlcanceEmision, { foreignKey: 'alcanceId' })
   declare alcance: BelongsTo<typeof AlcanceEmision>
+
+  @belongsTo(() => ActividadEmision, { foreignKey: 'actividadEmisionId' })
+  declare actividadEmision: BelongsTo<typeof ActividadEmision>
+
+  @belongsTo(() => SubcategoriaEmision, { foreignKey: 'subcategoriaEmisionId' })
+  declare subcategoriaEmision: BelongsTo<typeof SubcategoriaEmision>
 
   @belongsTo(() => UnidadMedida, { foreignKey: 'unidadId' })
   declare unidad: BelongsTo<typeof UnidadMedida>

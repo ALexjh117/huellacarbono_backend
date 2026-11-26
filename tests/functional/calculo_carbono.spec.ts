@@ -1,11 +1,12 @@
 import { test } from '@japa/runner'
 import { PERMISSIONS, SYSTEM_ROLE_SEEDS } from '#data/permission_catalog'
 import Actividad from '#models/actividad'
-import AlcanceEmision from '#models/alcance_emision'
 import DatoActividadCarbono from '#models/dato_actividad_carbono'
 import Departamento from '#models/departamento'
 import FactorEmision from '#models/factor_emision'
 import FuenteEmision from '#models/fuente_emision'
+import ActividadEmision from '#models/actividad_emision'
+import SubcategoriaEmision from '#models/subcategoria_emision'
 import Metodologia from '#models/metodologia'
 import MetodologiaVersion from '#models/metodologia_version'
 import Municipio from '#models/municipio'
@@ -23,6 +24,41 @@ import type { ApiClient } from '@japa/api-client'
 import { DateTime } from 'luxon'
 
 const PASSWORD = 'Clave1234'
+
+type ApiResponseData<T> = {
+  data: T
+}
+
+function responseData<T>(response: { body: () => unknown }): T {
+  return (response.body() as ApiResponseData<T>).data
+}
+
+type CalculoResponse = {
+  id: number
+  totalCo2e: string
+  toneladasCo2e: string
+  intensidadCo2e: string | null
+  unidadFuncional: string
+  unidadResultado: string | null
+  lineas: {
+    actividadEmisionCodigo: string
+    subcategoriaEmisionCodigo: string | null
+    factorAnioAplicacion: number | null
+    factorAnioPublicacion: number | null
+    factorInstitucionResponsable: string | null
+    factorOrigen: string | null
+  }[]
+  omitidos: {
+    motivo: string
+  }[]
+}
+
+type AccionResponse = {
+  fuenteNombre: string
+  estrategia: string
+  indicador: string
+  meta: string
+}
 
 async function prepararCuenta(client: ApiClient, email: string, rolNombre: string) {
   const roles = new Map<string, Rol>()
@@ -58,7 +94,8 @@ async function prepararCuenta(client: ApiClient, email: string, rolNombre: strin
 }
 
 async function codigoLibre() {
-  const usados = new Set((await Departamento.all()).map((item) => item.codigo))
+  const departamentos = await Departamento.all()
+  const usados = new Set(departamentos.map((item) => item.codigo))
   for (let indice = 0; indice < 100; indice += 1) {
     const candidato = String(indice).padStart(2, '0')
     if (!usados.has(candidato)) return candidato
@@ -92,8 +129,16 @@ async function escenario(usuarioId: number) {
     estado: true,
   })
   const produccion = await Proceso.create({ sedeId: sede.id, nombre: 'Produccion', estado: true })
-  const distribucion = await Proceso.create({ sedeId: sede.id, nombre: 'Distribucion', estado: true })
-  const caldera = await Actividad.create({ procesoId: produccion.id, nombre: 'Caldera', estado: true })
+  const distribucion = await Proceso.create({
+    sedeId: sede.id,
+    nombre: 'Distribucion',
+    estado: true,
+  })
+  const caldera = await Actividad.create({
+    procesoId: produccion.id,
+    nombre: 'Caldera',
+    estado: true,
+  })
   const frios = await Actividad.create({
     procesoId: produccion.id,
     nombre: 'Energia de los cuartos frios',
@@ -136,24 +181,16 @@ async function escenario(usuarioId: number) {
     factorBase: '1',
     estado: true,
   })
-  const fuenteGas = await FuenteEmision.create({
-    codigo: `GAS${codigo}`,
-    nombre: 'Gas natural',
-    estado: true,
-  })
-  const fuenteLuz = await FuenteEmision.create({
-    codigo: `ELEC${codigo}`,
-    nombre: 'Electricidad',
-    estado: true,
-  })
-  const fuenteDiesel = await FuenteEmision.create({
-    codigo: `DIE${codigo}`,
-    nombre: 'Diesel',
-    estado: true,
-  })
-  const alcance1 = await AlcanceEmision.create({ codigo: `A1${codigo}`, nombre: `Alcance 1 ${codigo}`, estado: true })
-  const alcance2 = await AlcanceEmision.create({ codigo: `A2${codigo}`, nombre: `Alcance 2 ${codigo}`, estado: true })
-  const alcance3 = await AlcanceEmision.create({ codigo: `A3${codigo}`, nombre: `Alcance 3 ${codigo}`, estado: true })
+  const actividadA1 = await ActividadEmision.query().where('codigo', 'A1').firstOrFail()
+  const actividadA2 = await ActividadEmision.query().where('codigo', 'A2').firstOrFail()
+  const actividadB1 = await ActividadEmision.query().where('codigo', 'B1').firstOrFail()
+  const fuenteGas = await FuenteEmision.query().where('codigo', 'A1-01').firstOrFail()
+  const fuenteLuz = await FuenteEmision.query().where('codigo', 'B1-01').firstOrFail()
+  const fuenteDiesel = await FuenteEmision.query().where('codigo', 'A2-06').firstOrFail()
+  const subcategoriaA2 = await SubcategoriaEmision.query()
+    .where('actividadEmisionId', actividadA2.id)
+    .where('codigo', 'TRANSPORTE-TERRESTRE')
+    .firstOrFail()
   const metodologia = await Metodologia.create({
     codigo: `GHG${codigo}`,
     nombre: 'GHG Protocol',
@@ -173,12 +210,7 @@ async function escenario(usuarioId: number) {
     fechaFin: DateTime.fromISO('2026-04-30'),
     estado: 'ABIERTO',
   })
-  const factor = async (
-    fuenteId: number,
-    unidadId: number,
-    codigoFactor: string,
-    valor: string
-  ) =>
+  const factor = async (fuenteId: number, unidadId: number, codigoFactor: string, valor: string) =>
     FactorEmision.create({
       versionId: version.id,
       fuenteEmisionId: fuenteId,
@@ -187,6 +219,13 @@ async function escenario(usuarioId: number) {
       codigo: codigoFactor,
       nombre: codigoFactor,
       valor,
+      gas: 'CO2E',
+      estadoAprobacion: 'APROBADO',
+      fuente: 'Factor sintético exclusivo de fixture; no usar como dato oficial',
+      institucionResponsable: 'Fixture de pruebas',
+      anioPublicacion: 2026,
+      anioAplicacion: 2026,
+      origen: 'FIXTURE_TEST',
       fechaInicioVigencia: DateTime.fromISO('2026-01-01'),
       estado: true,
     })
@@ -199,6 +238,8 @@ async function escenario(usuarioId: number) {
     fuenteId: number,
     unidadId: number,
     alcanceId: number,
+    actividadEmisionId: number,
+    subcategoriaEmisionId: number | null,
     cantidad: string
   ) =>
     DatoActividadCarbono.create({
@@ -206,6 +247,8 @@ async function escenario(usuarioId: number) {
       periodoId: periodo.id,
       fuenteEmisionId: fuenteId,
       alcanceId,
+      actividadEmisionId,
+      subcategoriaEmisionId,
       unidadId,
       usuarioRegistroId: usuarioId,
       cantidad,
@@ -213,15 +256,50 @@ async function escenario(usuarioId: number) {
       estadoRegistro: 'REGISTRADO',
     })
 
-  await papel(caldera.id, fuenteGas.id, unidadGas.id, alcance1.id, '100')
-  await papel(frios.id, fuenteLuz.id, unidadKwh.id, alcance2.id, '4000')
-  await papel(camiones.id, fuenteDiesel.id, unidadLitro.id, alcance3.id, '600')
+  await papel(
+    caldera.id,
+    fuenteGas.id,
+    unidadGas.id,
+    actividadA1.alcanceId,
+    actividadA1.id,
+    null,
+    '100'
+  )
+  await papel(
+    frios.id,
+    fuenteLuz.id,
+    unidadKwh.id,
+    actividadB1.alcanceId,
+    actividadB1.id,
+    null,
+    '4000'
+  )
+  await papel(
+    camiones.id,
+    fuenteDiesel.id,
+    unidadLitro.id,
+    actividadA2.alcanceId,
+    actividadA2.id,
+    subcategoriaA2.id,
+    '600'
+  )
 
-  return { organizacion, periodo, version, fuenteLuz, unidadKwh, frios, alcance2 }
+  return { organizacion, sede, periodo, version, fuenteLuz, unidadKwh, frios, actividadB1 }
 }
 
 test.group('Cálculo de carbono', (group) => {
   group.each.setup(() => testUtils.db().withGlobalTransaction())
+
+  async function habilitarPermisos(rolNombre: string, codigos: string[]) {
+    const rol = await Rol.findByOrFail('nombre', rolNombre)
+    const permisos = await Permiso.query().whereIn('codigo', codigos)
+    await rol.load('permisos')
+    const asignados = new Set(rol.permisos.map((permiso) => permiso.codigo))
+    const faltantes = permisos.filter((permiso) => !asignados.has(permiso.codigo))
+    if (faltantes.length) {
+      await rol.related('permisos').attach(faltantes.map((permiso) => permiso.id))
+    }
+  }
 
   test('la multiplicación de la guía no pierde el decimal', ({ assert }) => {
     assert.equal(multiplicarEmision('4000', '0.20'), '800')
@@ -239,7 +317,11 @@ test.group('Cálculo de carbono', (group) => {
   })
 
   test('un rol sin permiso no calcula', async ({ client }) => {
-    const { token } = await prepararCuenta(client, 'consulta.calculo@huellacarbono.test', 'USUARIO_CONSULTA')
+    const { token } = await prepararCuenta(
+      client,
+      'consulta.calculo@huellacarbono.test',
+      'USUARIO_CONSULTA'
+    )
     const response = await client.post('/api/v1/calculos-carbono').bearerToken(token).json({
       organizacionId: 1,
       periodoId: 1,
@@ -248,19 +330,24 @@ test.group('Cálculo de carbono', (group) => {
     response.assertStatus(403)
   })
 
-  test('abril de El Roble suma 2500 y deja fuera un papel sin factor', async ({ client, assert }) => {
-    const { token, usuario } = await prepararCuenta(client, 'admin.calculo@huellacarbono.test', 'ADMINISTRADOR')
+  test('abril de El Roble suma 2500 y deja fuera un papel sin factor', async ({
+    client,
+    assert,
+  }) => {
+    const { token, usuario } = await prepararCuenta(
+      client,
+      'admin.calculo@huellacarbono.test',
+      'ADMINISTRADOR'
+    )
     const escenarioRoble = await escenario(usuario.id)
-    const huerfano = await FuenteEmision.create({
-      codigo: `HUE${usuario.id}`,
-      nombre: 'Fuente sin factor',
-      estado: true,
-    })
+    const fuenteSinFactor = await FuenteEmision.query().where('codigo', 'B1-02').firstOrFail()
     await DatoActividadCarbono.create({
       actividadId: escenarioRoble.frios.id,
       periodoId: escenarioRoble.periodo.id,
-      fuenteEmisionId: huerfano.id,
-      alcanceId: escenarioRoble.alcance2.id,
+      fuenteEmisionId: fuenteSinFactor.id,
+      alcanceId: escenarioRoble.actividadB1.alcanceId,
+      actividadEmisionId: escenarioRoble.actividadB1.id,
+      subcategoriaEmisionId: null,
       unidadId: escenarioRoble.unidadKwh.id,
       usuarioRegistroId: usuario.id,
       cantidad: '10',
@@ -276,27 +363,37 @@ test.group('Cálculo de carbono', (group) => {
       unidadFuncional: 'unidades',
     })
     response.assertStatus(200)
-    const data = response.body().data
+    const data = responseData<CalculoResponse>(response)
     assert.equal(data.totalCo2e, '2500')
     assert.equal(data.toneladasCo2e, '2.5')
     assert.equal(data.intensidadCo2e, '0.25')
     assert.equal(data.unidadFuncional, 'unidades')
     assert.equal(data.unidadResultado, 'kg CO2e')
     assert.lengthOf(data.lineas, 3)
+    const trazaA2 = data.lineas.find((linea) => linea.actividadEmisionCodigo === 'A2')
+    if (!trazaA2) throw new Error('El resultado no conserva la línea A2 del dato de origen')
+    assert.equal(trazaA2.subcategoriaEmisionCodigo, 'TRANSPORTE-TERRESTRE')
+    assert.equal(trazaA2.factorAnioAplicacion, 2026)
+    assert.equal(trazaA2.factorAnioPublicacion, 2026)
+    assert.equal(trazaA2.factorInstitucionResponsable, 'Fixture de pruebas')
+    assert.equal(trazaA2.factorOrigen, 'FIXTURE_TEST')
     assert.lengthOf(data.omitidos, 1)
-    assert.equal(data.omitidos[0].motivo, 'No hay un factor de esa versión para esta fuente y esta unidad')
+    assert.equal(
+      data.omitidos[0].motivo,
+      'No hay factores aprobados vigentes y regionalmente aplicables para esta fuente'
+    )
 
     const sugerido = await client
       .get(`/api/v1/calculos-carbono/${data.id}/reduccion`)
       .bearerToken(token)
     sugerido.assertStatus(200)
-    const sugerencias = sugerido.body().data.acciones
+    const sugerencias = responseData<{ acciones: AccionResponse[] }>(sugerido).acciones
     assert.lengthOf(sugerencias, 3)
-    assert.equal(sugerencias[0].fuenteNombre, 'Diesel')
+    assert.equal(sugerencias[0].fuenteNombre, 'Vehículos livianos diésel')
     assert.include(sugerencias[0].meta, '1500')
-    assert.equal(sugerencias[1].fuenteNombre, 'Electricidad')
+    assert.equal(sugerencias[1].fuenteNombre, 'Electricidad SIN')
     assert.include(sugerencias[1].estrategia, 'LED')
-    assert.equal(sugerencias[2].fuenteNombre, 'Gas natural')
+    assert.equal(sugerencias[2].fuenteNombre, 'Gas natural en calderas')
 
     const plan = await client
       .put(`/api/v1/calculos-carbono/${data.id}/reduccion`)
@@ -307,13 +404,22 @@ test.group('Cálculo de carbono', (group) => {
         ],
       })
     plan.assertStatus(200)
-    assert.equal(plan.body().data.acciones[0].meta, 'Reducir 10%')
+    const planGuardado = responseData<{ acciones: AccionResponse[] }>(plan)
+    assert.equal(planGuardado.acciones[0].meta, 'Reducir 10%')
 
-    const informe = await client.get(`/api/v1/calculos-carbono/${data.id}/informe`).bearerToken(token)
+    const informe = await client
+      .get(`/api/v1/calculos-carbono/${data.id}/informe`)
+      .bearerToken(token)
     informe.assertStatus(200)
-    assert.equal(informe.body().data.toneladasCo2e, '2.5')
-    assert.equal(informe.body().data.intensidadCo2e, '0.25')
-    assert.equal(informe.body().data.acciones[0].estrategia, 'Iluminación eficiente')
+    const informeData = responseData<{
+      toneladasCo2e: string
+      intensidadCo2e: string | null
+      acciones: AccionResponse[]
+    }>(informe)
+
+    assert.equal(informeData.toneladasCo2e, '2.5')
+    assert.equal(informeData.intensidadCo2e, '0.25')
+    assert.equal(informeData.acciones[0].estrategia, 'Iluminación eficiente')
 
     const resumen = await client
       .get(`/api/v1/calculos-carbono/resumen?organizacionId=${escenarioRoble.organizacion.id}`)
@@ -327,5 +433,106 @@ test.group('Cálculo de carbono', (group) => {
       .bearerToken(token)
     historial.assertStatus(200)
     assert.equal(historial.body().data[0].totalCo2e, '2500')
+  })
+
+  test('limita cálculos, informes y reducciones a organizaciones asignadas', async ({
+    client,
+    assert,
+  }) => {
+    const permisosCarbono = ['calculo_carbono.ver', 'calculo_carbono.crear']
+    const cuentaA = await prepararCuenta(
+      client,
+      'responsable.calculo.a@huellacarbono.test',
+      'RESPONSABLE_AMBIENTAL'
+    )
+    const cuentaB = await prepararCuenta(
+      client,
+      'responsable.calculo.b@huellacarbono.test',
+      'RESPONSABLE_AMBIENTAL'
+    )
+    await habilitarPermisos('RESPONSABLE_AMBIENTAL', permisosCarbono)
+
+    const datosA = await escenario(cuentaA.usuario.id)
+    const datosB = await escenario(cuentaB.usuario.id)
+    await datosA.sede.related('usuarios').attach([cuentaA.usuario.id])
+    await datosB.sede.related('usuarios').attach([cuentaB.usuario.id])
+
+    const crearCalculo = (token: string, datos: Awaited<ReturnType<typeof escenario>>) =>
+      client.post('/api/v1/calculos-carbono').bearerToken(token).json({
+        organizacionId: datos.organizacion.id,
+        periodoId: datos.periodo.id,
+        versionId: datos.version.id,
+      })
+    const creadoA = await crearCalculo(cuentaA.token, datosA)
+    const creadoB = await crearCalculo(cuentaB.token, datosB)
+    creadoA.assertStatus(200)
+    creadoB.assertStatus(200)
+    const calculoAId = responseData<CalculoResponse>(creadoA).id
+    const calculoBId = responseData<CalculoResponse>(creadoB).id
+
+    const showPropio = await client
+      .get(`/api/v1/calculos-carbono/${calculoAId}`)
+      .bearerToken(cuentaA.token)
+    showPropio.assertStatus(200)
+    const informePropio = await client
+      .get(`/api/v1/calculos-carbono/${calculoAId}/informe`)
+      .bearerToken(cuentaA.token)
+    informePropio.assertStatus(200)
+    const reduccionPropia = await client
+      .get(`/api/v1/calculos-carbono/${calculoAId}/reduccion`)
+      .bearerToken(cuentaA.token)
+    reduccionPropia.assertStatus(200)
+
+    const showAjeno = await client
+      .get(`/api/v1/calculos-carbono/${calculoBId}`)
+      .bearerToken(cuentaA.token)
+    showAjeno.assertStatus(404)
+    const informeAjeno = await client
+      .get(`/api/v1/calculos-carbono/${calculoBId}/informe`)
+      .bearerToken(cuentaA.token)
+    informeAjeno.assertStatus(404)
+    const reduccionAjena = await client
+      .get(`/api/v1/calculos-carbono/${calculoBId}/reduccion`)
+      .bearerToken(cuentaA.token)
+    reduccionAjena.assertStatus(404)
+    const actualizarReduccionAjena = await client
+      .put(`/api/v1/calculos-carbono/${calculoBId}/reduccion`)
+      .bearerToken(cuentaA.token)
+      .json({ acciones: [] })
+    actualizarReduccionAjena.assertStatus(404)
+    const crearAjeno = await client
+      .post('/api/v1/calculos-carbono')
+      .bearerToken(cuentaA.token)
+      .json({
+        organizacionId: datosB.organizacion.id,
+        periodoId: datosB.periodo.id,
+        versionId: datosB.version.id,
+      })
+    crearAjeno.assertStatus(404)
+    const listaAjena = await client
+      .get(`/api/v1/calculos-carbono?organizacionId=${datosB.organizacion.id}`)
+      .bearerToken(cuentaA.token)
+    listaAjena.assertStatus(404)
+    const opcionesAjenas = await client
+      .get(`/api/v1/calculos-carbono/opciones?organizacionId=${datosB.organizacion.id}`)
+      .bearerToken(cuentaA.token)
+    opcionesAjenas.assertStatus(404)
+    const resumenAjeno = await client
+      .get(`/api/v1/calculos-carbono/resumen?organizacionId=${datosB.organizacion.id}`)
+      .bearerToken(cuentaA.token)
+    resumenAjeno.assertStatus(404)
+
+    const propios = await client.get('/api/v1/calculos-carbono').bearerToken(cuentaA.token)
+    propios.assertStatus(200)
+    const lista = responseData<{ organizacionId: number }[]>(propios)
+    assert.isTrue(lista.every((calculo) => calculo.organizacionId === datosA.organizacion.id))
+    const accesoB = await client
+      .get(`/api/v1/calculos-carbono/${calculoBId}`)
+      .bearerToken(cuentaB.token)
+    accesoB.assertStatus(200)
+    const informeB = await client
+      .get(`/api/v1/calculos-carbono/${calculoBId}/informe`)
+      .bearerToken(cuentaB.token)
+    informeB.assertStatus(200)
   })
 })

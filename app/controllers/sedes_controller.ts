@@ -18,41 +18,51 @@ function resourceId(value: string, mensaje: string) {
 }
 
 export default class SedesController {
-  async index({ params, request, serialize }: HttpContext) {
+  async index({ auth, params, request, serialize }: HttpContext) {
     const query = await request.validateUsing(listSedesValidator, {
       data: { includeInactive: bandera(request.input('includeInactive')) },
     })
     const sedes = await new SedeService().list(
+      auth.getUserOrFail().id,
       resourceId(params.id, 'La organización no existe'),
       query.includeInactive ?? false
     )
     return serialize(SedeTransformer.transform(sedes))
   }
 
-  async store({ params, request, serialize }: HttpContext) {
+  async store({ auth, params, request, serialize }: HttpContext) {
     const payload = await request.validateUsing(createSedeValidator)
     const sede = await new SedeService().create(
+      auth.getUserOrFail().id,
       resourceId(params.id, 'La organización no existe'),
       payload
     )
     return serialize(SedeTransformer.transform(sede))
   }
 
-  async show({ params, serialize }: HttpContext) {
-    const sede = await new SedeService().show(resourceId(params.id, 'La sede no existe'))
+  async show({ auth, params, serialize }: HttpContext) {
+    const sede = await new SedeService().show(
+      resourceId(params.id, 'La sede no existe'),
+      auth.getUserOrFail().id
+    )
     return serialize(SedeTransformer.transform(sede))
   }
 
-  async update({ params, request, serialize }: HttpContext) {
+  async update({ auth, params, request, serialize }: HttpContext) {
     const payload = await request.validateUsing(updateSedeValidator)
-    const sede = await new SedeService().update(resourceId(params.id, 'La sede no existe'), payload)
+    const sede = await new SedeService().update(
+      resourceId(params.id, 'La sede no existe'),
+      auth.getUserOrFail().id,
+      payload
+    )
     return serialize(SedeTransformer.transform(sede))
   }
 
-  async syncUsuarios({ params, request, serialize }: HttpContext) {
+  async syncUsuarios({ auth, params, request, serialize }: HttpContext) {
     const payload = await request.validateUsing(syncUsuariosSedeValidator)
     const sede = await new SedeService().syncUsuarios(
       resourceId(params.id, 'La sede no existe'),
+      auth.getUserOrFail().id,
       payload.userIds
     )
     return serialize(SedeTransformer.transform(sede))

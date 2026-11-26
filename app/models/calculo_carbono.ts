@@ -7,6 +7,7 @@ import PeriodoMedicion from '#models/periodo_medicion'
 import ResultadoCarbono from '#models/resultado_carbono'
 import UnidadMedida from '#models/unidad_medida'
 import Usuario from '#models/usuario'
+import GwpSet from '#models/gwp_set'
 
 export type FilaOmitida = {
   datoId: number
@@ -47,6 +48,18 @@ export default class CalculoCarbono extends BaseModel {
   @column({ columnName: 'total_co2e' })
   declare totalCo2e: string | null
 
+  @column({ columnName: 'base_gases' })
+  declare baseGases: string | null
+
+  @column({ columnName: 'hash_entrada' })
+  declare hashEntrada: string | null
+
+  @column({ columnName: 'version_motor' })
+  declare versionMotor: string | null
+
+  @column({ columnName: 'id_gwp_set' })
+  declare gwpSetId: number | null
+
   @column({ columnName: 'unidades_producidas' })
   declare unidadesProducidas: string | null
 
@@ -72,6 +85,9 @@ export default class CalculoCarbono extends BaseModel {
 
   @belongsTo(() => UnidadMedida, { foreignKey: 'unidadResultadoId' })
   declare unidadResultado: BelongsTo<typeof UnidadMedida>
+
+  @belongsTo(() => GwpSet, { foreignKey: 'gwpSetId' })
+  declare gwpSet: BelongsTo<typeof GwpSet>
 
   @hasMany(() => ResultadoCarbono, { foreignKey: 'calculoCarbonoId' })
   declare resultados: HasMany<typeof ResultadoCarbono>

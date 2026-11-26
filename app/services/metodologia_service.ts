@@ -1,4 +1,5 @@
 import Metodologia from '#models/metodologia'
+import MetodologiaVersion from '#models/metodologia_version'
 import { rethrowDatabaseError } from '#services/database_error'
 import { estaEnUso, limpiar, normalizarCodigo } from '#services/catalogo_reglas'
 import { Exception } from '@adonisjs/core/exceptions'
@@ -60,6 +61,20 @@ export default class MetodologiaService {
       throw new Exception('La metodología no existe', { status: 404, code: 'E_NOT_FOUND' })
     }
 
+    if (
+      (payload.codigo !== undefined ||
+        payload.nombre !== undefined ||
+        payload.tipo !== undefined ||
+        payload.descripcion !== undefined ||
+        payload.entidadFuente !== undefined) &&
+      (await MetodologiaVersion.query().where('metodologiaId', metodologia.id).first())
+    ) {
+      throw new Exception(
+        'La metodología ya tiene versiones; conserva su identidad y crea versiones nuevas para los cambios documentales',
+        { status: 409, code: 'E_CONFLICT' }
+      )
+    }
+
     if (payload.active === false && !metodologia.estado) {
       throw new Exception('La metodología ya está inactiva', { status: 409, code: 'E_CONFLICT' })
     }
@@ -83,7 +98,8 @@ export default class MetodologiaService {
     }
     if (payload.nombre !== undefined) metodologia.nombre = payload.nombre.trim()
     if (payload.tipo !== undefined) metodologia.tipo = payload.tipo
-    if (payload.descripcion !== undefined) metodologia.descripcion = limpiar(payload.descripcion) ?? null
+    if (payload.descripcion !== undefined)
+      metodologia.descripcion = limpiar(payload.descripcion) ?? null
     if (payload.entidadFuente !== undefined) {
       metodologia.entidadFuente = limpiar(payload.entidadFuente) ?? null
     }

@@ -26,9 +26,16 @@ export default await Env.create(new URL('../', import.meta.url), {
   SESSION_DRIVER: Env.schema.enum(['cookie', 'memory', 'database'] as const),
 
   // Database
-  DB_HOST: Env.schema.string({ format: 'host' }),
-  DB_PORT: Env.schema.number(),
-  DB_USER: Env.schema.string(),
+  DB_HOST: Env.schema.string.optional({ format: 'host' }),
+  DB_PORT: Env.schema.number.optional(),
+  DB_USER: Env.schema.string.optional(),
   DB_PASSWORD: Env.schema.string.optional(),
-  DB_DATABASE: Env.schema.string(),
+  DB_DATABASE: Env.schema.string.optional(),
+
+  // Aislada de DB_* para que NODE_ENV=test nunca herede la conexión local normal.
+  TEST_DB_HOST: Env.schema.string.optional({ format: 'host' }),
+  TEST_DB_PORT: Env.schema.number.optional(),
+  TEST_DB_USER: Env.schema.string.optional(),
+  TEST_DB_PASSWORD: Env.schema.string.optional(),
+  TEST_DB_DATABASE: Env.schema.string.optional(),
 })

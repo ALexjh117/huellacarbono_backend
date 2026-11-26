@@ -14,7 +14,8 @@ export default class FactoresEmisionController {
     const referencias = new ReferenciaService()
     const fuentes = await referencias.fuentes()
     const unidades = await referencias.unidades()
-    return serialize({ fuentes, unidades })
+    const fuentesSinFactor = await new FactorEmisionService().fuentesSinFactor()
+    return serialize({ fuentes, unidades, fuentesSinFactor })
   }
 
   async index({ request, serialize }: HttpContext) {
@@ -22,11 +23,13 @@ export default class FactoresEmisionController {
       data: {
         includeInactive: bandera(request.input('includeInactive')),
         versionId: request.input('versionId'),
+        fuenteEmisionId: request.input('fuenteEmisionId'),
       },
     })
     const factores = await new FactorEmisionService().list(
       query.includeInactive ?? false,
-      query.versionId
+      query.versionId,
+      query.fuenteEmisionId
     )
     return serialize(FactorEmisionTransformer.transform(factores))
   }

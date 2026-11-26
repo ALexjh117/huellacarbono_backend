@@ -16,14 +16,23 @@ async function ensureRoles() {
     roles.set(seed.nombre, existing ?? (await Rol.create({ ...seed, estado: true })))
   }
 
+  // Garantiza que todos los permisos del catálogo existan,
+  // igual que lo hace el seeder de roles.
+  for (const permission of PERMISSIONS) {
+    await Permiso.updateOrCreate({ codigo: permission.code }, { nombre: permission.name })
+  }
+
   const admin = roles.get('ADMINISTRADOR')!
   const permisos = await Permiso.query().whereIn(
     'codigo',
     PERMISSIONS.map((permission) => permission.code)
   )
+
   await admin.load('permisos')
+
   const asignados = new Set(admin.permisos.map((permiso) => permiso.codigo))
   const faltantes = permisos.filter((permiso) => !asignados.has(permiso.codigo))
+
   if (faltantes.length > 0) {
     await admin.related('permisos').attach(faltantes.map((permiso) => permiso.id))
   }
@@ -50,7 +59,7 @@ function payload<T>(response: { body: () => unknown }) {
 async function login(client: ApiClient, email: string, password = PASSWORD) {
   const response = await client.post('/api/v1/auth/login').json({ email, password })
   response.assertStatus(200)
-  return response.body().data.token as string
+  return payload<{ token: string }>(response).token
 }
 
 test.group('Usuarios y roles', (group) => {

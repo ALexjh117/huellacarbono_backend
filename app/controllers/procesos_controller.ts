@@ -24,32 +24,41 @@ function bandera(valor: unknown) {
 }
 
 export default class ProcesosController {
-  async index({ params, request, serialize }: HttpContext) {
+  async index({ auth, params, request, serialize }: HttpContext) {
     const query = await request.validateUsing(listHijosValidator, {
       data: { includeInactive: bandera(request.input('includeInactive')) },
     })
     const procesos = await new ProcesoService().list(
+      auth.getUserOrFail().id,
       resourceId(params.id, 'La sede no existe'),
       query.includeInactive ?? false
     )
     return serialize(ProcesoTransformer.transform(procesos))
   }
 
-  async store({ params, request, serialize }: HttpContext) {
+  async store({ auth, params, request, serialize }: HttpContext) {
     const payload = await request.validateUsing(createProcesoValidator)
-    const proceso = await new ProcesoService().create(resourceId(params.id, 'La sede no existe'), payload)
+    const proceso = await new ProcesoService().create(
+      auth.getUserOrFail().id,
+      resourceId(params.id, 'La sede no existe'),
+      payload
+    )
     return serialize(ProcesoTransformer.transform(proceso))
   }
 
-  async show({ params, serialize }: HttpContext) {
-    const proceso = await new ProcesoService().show(resourceId(params.id, 'El proceso no existe'))
+  async show({ auth, params, serialize }: HttpContext) {
+    const proceso = await new ProcesoService().show(
+      resourceId(params.id, 'El proceso no existe'),
+      auth.getUserOrFail().id
+    )
     return serialize(ProcesoTransformer.transform(proceso))
   }
 
-  async update({ params, request, serialize }: HttpContext) {
+  async update({ auth, params, request, serialize }: HttpContext) {
     const payload = await request.validateUsing(updateProcesoValidator)
     const proceso = await new ProcesoService().update(
       resourceId(params.id, 'El proceso no existe'),
+      auth.getUserOrFail().id,
       payload
     )
     return serialize(ProcesoTransformer.transform(proceso))
