@@ -14,13 +14,16 @@
  * - 1 gal EE. UU. = 3,785411784 L (231 in³ exactas).
  * - 1 bbl de petróleo = 42 gal EE. UU. = 158,987294928 L.
  * - 1 ft³ = 28,316846592 L (pie internacional = 0,3048 m).
+ * - 1 m³st (14,696 psi y 60 °F) = 1 m³ = 1 000 L. Es el volumen que el gas
+ *   ocupa en esas condiciones, así que se convierte como volumen.
  * - 1 kWh = 3,6 MJ; 1 MMBtu = 1 055,05585262 MJ (Btu de la tabla internacional).
  * - 1 milla náutica = 1 852 m.
  *
  * Por qué existe cada grupo (documento "Listado de actividades por Alcance"):
  * - Masa: combustibles sólidos y biomasa (A1), refrigerantes y SF6 (A4),
  *   fertilizantes (A5), materiales comprados (C1) y residuos (C3, C8).
- * - Volumen: combustibles líquidos y gaseosos (A1, A2), venteo de gas (A4).
+ * - Volumen: combustibles líquidos y gaseosos (A1, A2), incluido el gas natural
+ *   en metro cúbico estándar, y venteo de gas (A4).
  * - Energía: electricidad (B1) y combustibles expresados en energía (A1).
  * - Distancia: transporte y movilidad (A2, C2, C4, C5, C6).
  * - Área: uso del suelo (A5) y edificios arrendados (C13).
@@ -62,6 +65,13 @@ export const UNIDADES_MEDIDA_CATALOGO: readonly UnidadCatalogo[] = [
     codigo: 'UM-M3',
     nombre: 'Metro cúbico',
     simbolo: 'm³',
+    magnitud: 'Volumen',
+    factorBase: '1000',
+  },
+  {
+    codigo: 'UM-M3ST',
+    nombre: 'Metro cúbico estándar de gas (14.696 psi, 60 °F)',
+    simbolo: 'm³st',
     magnitud: 'Volumen',
     factorBase: '1000',
   },

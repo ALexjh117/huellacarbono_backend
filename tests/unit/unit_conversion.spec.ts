@@ -236,6 +236,12 @@ test.group('conversión de unidades del catálogo', () => {
     assert.equal(await convertir('0.75', 'UM-M3', 'UM-L'), '750')
   })
 
+  test('m³st ↔ m³ y m³st → L', async ({ assert }) => {
+    assert.equal(await convertir('2.5', 'UM-M3ST', 'UM-M3'), '2.5')
+    assert.equal(await convertir('2.5', 'UM-M3ST', 'UM-L'), '2500')
+    assert.equal(await convertir('1000', 'UM-L', 'UM-M3ST'), '1')
+  })
+
   test('kWh ↔ MWh y kWh → MJ', async ({ assert }) => {
     assert.equal(await convertir('2500', 'UM-KWH', 'UM-MWH'), '2.5')
     assert.equal(await convertir('1.2', 'UM-MWH', 'UM-KWH'), '1200')

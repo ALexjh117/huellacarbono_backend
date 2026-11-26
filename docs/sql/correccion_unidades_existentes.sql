@@ -1,6 +1,11 @@
 -- Corrección propuesta para unidades existentes en la base principal.
 -- NO SE HA EJECUTADO. Requiere aprobación y respaldo previo (pg_dump).
 --
+-- El respaldo del 2026-11-25 ya tiene el id 31 como UM-KG activo (factor 1)
+-- y el id 32 como UM-LB (factor 0.45359237). Este script no modifica esas
+-- filas. El metro cúbico estándar queda como volumen en la migración
+-- 1796300000000_clasificar_m3st_como_volumen.
+--
 -- Hallazgos en el respaldo de huelladecarbono (2026-11-23):
 --   id 32  LIBRA       LB  MASA  factor_base 1  activa    -> 1 lb = 0.45359237 kg
 --   id 31  Kilogramos  kg  Masa  factor_base 1  inactiva  -> correcto pero inactiva;
