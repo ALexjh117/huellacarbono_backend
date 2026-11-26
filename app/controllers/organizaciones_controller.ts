@@ -40,11 +40,11 @@ function bandera(valor: unknown) {
 }
 
 export default class OrganizacionesController {
-  async index({ request, serialize }: HttpContext) {
+  async index({ auth, request, serialize }: HttpContext) {
     const query = await request.validateUsing(listOrganizacionesValidator, {
       data: listQuery(request),
     })
-    const organizaciones = await new OrganizacionService().list({
+    const organizaciones = await new OrganizacionService().list(auth.getUserOrFail().id, {
       page: query.page ?? 1,
       perPage: query.perPage ?? 20,
       includeInactive: query.includeInactive ?? false,
@@ -53,11 +53,16 @@ export default class OrganizacionesController {
       q: query.q,
     })
 
-    return serialize(OrganizacionTransformer.paginate(organizaciones.all(), organizaciones.getMeta()))
+    return serialize(
+      OrganizacionTransformer.paginate(organizaciones.all(), organizaciones.getMeta())
+    )
   }
 
-  async show({ params, serialize }: HttpContext) {
-    const organizacion = await new OrganizacionService().show(resourceId(params.id))
+  async show({ auth, params, serialize }: HttpContext) {
+    const organizacion = await new OrganizacionService().show(
+      resourceId(params.id),
+      auth.getUserOrFail().id
+    )
     return serialize(OrganizacionTransformer.transform(organizacion))
   }
 
@@ -67,9 +72,13 @@ export default class OrganizacionesController {
     return serialize(OrganizacionTransformer.transform(organizacion))
   }
 
-  async update({ params, request, serialize }: HttpContext) {
+  async update({ auth, params, request, serialize }: HttpContext) {
     const payload = await request.validateUsing(updateOrganizacionValidator)
-    const organizacion = await new OrganizacionService().update(resourceId(params.id), payload)
+    const organizacion = await new OrganizacionService().update(
+      resourceId(params.id),
+      auth.getUserOrFail().id,
+      payload
+    )
     return serialize(OrganizacionTransformer.transform(organizacion))
   }
 }

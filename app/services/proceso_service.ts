@@ -2,6 +2,7 @@ import Actividad from '#models/actividad'
 import Proceso from '#models/proceso'
 import Sede from '#models/sede'
 import { rethrowDatabaseError } from '#services/database_error'
+import { exigirAccesoSede, exigirAccesoProceso } from '#services/access_control'
 import { Exception } from '@adonisjs/core/exceptions'
 
 type Payload = {
@@ -18,7 +19,8 @@ function limpiar(valor: string | null | undefined) {
 }
 
 export default class ProcesoService {
-  async list(sedeId: number, includeInactive: boolean) {
+  async list(usuarioId: number, sedeId: number, includeInactive: boolean) {
+    await exigirAccesoSede(usuarioId, sedeId)
     await this.assertSede(sedeId)
     const procesos = Proceso.query()
       .where('sedeId', sedeId)
@@ -31,7 +33,8 @@ export default class ProcesoService {
     return procesos
   }
 
-  async show(id: number) {
+  async show(id: number, usuarioId: number) {
+    await exigirAccesoProceso(usuarioId, id)
     const proceso = await Proceso.query()
       .where('id', id)
       .withCount('actividades', (actividades) => {
@@ -45,7 +48,8 @@ export default class ProcesoService {
     return proceso
   }
 
-  async create(sedeId: number, payload: Payload) {
+  async create(usuarioId: number, sedeId: number, payload: Payload) {
+    await exigirAccesoSede(usuarioId, sedeId)
     const sede = await this.assertSede(sedeId)
     if (!sede.estado) {
       throw new Exception('La sede está inactiva', { status: 409, code: 'E_CONFLICT' })
@@ -61,17 +65,14 @@ export default class ProcesoService {
         descripcion: limpiar(payload.descripcion) ?? null,
         estado: true,
       })
-      return await this.show(proceso.id)
+      return await this.show(proceso.id, usuarioId)
     } catch (error) {
       rethrowDatabaseError(error, 'No se pudo crear el proceso')
     }
   }
 
-  async update(id: number, payload: Payload) {
-    const proceso = await Proceso.find(id)
-    if (!proceso) {
-      throw new Exception('El proceso no existe', { status: 404, code: 'E_NOT_FOUND' })
-    }
+  async update(id: number, usuarioId: number, payload: Payload) {
+    const proceso = await this.show(id, usuarioId)
 
     if (payload.active === false && !proceso.estado) {
       throw new Exception('El proceso ya está inactivo', { status: 409, code: 'E_CONFLICT' })
@@ -102,7 +103,8 @@ export default class ProcesoService {
       await this.assertNombreLibre(proceso.sedeId, nombre, proceso.id)
       proceso.nombre = nombre
     }
-    if (payload.descripcion !== undefined) proceso.descripcion = limpiar(payload.descripcion) ?? null
+    if (payload.descripcion !== undefined)
+      proceso.descripcion = limpiar(payload.descripcion) ?? null
     if (payload.active !== undefined) proceso.estado = payload.active
 
     try {
@@ -111,7 +113,7 @@ export default class ProcesoService {
       rethrowDatabaseError(error, 'No se pudo actualizar el proceso')
     }
 
-    return this.show(proceso.id)
+    return this.show(proceso.id, usuarioId)
   }
 
   private async assertSede(id: number) {

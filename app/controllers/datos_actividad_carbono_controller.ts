@@ -19,22 +19,29 @@ function resourceId(value: string) {
 }
 
 export default class DatosActividadCarbonoController {
-  async index({ request, serialize }: HttpContext) {
+  async index({ auth, request, serialize }: HttpContext) {
     const query = await request.validateUsing(listDatoActividadCarbonoValidator, {
       data: {
         organizacionId: request.input('organizacionId'),
         periodoId: request.input('periodoId'),
       },
     })
-    const datos = await new DatoActividadCarbonoService().list(query.organizacionId, query.periodoId)
+    const datos = await new DatoActividadCarbonoService().list(
+      auth.getUserOrFail().id,
+      query.organizacionId,
+      query.periodoId
+    )
     return serialize(DatoActividadCarbonoTransformer.transform(datos))
   }
 
-  async opciones({ request, serialize }: HttpContext) {
+  async opciones({ auth, request, serialize }: HttpContext) {
     const query = await request.validateUsing(opcionesDatoActividadCarbonoValidator, {
       data: { organizacionId: request.input('organizacionId') },
     })
-    const opciones = await new DatoActividadCarbonoService().opciones(query.organizacionId)
+    const opciones = await new DatoActividadCarbonoService().opciones(
+      auth.getUserOrFail().id,
+      query.organizacionId
+    )
     return serialize({
       periodos: opciones.periodos.map((periodo) => ({
         id: periodo.id,
@@ -63,11 +70,28 @@ export default class DatosActividadCarbonoController {
         simbolo: unidad.simbolo,
         nombre: unidad.nombre,
       })),
+      actividadesEmision: opciones.actividadesEmision.map((actividad) => ({
+        id: actividad.id,
+        codigo: actividad.codigo,
+        nombre: actividad.nombre,
+        alcanceId: actividad.alcanceId,
+        alcanceCodigo: actividad.alcance.codigo,
+      })),
+      subcategoriasEmision: opciones.subcategorias.map((subcategoria) => ({
+        id: subcategoria.id,
+        codigo: subcategoria.codigo,
+        nombre: subcategoria.nombre,
+        actividadEmisionId: subcategoria.actividadEmisionId,
+      })),
+      fuentesPorActividadEmision: opciones.vinculosFuente,
     })
   }
 
-  async show({ params, serialize }: HttpContext) {
-    const dato = await new DatoActividadCarbonoService().show(resourceId(params.id))
+  async show({ auth, params, serialize }: HttpContext) {
+    const dato = await new DatoActividadCarbonoService().show(
+      resourceId(params.id),
+      auth.getUserOrFail().id
+    )
     return serialize(DatoActividadCarbonoTransformer.transform(dato))
   }
 
@@ -77,9 +101,13 @@ export default class DatosActividadCarbonoController {
     return serialize(DatoActividadCarbonoTransformer.transform(dato))
   }
 
-  async update({ params, request, serialize }: HttpContext) {
+  async update({ auth, params, request, serialize }: HttpContext) {
     const payload = await request.validateUsing(updateDatoActividadCarbonoValidator)
-    const dato = await new DatoActividadCarbonoService().actualizar(resourceId(params.id), payload)
+    const dato = await new DatoActividadCarbonoService().actualizar(
+      resourceId(params.id),
+      auth.getUserOrFail().id,
+      payload
+    )
     return serialize(DatoActividadCarbonoTransformer.transform(dato))
   }
 }

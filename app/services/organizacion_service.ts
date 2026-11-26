@@ -2,6 +2,10 @@ import Municipio from '#models/municipio'
 import Organizacion from '#models/organizacion'
 import Sede from '#models/sede'
 import { rethrowDatabaseError } from '#services/database_error'
+import {
+  exigirAccesoOrganizacion,
+  obtenerOrganizacionesAutorizadas,
+} from '#services/access_control'
 import { Exception } from '@adonisjs/core/exceptions'
 
 type Texto = string | null | undefined
@@ -45,13 +49,18 @@ function patron(valor: string) {
 }
 
 export default class OrganizacionService {
-  async list(query: ListQuery) {
+  async list(usuarioId: number, query: ListQuery) {
+    const organizacionesAutorizadas = await obtenerOrganizacionesAutorizadas(usuarioId)
     const organizaciones = Organizacion.query()
       .preload('municipio', (municipio) => municipio.preload('departamento'))
       .withCount('sedes', (sedes) => {
         sedes.where('estado', true)
       })
       .orderBy('nombre', 'asc')
+
+    if (organizacionesAutorizadas !== null) {
+      organizaciones.whereIn('id', organizacionesAutorizadas)
+    }
 
     if (!query.includeInactive) {
       organizaciones.where('estado', true)
@@ -77,9 +86,13 @@ export default class OrganizacionService {
     return organizaciones.paginate(query.page, query.perPage)
   }
 
-  async show(id: number) {
-    const organizacion = await Organizacion.query()
-      .where('id', id)
+  async show(id: number, usuarioId?: number) {
+    const consulta = Organizacion.query().where('id', id)
+    if (usuarioId !== undefined) {
+      const autorizadas = await obtenerOrganizacionesAutorizadas(usuarioId)
+      if (autorizadas !== null) consulta.whereIn('id', autorizadas)
+    }
+    const organizacion = await consulta
       .preload('municipio', (municipio) => municipio.preload('departamento'))
       .withCount('sedes', (sedes) => {
         sedes.where('estado', true)
@@ -126,7 +139,8 @@ export default class OrganizacionService {
     }
   }
 
-  async update(id: number, payload: OrganizacionPayload) {
+  async update(id: number, usuarioId: number, payload: OrganizacionPayload) {
+    await exigirAccesoOrganizacion(usuarioId, id)
     const organizacion = await Organizacion.find(id)
     if (!organizacion) {
       throw new Exception('La organización no existe', { status: 404, code: 'E_NOT_FOUND' })
@@ -152,7 +166,9 @@ export default class OrganizacionService {
     const municipioId = payload.municipioId ?? organizacion.municipioId
     const nombre = payload.nombre?.trim() ?? organizacion.nombre
     const nombreCorto =
-      payload.nombreCorto !== undefined ? (limpiar(payload.nombreCorto) ?? null) : organizacion.nombreCorto
+      payload.nombreCorto !== undefined
+        ? (limpiar(payload.nombreCorto) ?? null)
+        : organizacion.nombreCorto
 
     if (payload.municipioId !== undefined) {
       await this.assertMunicipioActivo(municipioId)
@@ -186,7 +202,7 @@ export default class OrganizacionService {
       rethrowDatabaseError(error, 'No se pudo actualizar la organización')
     }
 
-    return this.show(organizacion.id)
+    return this.show(organizacion.id, usuarioId)
   }
 
   private asignar(

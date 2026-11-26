@@ -18,19 +18,25 @@ function resourceId(value: string) {
 }
 
 export default class CalculosCarbonoController {
-  async index({ request, serialize }: HttpContext) {
+  async index({ auth, request, serialize }: HttpContext) {
     const query = await request.validateUsing(listCalculoCarbonoValidator, {
       data: { organizacionId: request.input('organizacionId') },
     })
-    const calculos = await new CalculoCarbonoService().list(query.organizacionId)
+    const calculos = await new CalculoCarbonoService().list(
+      auth.getUserOrFail().id,
+      query.organizacionId
+    )
     return serialize(CalculoCarbonoTransformer.transform(calculos))
   }
 
-  async opciones({ request, serialize }: HttpContext) {
+  async opciones({ auth, request, serialize }: HttpContext) {
     const query = await request.validateUsing(opcionesCalculoCarbonoValidator, {
       data: { organizacionId: request.input('organizacionId') },
     })
-    const { periodos, versiones } = await new CalculoCarbonoService().opciones(query.organizacionId)
+    const { periodos, versiones } = await new CalculoCarbonoService().opciones(
+      auth.getUserOrFail().id,
+      query.organizacionId
+    )
     return serialize({
       periodos: periodos.map(periodoVisible),
       versiones: versiones.map((version) => ({
@@ -44,31 +50,42 @@ export default class CalculosCarbonoController {
     })
   }
 
-  async show({ params, serialize }: HttpContext) {
-    const calculo = await new CalculoCarbonoService().show(resourceId(params.id))
+  async show({ auth, params, serialize }: HttpContext) {
+    const calculo = await new CalculoCarbonoService().show(
+      resourceId(params.id),
+      auth.getUserOrFail().id
+    )
     return serialize(CalculoCarbonoTransformer.transform(calculo))
   }
 
-  async resumen({ request, serialize }: HttpContext) {
+  async resumen({ auth, request, serialize }: HttpContext) {
     const query = await request.validateUsing(opcionesCalculoCarbonoValidator, {
       data: { organizacionId: request.input('organizacionId') },
     })
-    return serialize(await new CalculoCarbonoService().resumen(query.organizacionId))
+    return serialize(
+      await new CalculoCarbonoService().resumen(auth.getUserOrFail().id, query.organizacionId)
+    )
   }
 
-  async informe({ params, serialize }: HttpContext) {
-    return serialize(await new CalculoCarbonoService().informe(resourceId(params.id)))
+  async informe({ auth, params, serialize }: HttpContext) {
+    return serialize(
+      await new CalculoCarbonoService().informe(resourceId(params.id), auth.getUserOrFail().id)
+    )
   }
 
-  async reduccion({ params, serialize }: HttpContext) {
-    const acciones = await new CalculoCarbonoService().listarReduccion(resourceId(params.id))
+  async reduccion({ auth, params, serialize }: HttpContext) {
+    const acciones = await new CalculoCarbonoService().listarReduccion(
+      resourceId(params.id),
+      auth.getUserOrFail().id
+    )
     return serialize({ acciones })
   }
 
-  async guardarReduccion({ params, request, serialize }: HttpContext) {
+  async guardarReduccion({ auth, params, request, serialize }: HttpContext) {
     const payload = await request.validateUsing(guardarReduccionValidator)
     const acciones = await new CalculoCarbonoService().guardarReduccion(
       resourceId(params.id),
+      auth.getUserOrFail().id,
       payload.acciones
     )
     return serialize({ acciones })

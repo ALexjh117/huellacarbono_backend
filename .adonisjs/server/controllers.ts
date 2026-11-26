@@ -6,10 +6,13 @@
 export const controllers = {
   AccessTokens: () => import('#controllers/access_tokens_controller'),
   Actividades: () => import('#controllers/actividades_controller'),
+  AlcancesEmision: () => import('#controllers/alcances_emision_controller'),
   CalculosCarbono: () => import('#controllers/calculos_carbono_controller'),
   Catalogos: () => import('#controllers/catalogos_controller'),
+  ComponentesHidricos: () => import('#controllers/componentes_hidricos_controller'),
   DatosActividadCarbono: () => import('#controllers/datos_actividad_carbono_controller'),
   FactoresEmision: () => import('#controllers/factores_emision_controller'),
+  ImportacionesFactor: () => import('#controllers/importaciones_factor_controller'),
   Metodologias: () => import('#controllers/metodologias_controller'),
   Organizaciones: () => import('#controllers/organizaciones_controller'),
   ParametrosHidricos: () => import('#controllers/parametros_hidricos_controller'),
@@ -19,6 +22,7 @@ export const controllers = {
   Roles: () => import('#controllers/roles_controller'),
   Sedes: () => import('#controllers/sedes_controller'),
   Territorio: () => import('#controllers/territorio_controller'),
+  TiposAgua: () => import('#controllers/tipos_agua_controller'),
   UnidadesMedida: () => import('#controllers/unidades_medida_controller'),
   Users: () => import('#controllers/users_controller'),
 }

@@ -59,11 +59,12 @@ function datos<T>(response: { body: () => unknown }) {
 async function login(client: ApiClient, email: string) {
   const response = await client.post('/api/v1/auth/login').json({ email, password: PASSWORD })
   response.assertStatus(200)
-  return response.body().data.token as string
+  return datos<{ token: string }>(response).token
 }
 
 async function territorioDePrueba() {
-  const usados = new Set((await Departamento.all()).map((departamento) => departamento.codigo))
+  const departamentos = await Departamento.all()
+  const usados = new Set(departamentos.map((departamento) => departamento.codigo))
   let codigo = ''
   for (let indice = 0; indice < 100; indice += 1) {
     const candidato = String(indice).padStart(2, '0')
@@ -214,8 +215,13 @@ test.group('Organizaciones y sedes', (group) => {
       .bearerToken(token)
       .json({ userIds: [operativo.id, admin.id] })
     asignada.assertStatus(200)
-    const usuarios = datos<{ usuarios: { id: number }[] }>(asignada).usuarios.map((usuario) => usuario.id)
-    assert.deepEqual(usuarios.sort((a, b) => a - b), [admin.id, operativo.id].sort((a, b) => a - b))
+    const usuarios = datos<{ usuarios: { id: number }[] }>(asignada).usuarios.map(
+      (usuario) => usuario.id
+    )
+    assert.deepEqual(
+      usuarios.sort((a, b) => a - b),
+      [admin.id, operativo.id].sort((a, b) => a - b)
+    )
 
     const bloqueada = await client
       .patch(`/api/v1/organizaciones/${organizacion.id}`)

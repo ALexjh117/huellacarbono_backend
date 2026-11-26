@@ -1,26 +1,27 @@
 import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
 import { controllers } from '#generated/controllers'
-import AccessTokensController from '#controllers/access_tokens_controller'
-import CalculosCarbonoController from '#controllers/calculos_carbono_controller'
-import DatosActividadCarbonoController from '#controllers/datos_actividad_carbono_controller'
-import ActividadesController from '#controllers/actividades_controller'
-import {
-  AlcancesEmisionController,
-  ComponentesHidricosController,
-  TiposAguaController,
-} from '#controllers/catalogos_controller'
-import FactoresEmisionController from '#controllers/factores_emision_controller'
-import MetodologiasController from '#controllers/metodologias_controller'
-import OrganizacionesController from '#controllers/organizaciones_controller'
-import ParametrosHidricosController from '#controllers/parametros_hidricos_controller'
-import ProcesosController from '#controllers/procesos_controller'
-import PermissionsController from '#controllers/permissions_controller'
-import ProfileController from '#controllers/profile_controller'
-import RolesController from '#controllers/roles_controller'
-import SedesController from '#controllers/sedes_controller'
-import TerritorioController from '#controllers/territorio_controller'
-import UsersController from '#controllers/users_controller'
+
+const AccessTokensController = () => import('#controllers/access_tokens_controller')
+const CalculosCarbonoController = () => import('#controllers/calculos_carbono_controller')
+const DatosActividadCarbonoController = () =>
+  import('#controllers/datos_actividad_carbono_controller')
+const ActividadesController = () => import('#controllers/actividades_controller')
+const TiposAguaController = () => import('#controllers/tipos_agua_controller')
+const ComponentesHidricosController = () => import('#controllers/componentes_hidricos_controller')
+const AlcancesEmisionController = () => import('#controllers/alcances_emision_controller')
+const FactoresEmisionController = () => import('#controllers/factores_emision_controller')
+const ImportacionesFactorController = () => import('#controllers/importaciones_factor_controller')
+const MetodologiasController = () => import('#controllers/metodologias_controller')
+const OrganizacionesController = () => import('#controllers/organizaciones_controller')
+const ParametrosHidricosController = () => import('#controllers/parametros_hidricos_controller')
+const ProcesosController = () => import('#controllers/procesos_controller')
+const PermissionsController = () => import('#controllers/permissions_controller')
+const ProfileController = () => import('#controllers/profile_controller')
+const RolesController = () => import('#controllers/roles_controller')
+const SedesController = () => import('#controllers/sedes_controller')
+const TerritorioController = () => import('#controllers/territorio_controller')
+const UsersController = () => import('#controllers/users_controller')
 
 router.get('/', () => {
   return { hello: 'world' }
@@ -254,7 +255,10 @@ router
 
     router
       .group(() => {
-        router.get('/', [TiposAguaController, 'index']).as('index').use(middleware.permission('tipo_agua.ver'))
+        router
+          .get('/', [TiposAguaController, 'index'])
+          .as('index')
+          .use(middleware.permission('tipo_agua.ver'))
         router
           .post('/', [TiposAguaController, 'store'])
           .as('store')
@@ -363,6 +367,31 @@ router
           .get('opciones', [FactoresEmisionController, 'opciones'])
           .as('opciones')
           .use(middleware.permission('factor_emision.ver'))
+        // Carga trazable por lotes: previsualizar, aplicar o rechazar.
+        router
+          .get('cobertura', [ImportacionesFactorController, 'cobertura'])
+          .as('cobertura')
+          .use(middleware.permission('factor_emision.ver'))
+        router
+          .get('importaciones', [ImportacionesFactorController, 'index'])
+          .as('importaciones.index')
+          .use(middleware.permission('factor_emision.ver'))
+        router
+          .post('importaciones', [ImportacionesFactorController, 'previsualizar'])
+          .as('importaciones.previsualizar')
+          .use(middleware.permission('factor_emision.crear'))
+        router
+          .get('importaciones/:id', [ImportacionesFactorController, 'show'])
+          .as('importaciones.show')
+          .use(middleware.permission('factor_emision.ver'))
+        router
+          .post('importaciones/:id/aplicar', [ImportacionesFactorController, 'aplicar'])
+          .as('importaciones.aplicar')
+          .use(middleware.permission('factor_emision.crear'))
+        router
+          .post('importaciones/:id/rechazar', [ImportacionesFactorController, 'rechazar'])
+          .as('importaciones.rechazar')
+          .use(middleware.permission('factor_emision.crear'))
         router
           .get('/', [FactoresEmisionController, 'index'])
           .as('index')
