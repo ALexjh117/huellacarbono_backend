@@ -12,13 +12,13 @@ export interface Registry {
     methods: ["POST"]
     pattern: '/api/v1/auth/login'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/user').loginValidator)>>
       paramsTuple: []
       params: {}
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQuery<InferInput<(typeof import('#validators/user').loginValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/access_tokens_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/access_tokens_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/access_tokens_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'account.show': {
@@ -29,9 +29,9 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/profile_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/profile_controller').default['show']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/profile_controller').default['show']>>>
     }
   }
   'account.logout': {
@@ -42,9 +42,9 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/access_tokens_controller').default['destroy']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/access_tokens_controller').default['destroy']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/access_tokens_controller').default['destroy']>>>
     }
   }
   'users.options': {
@@ -55,9 +55,9 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/users_controller').default['options']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/users_controller').default['options']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/users_controller').default['options']>>>
     }
   }
   'users.index': {
@@ -67,36 +67,36 @@ export interface Registry {
       body: {}
       paramsTuple: []
       params: {}
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/usuario').listQueryValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/users_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/users_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/users_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'users.store': {
     methods: ["POST"]
     pattern: '/api/v1/users'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/usuario').createUserValidator)>>
       paramsTuple: []
       params: {}
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQuery<InferInput<(typeof import('#validators/usuario').createUserValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/users_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/users_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/users_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'users.roles': {
     methods: ["PUT"]
     pattern: '/api/v1/users/:id/roles'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/usuario').syncRolesValidator)>>
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQuery<InferInput<(typeof import('#validators/usuario').syncRolesValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/users_controller').default['syncRoles']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/users_controller').default['syncRoles']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/users_controller').default['syncRoles']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'users.show': {
@@ -107,22 +107,22 @@ export interface Registry {
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/users_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/users_controller').default['show']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/users_controller').default['show']>>>
     }
   }
   'users.update': {
     methods: ["PATCH"]
     pattern: '/api/v1/users/:id'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/usuario').updateUserValidator)>>
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQuery<InferInput<(typeof import('#validators/usuario').updateUserValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/users_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/users_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/users_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'roles.index': {
@@ -132,36 +132,36 @@ export interface Registry {
       body: {}
       paramsTuple: []
       params: {}
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/usuario').listQueryValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/roles_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/roles_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/roles_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'roles.store': {
     methods: ["POST"]
     pattern: '/api/v1/roles'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/rol').createRoleValidator)>>
       paramsTuple: []
       params: {}
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQuery<InferInput<(typeof import('#validators/rol').createRoleValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/roles_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/roles_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/roles_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'roles.permissions': {
     methods: ["PUT"]
     pattern: '/api/v1/roles/:id/permissions'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/rol').syncRolePermissionsValidator)>>
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQuery<InferInput<(typeof import('#validators/rol').syncRolePermissionsValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/roles_controller').default['syncPermissions']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/roles_controller').default['syncPermissions']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/roles_controller').default['syncPermissions']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'roles.show': {
@@ -172,22 +172,22 @@ export interface Registry {
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/roles_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/roles_controller').default['show']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/roles_controller').default['show']>>>
     }
   }
   'roles.update': {
     methods: ["PATCH"]
     pattern: '/api/v1/roles/:id'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/rol').updateRoleValidator)>>
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQuery<InferInput<(typeof import('#validators/rol').updateRoleValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/roles_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/roles_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/roles_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'measurement-units.index': {
@@ -263,9 +263,9 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/permissions_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/permissions_controller').default['index']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/permissions_controller').default['index']>>>
     }
   }
   'territorio.departamentos': {
@@ -276,9 +276,9 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/territorio_controller').default['departamentos']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/territorio_controller').default['departamentos']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/territorio_controller').default['departamentos']>>>
     }
   }
   'territorio.municipios': {
@@ -288,10 +288,10 @@ export interface Registry {
       body: {}
       paramsTuple: []
       params: {}
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/territorio').municipiosQueryValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/territorio_controller').default['municipios']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/territorio_controller').default['municipios']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/territorio_controller').default['municipios']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'organizaciones.index': {
@@ -301,23 +301,23 @@ export interface Registry {
       body: {}
       paramsTuple: []
       params: {}
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/organizacion').listOrganizacionesValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/organizaciones_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/organizaciones_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/organizaciones_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'organizaciones.store': {
     methods: ["POST"]
     pattern: '/api/v1/organizaciones'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/organizacion').createOrganizacionValidator)>>
       paramsTuple: []
       params: {}
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQuery<InferInput<(typeof import('#validators/organizacion').createOrganizacionValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/organizaciones_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/organizaciones_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/organizaciones_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'organizaciones.sedes.index': {
@@ -327,23 +327,49 @@ export interface Registry {
       body: {}
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/sede').listSedesValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/sedes_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/sedes_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/sedes_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'organizaciones.sedes.store': {
     methods: ["POST"]
     pattern: '/api/v1/organizaciones/:id/sedes'
     types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/sede').createSedeValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/sede').createSedeValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/sedes_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/sedes_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/sedes_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'organizaciones.periodos.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/organizaciones/:id/periodos'
+    types: {
       body: {}
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/periodos_medicion_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/periodos_medicion_controller').default['index']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/periodos_medicion_controller').default['index']>>>
+    }
+  }
+  'organizaciones.periodos.store': {
+    methods: ["POST"]
+    pattern: '/api/v1/organizaciones/:id/periodos'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/periodo_medicion').createPeriodoValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/periodo_medicion').createPeriodoValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/periodos_medicion_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/periodos_medicion_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/periodos_medicion_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'organizaciones.show': {
@@ -354,22 +380,35 @@ export interface Registry {
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/organizaciones_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/organizaciones_controller').default['show']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/organizaciones_controller').default['show']>>>
     }
   }
   'organizaciones.update': {
     methods: ["PATCH"]
     pattern: '/api/v1/organizaciones/:id'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/organizacion').updateOrganizacionValidator)>>
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQuery<InferInput<(typeof import('#validators/organizacion').updateOrganizacionValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/organizaciones_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/organizaciones_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/organizaciones_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'periodos.update': {
+    methods: ["PATCH"]
+    pattern: '/api/v1/periodos/:id'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/periodo_medicion').updatePeriodoValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/periodo_medicion').updatePeriodoValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/periodos_medicion_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/periodos_medicion_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/periodos_medicion_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'sedes.procesos.index': {
@@ -379,23 +418,23 @@ export interface Registry {
       body: {}
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/proceso').listHijosValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/procesos_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/procesos_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/procesos_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'sedes.procesos.store': {
     methods: ["POST"]
     pattern: '/api/v1/sedes/:id/procesos'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/proceso').createProcesoValidator)>>
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQuery<InferInput<(typeof import('#validators/proceso').createProcesoValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/procesos_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/procesos_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/procesos_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'sedes.show': {
@@ -406,35 +445,35 @@ export interface Registry {
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/sedes_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/sedes_controller').default['show']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/sedes_controller').default['show']>>>
     }
   }
   'sedes.update': {
     methods: ["PATCH"]
     pattern: '/api/v1/sedes/:id'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/sede').updateSedeValidator)>>
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQuery<InferInput<(typeof import('#validators/sede').updateSedeValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/sedes_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/sedes_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/sedes_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'sedes.usuarios': {
     methods: ["PUT"]
     pattern: '/api/v1/sedes/:id/usuarios'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/sede').syncUsuariosSedeValidator)>>
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQuery<InferInput<(typeof import('#validators/sede').syncUsuariosSedeValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/sedes_controller').default['syncUsuarios']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/sedes_controller').default['syncUsuarios']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/sedes_controller').default['syncUsuarios']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'procesos.actividades.index': {
@@ -444,23 +483,23 @@ export interface Registry {
       body: {}
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/proceso').listHijosValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/actividades_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/actividades_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/actividades_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'procesos.actividades.store': {
     methods: ["POST"]
     pattern: '/api/v1/procesos/:id/actividades'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/proceso').createActividadValidator)>>
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQuery<InferInput<(typeof import('#validators/proceso').createActividadValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/actividades_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/actividades_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/actividades_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'procesos.show': {
@@ -471,35 +510,35 @@ export interface Registry {
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/procesos_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/procesos_controller').default['show']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/procesos_controller').default['show']>>>
     }
   }
   'procesos.update': {
     methods: ["PATCH"]
     pattern: '/api/v1/procesos/:id'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/proceso').updateProcesoValidator)>>
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQuery<InferInput<(typeof import('#validators/proceso').updateProcesoValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/procesos_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/procesos_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/procesos_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'actividades.update': {
     methods: ["PATCH"]
     pattern: '/api/v1/actividades/:id'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/proceso').updateActividadValidator)>>
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQuery<InferInput<(typeof import('#validators/proceso').updateActividadValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/actividades_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/actividades_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/actividades_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'tiposAgua.index': {
@@ -510,9 +549,9 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/tipos_agua_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/tipos_agua_controller').default['index']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/tipos_agua_controller').default['index']>>>
     }
   }
   'tiposAgua.store': {
@@ -523,9 +562,9 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/tipos_agua_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/tipos_agua_controller').default['store']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/tipos_agua_controller').default['store']>>>
     }
   }
   'tiposAgua.show': {
@@ -536,9 +575,9 @@ export interface Registry {
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/tipos_agua_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/tipos_agua_controller').default['show']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/tipos_agua_controller').default['show']>>>
     }
   }
   'tiposAgua.update': {
@@ -549,9 +588,9 @@ export interface Registry {
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/tipos_agua_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/tipos_agua_controller').default['update']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/tipos_agua_controller').default['update']>>>
     }
   }
   'componentesHidricos.index': {
@@ -562,9 +601,9 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/componentes_hidricos_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/componentes_hidricos_controller').default['index']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/componentes_hidricos_controller').default['index']>>>
     }
   }
   'componentesHidricos.store': {
@@ -575,9 +614,9 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/componentes_hidricos_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/componentes_hidricos_controller').default['store']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/componentes_hidricos_controller').default['store']>>>
     }
   }
   'componentesHidricos.show': {
@@ -588,9 +627,9 @@ export interface Registry {
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/componentes_hidricos_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/componentes_hidricos_controller').default['show']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/componentes_hidricos_controller').default['show']>>>
     }
   }
   'componentesHidricos.update': {
@@ -601,9 +640,9 @@ export interface Registry {
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/componentes_hidricos_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/componentes_hidricos_controller').default['update']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/componentes_hidricos_controller').default['update']>>>
     }
   }
   'alcancesEmision.index': {
@@ -614,9 +653,9 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/alcances_emision_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/alcances_emision_controller').default['index']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/alcances_emision_controller').default['index']>>>
     }
   }
   'alcancesEmision.store': {
@@ -627,9 +666,9 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/alcances_emision_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/alcances_emision_controller').default['store']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/alcances_emision_controller').default['store']>>>
     }
   }
   'alcancesEmision.show': {
@@ -640,9 +679,9 @@ export interface Registry {
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/alcances_emision_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/alcances_emision_controller').default['show']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/alcances_emision_controller').default['show']>>>
     }
   }
   'alcancesEmision.update': {
@@ -653,9 +692,9 @@ export interface Registry {
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/alcances_emision_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/alcances_emision_controller').default['update']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/alcances_emision_controller').default['update']>>>
     }
   }
   'metodologias.index': {
@@ -665,23 +704,23 @@ export interface Registry {
       body: {}
       paramsTuple: []
       params: {}
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/catalogo').listCatalogoValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/metodologias_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/metodologias_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/metodologias_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'metodologias.store': {
     methods: ["POST"]
     pattern: '/api/v1/metodologias'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/catalogo').createMetodologiaValidator)>>
       paramsTuple: []
       params: {}
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQuery<InferInput<(typeof import('#validators/catalogo').createMetodologiaValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/metodologias_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/metodologias_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/metodologias_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'metodologias.versiones': {
@@ -691,36 +730,36 @@ export interface Registry {
       body: {}
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/catalogo').listCatalogoValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/metodologias_controller').default['versiones']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/metodologias_controller').default['versiones']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/metodologias_controller').default['versiones']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'metodologias.versiones.store': {
     methods: ["POST"]
     pattern: '/api/v1/metodologias/:id/versiones'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/catalogo').createVersionValidator)>>
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQuery<InferInput<(typeof import('#validators/catalogo').createVersionValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/metodologias_controller').default['crearVersion']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/metodologias_controller').default['crearVersion']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/metodologias_controller').default['crearVersion']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'metodologias.versiones.update': {
     methods: ["PATCH"]
     pattern: '/api/v1/metodologias/:id/versiones/:versionId'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/catalogo').updateVersionValidator)>>
       paramsTuple: [ParamValue, ParamValue]
       params: { id: ParamValue; versionId: ParamValue }
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQuery<InferInput<(typeof import('#validators/catalogo').updateVersionValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/metodologias_controller').default['actualizarVersion']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/metodologias_controller').default['actualizarVersion']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/metodologias_controller').default['actualizarVersion']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'metodologias.show': {
@@ -731,22 +770,22 @@ export interface Registry {
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/metodologias_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/metodologias_controller').default['show']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/metodologias_controller').default['show']>>>
     }
   }
   'metodologias.update': {
     methods: ["PATCH"]
     pattern: '/api/v1/metodologias/:id'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/catalogo').updateMetodologiaValidator)>>
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQuery<InferInput<(typeof import('#validators/catalogo').updateMetodologiaValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/metodologias_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/metodologias_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/metodologias_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'factoresEmision.opciones': {
@@ -757,9 +796,87 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/factores_emision_controller').default['opciones']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/factores_emision_controller').default['opciones']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/factores_emision_controller').default['opciones']>>>
+    }
+  }
+  'factoresEmision.cobertura': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/factores-emision/cobertura'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/importacion_factor').coberturaValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/importaciones_factor_controller').default['cobertura']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/importaciones_factor_controller').default['cobertura']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/importaciones_factor_controller').default['cobertura']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'factoresEmision.importaciones.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/factores-emision/importaciones'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/importacion_factor').listImportacionesValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/importaciones_factor_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/importaciones_factor_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/importaciones_factor_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'factoresEmision.importaciones.previsualizar': {
+    methods: ["POST"]
+    pattern: '/api/v1/factores-emision/importaciones'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/importacion_factor').previsualizarImportacionValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/importacion_factor').previsualizarImportacionValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/importaciones_factor_controller').default['previsualizar']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/importaciones_factor_controller').default['previsualizar']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/importaciones_factor_controller').default['previsualizar']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'factoresEmision.importaciones.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/factores-emision/importaciones/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/importaciones_factor_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/importaciones_factor_controller').default['show']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/importaciones_factor_controller').default['show']>>>
+    }
+  }
+  'factoresEmision.importaciones.aplicar': {
+    methods: ["POST"]
+    pattern: '/api/v1/factores-emision/importaciones/:id/aplicar'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/importaciones_factor_controller').default['aplicar']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/importaciones_factor_controller').default['aplicar']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/importaciones_factor_controller').default['aplicar']>>>
+    }
+  }
+  'factoresEmision.importaciones.rechazar': {
+    methods: ["POST"]
+    pattern: '/api/v1/factores-emision/importaciones/:id/rechazar'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/importaciones_factor_controller').default['rechazar']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/importaciones_factor_controller').default['rechazar']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/importaciones_factor_controller').default['rechazar']>>>
     }
   }
   'factoresEmision.index': {
@@ -769,23 +886,23 @@ export interface Registry {
       body: {}
       paramsTuple: []
       params: {}
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/catalogo').listVigenciaValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/factores_emision_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/factores_emision_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/factores_emision_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'factoresEmision.store': {
     methods: ["POST"]
     pattern: '/api/v1/factores-emision'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/catalogo').createFactorValidator)>>
       paramsTuple: []
       params: {}
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQuery<InferInput<(typeof import('#validators/catalogo').createFactorValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/factores_emision_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/factores_emision_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/factores_emision_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'factoresEmision.show': {
@@ -796,22 +913,22 @@ export interface Registry {
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/factores_emision_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/factores_emision_controller').default['show']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/factores_emision_controller').default['show']>>>
     }
   }
   'factoresEmision.update': {
     methods: ["PATCH"]
     pattern: '/api/v1/factores-emision/:id'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/catalogo').updateFactorValidator)>>
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQuery<InferInput<(typeof import('#validators/catalogo').updateFactorValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/factores_emision_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/factores_emision_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/factores_emision_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'parametrosHidricos.opciones': {
@@ -822,9 +939,9 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/parametros_hidricos_controller').default['opciones']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/parametros_hidricos_controller').default['opciones']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/parametros_hidricos_controller').default['opciones']>>>
     }
   }
   'parametrosHidricos.index': {
@@ -834,23 +951,23 @@ export interface Registry {
       body: {}
       paramsTuple: []
       params: {}
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/catalogo').listVigenciaValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/parametros_hidricos_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/parametros_hidricos_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/parametros_hidricos_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'parametrosHidricos.store': {
     methods: ["POST"]
     pattern: '/api/v1/parametros-hidricos'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/catalogo').createParametroValidator)>>
       paramsTuple: []
       params: {}
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQuery<InferInput<(typeof import('#validators/catalogo').createParametroValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/parametros_hidricos_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/parametros_hidricos_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/parametros_hidricos_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'parametrosHidricos.show': {
@@ -861,22 +978,22 @@ export interface Registry {
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/parametros_hidricos_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/parametros_hidricos_controller').default['show']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/parametros_hidricos_controller').default['show']>>>
     }
   }
   'parametrosHidricos.update': {
     methods: ["PATCH"]
     pattern: '/api/v1/parametros-hidricos/:id'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/catalogo').updateParametroValidator)>>
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQuery<InferInput<(typeof import('#validators/catalogo').updateParametroValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/parametros_hidricos_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/parametros_hidricos_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/parametros_hidricos_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'datosActividadCarbono.opciones': {
@@ -886,10 +1003,10 @@ export interface Registry {
       body: {}
       paramsTuple: []
       params: {}
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/dato_actividad_carbono').opcionesDatoActividadCarbonoValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/datos_actividad_carbono_controller').default['opciones']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/datos_actividad_carbono_controller').default['opciones']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/datos_actividad_carbono_controller').default['opciones']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'datosActividadCarbono.index': {
@@ -899,23 +1016,23 @@ export interface Registry {
       body: {}
       paramsTuple: []
       params: {}
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/dato_actividad_carbono').listDatoActividadCarbonoValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/datos_actividad_carbono_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/datos_actividad_carbono_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/datos_actividad_carbono_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'datosActividadCarbono.store': {
     methods: ["POST"]
     pattern: '/api/v1/datos-actividad-carbono'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/dato_actividad_carbono').createDatoActividadCarbonoValidator)>>
       paramsTuple: []
       params: {}
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQuery<InferInput<(typeof import('#validators/dato_actividad_carbono').createDatoActividadCarbonoValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/datos_actividad_carbono_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/datos_actividad_carbono_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/datos_actividad_carbono_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'datosActividadCarbono.show': {
@@ -926,22 +1043,22 @@ export interface Registry {
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/datos_actividad_carbono_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/datos_actividad_carbono_controller').default['show']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/datos_actividad_carbono_controller').default['show']>>>
     }
   }
   'datosActividadCarbono.update': {
     methods: ["PATCH"]
     pattern: '/api/v1/datos-actividad-carbono/:id'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/dato_actividad_carbono').updateDatoActividadCarbonoValidator)>>
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQuery<InferInput<(typeof import('#validators/dato_actividad_carbono').updateDatoActividadCarbonoValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/datos_actividad_carbono_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/datos_actividad_carbono_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/datos_actividad_carbono_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'calculosCarbono.opciones': {
@@ -951,10 +1068,10 @@ export interface Registry {
       body: {}
       paramsTuple: []
       params: {}
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/calculo_carbono').opcionesCalculoCarbonoValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['opciones']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['opciones']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['opciones']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'calculosCarbono.index': {
@@ -964,10 +1081,10 @@ export interface Registry {
       body: {}
       paramsTuple: []
       params: {}
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/calculo_carbono').listCalculoCarbonoValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'calculosCarbono.resumen': {
@@ -977,23 +1094,36 @@ export interface Registry {
       body: {}
       paramsTuple: []
       params: {}
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/calculo_carbono').opcionesCalculoCarbonoValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['resumen']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['resumen']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['resumen']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'calculosCarbono.coberturaFactores': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/calculos-carbono/cobertura-factores'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['coberturaFactores']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['coberturaFactores']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['coberturaFactores']>>>
     }
   }
   'calculosCarbono.store': {
     methods: ["POST"]
     pattern: '/api/v1/calculos-carbono'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/calculo_carbono').createCalculoCarbonoValidator)>>
       paramsTuple: []
       params: {}
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQuery<InferInput<(typeof import('#validators/calculo_carbono').createCalculoCarbonoValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'calculosCarbono.informe': {
@@ -1004,9 +1134,9 @@ export interface Registry {
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['informe']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['informe']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['informe']>>>
     }
   }
   'calculosCarbono.reduccion': {
@@ -1017,22 +1147,22 @@ export interface Registry {
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['reduccion']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['reduccion']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['reduccion']>>>
     }
   }
   'calculosCarbono.guardarReduccion': {
     methods: ["PUT"]
     pattern: '/api/v1/calculos-carbono/:id/reduccion'
     types: {
-      body: {}
+      body: ExtractBody<InferInput<(typeof import('#validators/calculo_carbono').guardarReduccionValidator)>>
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQuery<InferInput<(typeof import('#validators/calculo_carbono').guardarReduccionValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['guardarReduccion']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['guardarReduccion']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['guardarReduccion']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'calculosCarbono.show': {
@@ -1043,9 +1173,9 @@ export interface Registry {
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['show']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['show']>>>
     }
   }
 }

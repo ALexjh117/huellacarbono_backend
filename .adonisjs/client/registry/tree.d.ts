@@ -45,8 +45,15 @@ export interface ApiDefinition {
       index: typeof routes['organizaciones.sedes.index']
       store: typeof routes['organizaciones.sedes.store']
     }
+    periodos: {
+      index: typeof routes['organizaciones.periodos.index']
+      store: typeof routes['organizaciones.periodos.store']
+    }
     show: typeof routes['organizaciones.show']
     update: typeof routes['organizaciones.update']
+  }
+  periodos: {
+    update: typeof routes['periodos.update']
   }
   sedes: {
     procesos: {
@@ -98,6 +105,14 @@ export interface ApiDefinition {
   }
   factoresEmision: {
     opciones: typeof routes['factoresEmision.opciones']
+    cobertura: typeof routes['factoresEmision.cobertura']
+    importaciones: {
+      index: typeof routes['factoresEmision.importaciones.index']
+      previsualizar: typeof routes['factoresEmision.importaciones.previsualizar']
+      show: typeof routes['factoresEmision.importaciones.show']
+      aplicar: typeof routes['factoresEmision.importaciones.aplicar']
+      rechazar: typeof routes['factoresEmision.importaciones.rechazar']
+    }
     index: typeof routes['factoresEmision.index']
     store: typeof routes['factoresEmision.store']
     show: typeof routes['factoresEmision.show']
@@ -121,6 +136,7 @@ export interface ApiDefinition {
     opciones: typeof routes['calculosCarbono.opciones']
     index: typeof routes['calculosCarbono.index']
     resumen: typeof routes['calculosCarbono.resumen']
+    coberturaFactores: typeof routes['calculosCarbono.coberturaFactores']
     store: typeof routes['calculosCarbono.store']
     informe: typeof routes['calculosCarbono.informe']
     reduccion: typeof routes['calculosCarbono.reduccion']

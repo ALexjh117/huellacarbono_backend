@@ -38,6 +38,10 @@ type CrearPayload = {
     unidadDensidadId?: number
     poderCalorifico?: string
     unidadPoderCalorificoId?: number
+    opcionFactor?: string
+    decisionFactor?: 'USAR_ULTIMO' | 'VALOR_PROPIO'
+    factorReferenciaId?: number
+    valorFactorPropio?: string
   }
 }
 
@@ -212,6 +216,7 @@ export default class DatoActividadCarbonoService {
       actividadesEmision,
       subcategorias,
       vinculosFuente,
+      resumenFactores,
     ] = await Promise.all([
       PeriodoMedicion.query()
         .where('organizacionId', organizacionId)
@@ -246,6 +251,7 @@ export default class DatoActividadCarbonoService {
           'vinculo.id_fuente_emision as fuenteEmisionId',
           'vinculo.id_subcategoria_emision as subcategoriaEmisionId'
         ),
+      this.resumenFactoresAprobados(),
     ])
 
     return {
@@ -257,7 +263,51 @@ export default class DatoActividadCarbonoService {
       actividadesEmision,
       subcategorias,
       vinculosFuente,
+      resumenFactores,
     }
+  }
+
+  /** Unidades, gases, años y opciones de factor que ya están aprobadas por fuente. */
+  private async resumenFactoresAprobados() {
+    const result = await db.rawQuery(`
+      SELECT f.id_fuente_emision AS "fuenteEmisionId",
+             COALESCE(
+               array_agg(DISTINCT f.variante) FILTER (
+                 WHERE f.variante IS NOT NULL AND btrim(f.variante) <> ''
+               ),
+               '{}'
+             ) AS variantes,
+             COALESCE(
+               array_agg(DISTINCT entrada.simbolo) FILTER (WHERE entrada.simbolo IS NOT NULL),
+               '{}'
+             ) AS unidades,
+             COALESCE(array_agg(DISTINCT f.gas) FILTER (WHERE f.gas IS NOT NULL), '{}') AS gases,
+             COALESCE(
+               array_agg(DISTINCT f.anio_aplicacion) FILTER (WHERE f.anio_aplicacion IS NOT NULL),
+               '{}'
+             ) AS anios
+        FROM factor_emision f
+        JOIN unidad_medida entrada ON entrada.id_unidad = f.id_unidad_entrada
+       WHERE f.estado = TRUE
+         AND f.estado_aprobacion = 'APROBADO'
+       GROUP BY f.id_fuente_emision
+    `)
+    const filas = (result as { rows?: Record<string, unknown>[] }).rows ?? []
+    return filas.map((fila) => ({
+      fuenteEmisionId: Number(fila.fuenteEmisionId),
+      variantes: this.textos(fila.variantes).sort((a, b) => a.localeCompare(b)),
+      unidades: this.textos(fila.unidades).sort((a, b) => a.localeCompare(b)),
+      gases: this.textos(fila.gases).sort((a, b) => a.localeCompare(b)),
+      anios: this.textos(fila.anios)
+        .map((anio) => Number(anio))
+        .filter((anio) => Number.isInteger(anio))
+        .sort((a, b) => a - b),
+    }))
+  }
+
+  private textos(valor: unknown) {
+    if (!Array.isArray(valor)) return []
+    return valor.map((item) => String(item).trim()).filter(Boolean)
   }
 
   async crear(usuarioId: number, payload: CrearPayload) {

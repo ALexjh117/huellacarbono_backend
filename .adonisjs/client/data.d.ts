@@ -8,6 +8,7 @@ import type { InferData, InferVariants } from '@adonisjs/core/types/transformers
 import type ActividadTransformer from '#transformers/actividad_transformer'
 import type AlcanceEmisionTransformer from '#transformers/alcance_emision_transformer'
 import type CalculoCarbonoTransformer from '#transformers/calculo_carbono_transformer'
+import type CentroFormacionTransformer from '#transformers/centro_formacion_transformer'
 import type ComponenteHidricoTransformer from '#transformers/componente_hidrico_transformer'
 import type DatoActividadCarbonoTransformer from '#transformers/dato_actividad_carbono_transformer'
 import type DepartamentoTransformer from '#transformers/departamento_transformer'
@@ -18,7 +19,9 @@ import type MetodologiaVersionTransformer from '#transformers/metodologia_versio
 import type MunicipioTransformer from '#transformers/municipio_transformer'
 import type OrganizacionTransformer from '#transformers/organizacion_transformer'
 import type ParametroHidricoTransformer from '#transformers/parametro_hidrico_transformer'
+import type PeriodoMedicionTransformer from '#transformers/periodo_medicion_transformer'
 import type ProcesoTransformer from '#transformers/proceso_transformer'
+import type RegionalTransformer from '#transformers/regional_transformer'
 import type RolTransformer from '#transformers/rol_transformer'
 import type SedeTransformer from '#transformers/sede_transformer'
 import type TipoAguaTransformer from '#transformers/tipo_agua_transformer'
@@ -37,6 +40,10 @@ export namespace Data {
   export type CalculoCarbono = InferData<CalculoCarbonoTransformer>
   export namespace CalculoCarbono {
     export type Variants = InferVariants<CalculoCarbonoTransformer>
+  }
+  export type CentroFormacion = InferData<CentroFormacionTransformer>
+  export namespace CentroFormacion {
+    export type Variants = InferVariants<CentroFormacionTransformer>
   }
   export type ComponenteHidrico = InferData<ComponenteHidricoTransformer>
   export namespace ComponenteHidrico {
@@ -78,9 +85,17 @@ export namespace Data {
   export namespace ParametroHidrico {
     export type Variants = InferVariants<ParametroHidricoTransformer>
   }
+  export type PeriodoMedicion = InferData<PeriodoMedicionTransformer>
+  export namespace PeriodoMedicion {
+    export type Variants = InferVariants<PeriodoMedicionTransformer>
+  }
   export type Proceso = InferData<ProcesoTransformer>
   export namespace Proceso {
     export type Variants = InferVariants<ProcesoTransformer>
+  }
+  export type Regional = InferData<RegionalTransformer>
+  export namespace Regional {
+    export type Variants = InferVariants<RegionalTransformer>
   }
   export type Rol = InferData<RolTransformer>
   export namespace Rol {

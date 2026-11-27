@@ -41,6 +41,10 @@ export default class FactorEmision extends BaseModel {
   @column({ columnName: 'gas_especifico' })
   declare gasEspecifico: string | null
 
+  /** Opción del factor: combustible, gasoducto, proceso o tipo de electricidad. */
+  @column()
+  declare variante: string | null
+
   @column({ columnName: 'estado_aprobacion' })
   declare estadoAprobacion: 'BORRADOR' | 'PENDIENTE' | 'APROBADO' | 'RECHAZADO'
 

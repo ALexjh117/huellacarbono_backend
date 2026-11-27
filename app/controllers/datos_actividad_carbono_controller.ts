@@ -1,5 +1,9 @@
 import DatoActividadCarbonoService from '#services/dato_actividad_carbono_service'
 import { fechaTexto } from '#services/catalogo_reglas'
+import {
+  fichaConCatalogo,
+  requisitosCalculoFuente,
+} from '#services/emissions/calculation_methodologies'
 import DatoActividadCarbonoTransformer from '#transformers/dato_actividad_carbono_transformer'
 import {
   createDatoActividadCarbonoValidator,
@@ -42,6 +46,21 @@ export default class DatosActividadCarbonoController {
       auth.getUserOrFail().id,
       query.organizacionId
     )
+    const codigoPorActividad = new Map(
+      opciones.actividadesEmision.map((actividad) => [Number(actividad.id), actividad.codigo])
+    )
+    const resumenPorFuente = new Map(
+      opciones.resumenFactores.map((fila) => [fila.fuenteEmisionId, fila])
+    )
+    const actividadesPorFuente = new Map<number, string[]>()
+    for (const vinculo of opciones.vinculosFuente) {
+      const codigo = codigoPorActividad.get(Number(vinculo.actividadEmisionId))
+      if (!codigo) continue
+      const fuenteId = Number(vinculo.fuenteEmisionId)
+      const codigos = actividadesPorFuente.get(fuenteId) ?? []
+      if (!codigos.includes(codigo)) codigos.push(codigo)
+      actividadesPorFuente.set(fuenteId, codigos)
+    }
     return serialize({
       periodos: opciones.periodos.map((periodo) => ({
         id: periodo.id,
@@ -55,11 +74,19 @@ export default class DatosActividadCarbonoController {
         nombre: actividad.nombre,
         procesoNombre: actividad.proceso.nombre,
       })),
-      fuentes: opciones.fuentes.map((fuente) => ({
-        id: fuente.id,
-        codigo: fuente.codigo,
-        nombre: fuente.nombre,
-      })),
+      fuentes: opciones.fuentes.map((fuente) => {
+        const ficha = fichaConCatalogo(
+          requisitosCalculoFuente(actividadesPorFuente.get(fuente.id) ?? []),
+          resumenPorFuente.get(fuente.id) ?? null
+        )
+        return {
+          id: fuente.id,
+          codigo: fuente.codigo,
+          nombre: fuente.nombre,
+          requisitosCalculo: ficha.requisitos,
+          camposParametros: ficha.camposParametros,
+        }
+      }),
       alcances: opciones.alcances.map((alcance) => ({
         id: alcance.id,
         codigo: alcance.codigo,

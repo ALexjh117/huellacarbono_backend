@@ -104,6 +104,147 @@ export function resolverMetodologia(actividadCodigo: string, reglaTipo?: string 
   return { codigo, ...method }
 }
 
+const DATO_POR_METODO: Record<string, string> = {
+  COMBUSTION_FIJA: 'Combustible consumido',
+  COMBUSTION_MOVIL: 'Combustible consumido o distancia recorrida',
+  PROCESO_INDUSTRIAL: 'Material procesado o producción',
+  EMISION_FUGITIVA: 'Cantidad liberada',
+  ELECTRICIDAD: 'Energía eléctrica consumida',
+  AGRICULTURA_USO_SUELO: 'Actividad agropecuaria o de uso del suelo',
+  BIENES_SERVICIOS: 'Cantidad del bien o servicio adquirido',
+  TRANSPORTE: 'Actividad de transporte',
+  RESIDUOS: 'Residuo tratado',
+  VIAJES: 'Viaje de negocio',
+  MOVILIDAD: 'Desplazamiento de empleados',
+  USO_PRODUCTOS: 'Uso del producto vendido',
+  FIN_VIDA_PRODUCTOS: 'Producto al final de su vida',
+  ACTIVOS_ARRENDADOS: 'Actividad del activo arrendado',
+}
+
+const UNIDAD_POR_MAGNITUD: Record<string, string> = {
+  masa: 'masa (kg, t)',
+  volumen: 'volumen (L, m³, gal)',
+  energia: 'energía (kWh, MWh)',
+  distancia: 'distancia (km)',
+  produccion: 'producción',
+  area: 'área',
+  transporte: 'transporte',
+  'transporte de carga': 'transporte de carga (t·km)',
+  'transporte de pasajeros': 'transporte de pasajeros',
+}
+
+export type RequisitosCalculoFuente = {
+  estado: 'EJECUTABLE' | 'PENDIENTE_METODOLOGIA'
+  metodologia: string
+  datos: string
+  unidades: string
+  factor: string
+  pendiente: string
+}
+
+/** Ficha que el formulario muestra al elegir una fuente. Sale de la metodología de su actividad. */
+export function requisitosCalculoFuente(codigosActividad: readonly string[]): RequisitosCalculoFuente {
+  const metodos = codigosActividad.flatMap((codigo) => {
+    try {
+      return [resolverMetodologia(codigo)]
+    } catch {
+      return []
+    }
+  })
+  if (!metodos.length) {
+    return {
+      estado: 'PENDIENTE_METODOLOGIA',
+      metodologia: 'Sin metodología ejecutable para esta fuente',
+      datos: 'El dato se puede guardar como evidencia',
+      unidades: 'El cálculo no aplicará una unidad hasta que exista método',
+      factor: 'No hay un método que aplique un factor',
+      pendiente: 'Esta fuente no tiene una metodología de cálculo implementada.',
+    }
+  }
+  const metodo = metodos[0]
+  return {
+    estado: 'EJECUTABLE',
+    metodologia: metodo.nombre,
+    datos: DATO_POR_METODO[metodo.codigo] ?? 'Cantidad de actividad del periodo',
+    unidades: metodo.magnitudes.map((magnitud) => UNIDAD_POR_MAGNITUD[magnitud] ?? magnitud).join(', '),
+    factor:
+      'Factor aprobado de la versión elegida, vigente en la fecha del dato, con salida en masa de CO2e',
+    pendiente:
+      metodo.codigo === 'COMBUSTION_MOVIL'
+        ? 'Si registras distancia, también hace falta el consumo específico y su unidad.'
+        : '',
+  }
+}
+
+export type ResumenFactorFuente = {
+  variantes: string[]
+  unidades: string[]
+  gases: string[]
+  anios: number[]
+}
+
+export type CampoOpcionFactor = {
+  campo: 'opcionFactor'
+  etiqueta: string
+  tipo: 'seleccion'
+  requerido: true
+  ayuda: string
+  opciones: { valor: string; texto: string }[]
+}
+
+export function etiquetaVariante(codigo: string) {
+  return codigo.replace(/_/g, ' ')
+}
+
+/**
+ * Completa la ficha con lo que sí está cargado: unidades, gases, años y, si hay
+ * más de una, la lista para elegir la opción de factor.
+ */
+export function fichaConCatalogo(
+  base: RequisitosCalculoFuente,
+  resumen: ResumenFactorFuente | null
+): { requisitos: RequisitosCalculoFuente; camposParametros: CampoOpcionFactor[] } {
+  if (!resumen || resumen.unidades.length + resumen.variantes.length + resumen.gases.length === 0) {
+    return {
+      requisitos: {
+        ...base,
+        pendiente: base.pendiente || 'No hay un factor aprobado cargado para esta fuente.',
+      },
+      camposParametros: [],
+    }
+  }
+  const anios = resumen.anios.length ? ` Años con factor: ${resumen.anios.join(', ')}.` : ''
+  const gases = resumen.gases.length ? ` Gases: ${resumen.gases.join(', ')}.` : ''
+  const varias = resumen.variantes.length > 1
+  const factor = varias
+    ? `Hay ${resumen.variantes.length} opciones de factor. Elige la que corresponde al dato.${anios}${gases}`
+    : resumen.variantes[0]
+      ? `Opción ${etiquetaVariante(resumen.variantes[0])}. Salida en masa de CO2e.${anios}${gases}`
+      : `${base.factor}.${anios}${gases}`
+  return {
+    requisitos: {
+      ...base,
+      unidades: resumen.unidades.length ? resumen.unidades.join(', ') : base.unidades,
+      factor,
+      pendiente: varias
+        ? 'Selecciona la opción de factor. Sin ella hay varios factores vigentes y el cálculo no elige uno.'
+        : base.pendiente,
+    },
+    camposParametros: varias
+      ? [
+          {
+            campo: 'opcionFactor',
+            etiqueta: 'Opción de factor',
+            tipo: 'seleccion',
+            requerido: true,
+            ayuda: 'Cada opción tiene su propio factor aprobado. El cálculo usa solo la que declares.',
+            opciones: resumen.variantes.map((valor) => ({ valor, texto: etiquetaVariante(valor) })),
+          },
+        ]
+      : [],
+  }
+}
+
 /** Returns activity in the factor's input unit; it never guesses properties. */
 export async function actividadParaFactor(
   methodologyCode: string,

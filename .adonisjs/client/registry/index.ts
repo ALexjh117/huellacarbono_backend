@@ -164,6 +164,18 @@ const routes = {
     tokens: [[0,"api"],[0,"v1"],[0,"organizaciones"],[1,"id"],[0,"sedes"]],
     types: placeholder as Registry['organizaciones.sedes.store']['types'],
   },
+  'organizaciones.periodos.index': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/v1/organizaciones/:id/periodos',
+    tokens: [[0,"api"],[0,"v1"],[0,"organizaciones"],[1,"id"],[0,"periodos"]],
+    types: placeholder as Registry['organizaciones.periodos.index']['types'],
+  },
+  'organizaciones.periodos.store': {
+    methods: ["POST"],
+    pattern: '/api/v1/organizaciones/:id/periodos',
+    tokens: [[0,"api"],[0,"v1"],[0,"organizaciones"],[1,"id"],[0,"periodos"]],
+    types: placeholder as Registry['organizaciones.periodos.store']['types'],
+  },
   'organizaciones.show': {
     methods: ["GET","HEAD"],
     pattern: '/api/v1/organizaciones/:id',
@@ -175,6 +187,12 @@ const routes = {
     pattern: '/api/v1/organizaciones/:id',
     tokens: [[0,"api"],[0,"v1"],[0,"organizaciones"],[1,"id"]],
     types: placeholder as Registry['organizaciones.update']['types'],
+  },
+  'periodos.update': {
+    methods: ["PATCH"],
+    pattern: '/api/v1/periodos/:id',
+    tokens: [[0,"api"],[0,"v1"],[0,"periodos"],[1,"id"]],
+    types: placeholder as Registry['periodos.update']['types'],
   },
   'sedes.procesos.index': {
     methods: ["GET","HEAD"],
@@ -356,6 +374,42 @@ const routes = {
     tokens: [[0,"api"],[0,"v1"],[0,"factores-emision"],[0,"opciones"]],
     types: placeholder as Registry['factoresEmision.opciones']['types'],
   },
+  'factoresEmision.cobertura': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/v1/factores-emision/cobertura',
+    tokens: [[0,"api"],[0,"v1"],[0,"factores-emision"],[0,"cobertura"]],
+    types: placeholder as Registry['factoresEmision.cobertura']['types'],
+  },
+  'factoresEmision.importaciones.index': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/v1/factores-emision/importaciones',
+    tokens: [[0,"api"],[0,"v1"],[0,"factores-emision"],[0,"importaciones"]],
+    types: placeholder as Registry['factoresEmision.importaciones.index']['types'],
+  },
+  'factoresEmision.importaciones.previsualizar': {
+    methods: ["POST"],
+    pattern: '/api/v1/factores-emision/importaciones',
+    tokens: [[0,"api"],[0,"v1"],[0,"factores-emision"],[0,"importaciones"]],
+    types: placeholder as Registry['factoresEmision.importaciones.previsualizar']['types'],
+  },
+  'factoresEmision.importaciones.show': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/v1/factores-emision/importaciones/:id',
+    tokens: [[0,"api"],[0,"v1"],[0,"factores-emision"],[0,"importaciones"],[1,"id"]],
+    types: placeholder as Registry['factoresEmision.importaciones.show']['types'],
+  },
+  'factoresEmision.importaciones.aplicar': {
+    methods: ["POST"],
+    pattern: '/api/v1/factores-emision/importaciones/:id/aplicar',
+    tokens: [[0,"api"],[0,"v1"],[0,"factores-emision"],[0,"importaciones"],[1,"id"],[0,"aplicar"]],
+    types: placeholder as Registry['factoresEmision.importaciones.aplicar']['types'],
+  },
+  'factoresEmision.importaciones.rechazar': {
+    methods: ["POST"],
+    pattern: '/api/v1/factores-emision/importaciones/:id/rechazar',
+    tokens: [[0,"api"],[0,"v1"],[0,"factores-emision"],[0,"importaciones"],[1,"id"],[0,"rechazar"]],
+    types: placeholder as Registry['factoresEmision.importaciones.rechazar']['types'],
+  },
   'factoresEmision.index': {
     methods: ["GET","HEAD"],
     pattern: '/api/v1/factores-emision',
@@ -457,6 +511,12 @@ const routes = {
     pattern: '/api/v1/calculos-carbono/resumen',
     tokens: [[0,"api"],[0,"v1"],[0,"calculos-carbono"],[0,"resumen"]],
     types: placeholder as Registry['calculosCarbono.resumen']['types'],
+  },
+  'calculosCarbono.coberturaFactores': {
+    methods: ["GET","HEAD"],
+    pattern: '/api/v1/calculos-carbono/cobertura-factores',
+    tokens: [[0,"api"],[0,"v1"],[0,"calculos-carbono"],[0,"cobertura-factores"]],
+    types: placeholder as Registry['calculosCarbono.coberturaFactores']['types'],
   },
   'calculosCarbono.store': {
     methods: ["POST"],

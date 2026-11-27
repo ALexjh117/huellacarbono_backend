@@ -1,6 +1,8 @@
 import CalculoCarbonoService, { periodoVisible } from '#services/calculo_carbono_service'
+import CoberturaFactoresService from '#services/cobertura_factores_service'
 import CalculoCarbonoTransformer from '#transformers/calculo_carbono_transformer'
 import {
+  coberturaFactoresValidator,
   createCalculoCarbonoValidator,
   guardarReduccionValidator,
   listCalculoCarbonoValidator,
@@ -56,6 +58,20 @@ export default class CalculosCarbonoController {
       auth.getUserOrFail().id
     )
     return serialize(CalculoCarbonoTransformer.transform(calculo))
+  }
+
+  async coberturaFactores({ auth, request, serialize }: HttpContext) {
+    const query = await request.validateUsing(coberturaFactoresValidator, {
+      data: {
+        versionId: request.input('versionId'),
+        desde: request.input('desde'),
+        hasta: request.input('hasta'),
+        organizacionId: request.input('organizacionId'),
+      },
+    })
+    return serialize(
+      await new CoberturaFactoresService().coberturaIntervalo(auth.getUserOrFail().id, query)
+    )
   }
 
   async resumen({ auth, request, serialize }: HttpContext) {

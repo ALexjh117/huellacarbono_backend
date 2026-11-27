@@ -52,6 +52,10 @@ export const createDatoActividadCarbonoValidator = vine.create({
       unidadDensidadId: vine.number().positive().optional(),
       poderCalorifico: parametroDecimal().optional(),
       unidadPoderCalorificoId: vine.number().positive().optional(),
+      opcionFactor: vine.string().trim().maxLength(60).optional(),
+      decisionFactor: vine.enum(['USAR_ULTIMO', 'VALOR_PROPIO'] as const).optional(),
+      factorReferenciaId: vine.number().positive().optional(),
+      valorFactorPropio: parametroDecimal().optional(),
     })
     .optional(),
 })
@@ -81,6 +85,10 @@ export const updateDatoActividadCarbonoValidator = vine.create({
       unidadDensidadId: vine.number().positive().optional(),
       poderCalorifico: parametroDecimal().optional(),
       unidadPoderCalorificoId: vine.number().positive().optional(),
+      opcionFactor: vine.string().trim().maxLength(60).optional(),
+      decisionFactor: vine.enum(['USAR_ULTIMO', 'VALOR_PROPIO'] as const).optional(),
+      factorReferenciaId: vine.number().positive().optional(),
+      valorFactorPropio: parametroDecimal().optional(),
     })
     .optional(),
   estadoRegistro: vine.enum(ESTADOS).optional(),

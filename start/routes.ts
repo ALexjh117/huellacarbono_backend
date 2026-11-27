@@ -14,6 +14,7 @@ const FactoresEmisionController = () => import('#controllers/factores_emision_co
 const ImportacionesFactorController = () => import('#controllers/importaciones_factor_controller')
 const MetodologiasController = () => import('#controllers/metodologias_controller')
 const OrganizacionesController = () => import('#controllers/organizaciones_controller')
+const PeriodosMedicionController = () => import('#controllers/periodos_medicion_controller')
 const ParametrosHidricosController = () => import('#controllers/parametros_hidricos_controller')
 const ProcesosController = () => import('#controllers/procesos_controller')
 const PermissionsController = () => import('#controllers/permissions_controller')
@@ -176,6 +177,14 @@ router
           .as('sedes.store')
           .use(middleware.permission('sede.crear'))
         router
+          .get(':id/periodos', [PeriodosMedicionController, 'index'])
+          .as('periodos.index')
+          .use(middleware.permission('organizacion.ver'))
+        router
+          .post(':id/periodos', [PeriodosMedicionController, 'store'])
+          .as('periodos.store')
+          .use(middleware.permission('organizacion.editar'))
+        router
           .get(':id', [OrganizacionesController, 'show'])
           .as('show')
           .use(middleware.permission('organizacion.ver'))
@@ -186,6 +195,18 @@ router
       })
       .prefix('organizaciones')
       .as('organizaciones')
+      .use(middleware.auth())
+      .use(middleware.account())
+
+    router
+      .group(() => {
+        router
+          .patch(':id', [PeriodosMedicionController, 'update'])
+          .as('update')
+          .use(middleware.permission('organizacion.editar'))
+      })
+      .prefix('periodos')
+      .as('periodos')
       .use(middleware.auth())
       .use(middleware.account())
 
@@ -483,6 +504,10 @@ router
         router
           .get('resumen', [CalculosCarbonoController, 'resumen'])
           .as('resumen')
+          .use(middleware.permission('calculo_carbono.ver'))
+        router
+          .get('cobertura-factores', [CalculosCarbonoController, 'coberturaFactores'])
+          .as('coberturaFactores')
           .use(middleware.permission('calculo_carbono.ver'))
         router
           .post('/', [CalculosCarbonoController, 'store'])

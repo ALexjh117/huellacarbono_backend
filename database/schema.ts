@@ -248,6 +248,23 @@ export class CalculoHidricoParametroSchema extends BaseModel {
   declare valorAplicado: string
 }
 
+export class CentroFormacionSchema extends BaseModel {
+  static $columns = ['codigo', 'estado', 'fechaCreacion', 'idCentro', 'idRegional', 'nombre'] as const
+  $columns = CentroFormacionSchema.$columns
+  @column()
+  declare codigo: string
+  @column()
+  declare estado: boolean
+  @column.dateTime()
+  declare fechaCreacion: DateTime
+  @column({ isPrimary: true })
+  declare idCentro: bigint | number
+  @column()
+  declare idRegional: number
+  @column()
+  declare nombre: string
+}
+
 export class ComponenteHidricoSchema extends BaseModel {
   static $columns = ['codigo', 'descripcion', 'estado', 'idComponenteHidrico', 'nombre'] as const
   $columns = ComponenteHidricoSchema.$columns
@@ -376,12 +393,14 @@ export class DepartamentoSchema extends BaseModel {
 }
 
 export class FactorEmisionSchema extends BaseModel {
-  static $columns = ['anioAplicacion', 'anioPublicacion', 'codigo', 'estado', 'estadoAprobacion', 'fechaCreacion', 'fechaFinVigencia', 'fechaInicioVigencia', 'fuente', 'gas', 'gasEspecifico', 'idFactorEmision', 'idFuenteEmision', 'idImportacion', 'idUnidadEntrada', 'idUnidadSalida', 'idVersion', 'institucionResponsable', 'nombre', 'origen', 'region', 'sectorCategoria', 'valor'] as const
+  static $columns = ['anioAplicacion', 'anioPublicacion', 'baseCalculo', 'codigo', 'estado', 'estadoAprobacion', 'fechaCreacion', 'fechaFinVigencia', 'fechaInicioVigencia', 'fuente', 'gas', 'gasEspecifico', 'gwpBase', 'idFactorEmision', 'idFuenteEmision', 'idImportacion', 'idUnidadEntrada', 'idUnidadSalida', 'idVersion', 'institucionResponsable', 'nombre', 'origen', 'region', 'sectorCategoria', 'valor', 'variante'] as const
   $columns = FactorEmisionSchema.$columns
   @column()
   declare anioAplicacion: number | null
   @column()
   declare anioPublicacion: number | null
+  @column()
+  declare baseCalculo: string | null
   @column()
   declare codigo: string
   @column()
@@ -400,6 +419,8 @@ export class FactorEmisionSchema extends BaseModel {
   declare gas: string
   @column()
   declare gasEspecifico: string | null
+  @column()
+  declare gwpBase: string | null
   @column({ isPrimary: true })
   declare idFactorEmision: bigint | number
   @column()
@@ -424,6 +445,8 @@ export class FactorEmisionSchema extends BaseModel {
   declare sectorCategoria: string | null
   @column()
   declare valor: string
+  @column()
+  declare variante: string | null
 }
 
 export class FuenteEmisionSchema extends BaseModel {
@@ -575,7 +598,7 @@ export class MetodologiaSchema extends BaseModel {
 }
 
 export class MetodologiaVersionSchema extends BaseModel {
-  static $columns = ['descripcion', 'estado', 'fechaCreacion', 'fechaFinVigencia', 'fechaInicioVigencia', 'idGwpSet', 'idMetodologia', 'idVersion', 'numeroVersion', 'referenciaDocumental'] as const
+  static $columns = ['descripcion', 'estado', 'fechaCreacion', 'fechaFinVigencia', 'fechaInicioVigencia', 'idGwpSet', 'idMetodologia', 'idVersion', 'numeroVersion', 'referenciaDocumental', 'requisitosCalculoProducto'] as const
   $columns = MetodologiaVersionSchema.$columns
   @column()
   declare descripcion: string | null
@@ -597,6 +620,8 @@ export class MetodologiaVersionSchema extends BaseModel {
   declare numeroVersion: string
   @column()
   declare referenciaDocumental: string | null
+  @column()
+  declare requisitosCalculoProducto: string
 }
 
 export class MunicipioSchema extends BaseModel {
@@ -615,7 +640,7 @@ export class MunicipioSchema extends BaseModel {
 }
 
 export class OrganizacionSchema extends BaseModel {
-  static $columns = ['correo', 'direccion', 'estado', 'fechaCreacion', 'idMunicipio', 'idOrganizacion', 'nit', 'nombre', 'nombreCorto', 'representanteCorreo', 'representanteNombre', 'representanteNumeroDocumento', 'representanteTelefono', 'representanteTipoDocumento', 'sectorEconomico', 'telefono', 'tipo'] as const
+  static $columns = ['correo', 'direccion', 'estado', 'fechaCreacion', 'idMunicipio', 'idOrganizacion', 'idUsuario', 'nit', 'nombre', 'nombreCorto', 'representanteCorreo', 'representanteNombre', 'representanteNumeroDocumento', 'representanteTelefono', 'representanteTipoDocumento', 'sectorEconomico', 'telefono', 'tipo'] as const
   $columns = OrganizacionSchema.$columns
   @column()
   declare correo: string | null
@@ -629,6 +654,8 @@ export class OrganizacionSchema extends BaseModel {
   declare idMunicipio: number
   @column({ isPrimary: true })
   declare idOrganizacion: bigint | number
+  @column()
+  declare idUsuario: bigint | number | null
   @column()
   declare nit: string
   @column()
@@ -727,6 +754,21 @@ export class ProcesoSchema extends BaseModel {
   declare nombre: string
 }
 
+export class RegionalSchema extends BaseModel {
+  static $columns = ['codigo', 'estado', 'fechaCreacion', 'idRegional', 'nombre'] as const
+  $columns = RegionalSchema.$columns
+  @column()
+  declare codigo: string
+  @column()
+  declare estado: boolean
+  @column.dateTime()
+  declare fechaCreacion: DateTime
+  @column({ isPrimary: true })
+  declare idRegional: number
+  @column()
+  declare nombre: string
+}
+
 export class ReglaCalculoSchema extends BaseModel {
   static $columns = ['baseGases', 'codigo', 'descripcion', 'estado', 'fechaActualizacion', 'fechaCreacion', 'formula', 'idFuenteEmision', 'idReglaCalculo', 'idVersion', 'metodologia', 'nombre', 'referenciaBibliografica', 'requiereFactor', 'requiereParametros', 'tipoCalculo', 'unidadEntradaId', 'unidadResultadoId', 'versionMetodologia'] as const
   $columns = ReglaCalculoSchema.$columns
@@ -813,8 +855,10 @@ export class ReglaCalculoVariableSchema extends BaseModel {
 }
 
 export class ResultadoCarbonoSchema extends BaseModel {
-  static $columns = ['baseGases', 'cantidadConvertida', 'cantidadEmision', 'cantidadOriginal', 'densidadValor', 'factorAnioAplicacion', 'factorAnioPublicacion', 'factorCodigo', 'factorFuente', 'factorInstitucionResponsable', 'factorOrigen', 'factorVersion', 'fechaCalculo', 'fechaCreacion', 'gasCalculado', 'gasEspecifico', 'gwpHorizonteAnios', 'gwpVersion', 'idActividad', 'idActividadEmision', 'idAlcance', 'idCalculoCarbono', 'idDatoCarbono', 'idFactorEmision', 'idFuenteEmision', 'idGwpValue', 'idReglaCalculo', 'idResultadoCarbono', 'idSubcategoriaEmision', 'idUnidad', 'idUnidadDensidad', 'idUnidadOriginal', 'idUnidadPoderCalorifico', 'idUnidadUtilizada', 'metodologia', 'parametrosCalculo', 'poderCalorificoValor', 'unidadEmisionId', 'valorCo2E', 'valorFactor', 'valorGwp', 'versionMotor'] as const
+  static $columns = ['baseFactor', 'baseGases', 'cantidadConvertida', 'cantidadEmision', 'cantidadOriginal', 'densidadValor', 'factorAnioAplicacion', 'factorAnioPublicacion', 'factorCodigo', 'factorFuente', 'factorInstitucionResponsable', 'factorOrigen', 'factorVersion', 'fechaCalculo', 'fechaCreacion', 'gasCalculado', 'gasEspecifico', 'gwpBaseFactor', 'gwpHorizonteAnios', 'gwpVersion', 'idActividad', 'idActividadEmision', 'idAlcance', 'idCalculoCarbono', 'idDatoCarbono', 'idFactorEmision', 'idFuenteEmision', 'idGwpValue', 'idReglaCalculo', 'idResultadoCarbono', 'idSubcategoriaEmision', 'idUnidad', 'idUnidadDensidad', 'idUnidadOriginal', 'idUnidadPoderCalorifico', 'idUnidadUtilizada', 'metodologia', 'parametrosCalculo', 'poderCalorificoValor', 'unidadEmisionId', 'valorCo2E', 'valorFactor', 'valorGwp', 'versionMotor'] as const
   $columns = ResultadoCarbonoSchema.$columns
+  @column()
+  declare baseFactor: string | null
   @column()
   declare baseGases: string | null
   @column()
@@ -847,6 +891,8 @@ export class ResultadoCarbonoSchema extends BaseModel {
   declare gasCalculado: string | null
   @column()
   declare gasEspecifico: string | null
+  @column()
+  declare gwpBaseFactor: string | null
   @column()
   declare gwpHorizonteAnios: number | null
   @column()
@@ -1050,7 +1096,7 @@ export class UserSchema extends BaseModel {
 }
 
 export class UsuarioSchema extends BaseModel {
-  static $columns = ['apellidos', 'correo', 'estado', 'fechaActualizacion', 'fechaCreacion', 'fechaUltimoAcceso', 'idUsuario', 'nombres', 'passwordHash'] as const
+  static $columns = ['apellidos', 'correo', 'estado', 'fechaActualizacion', 'fechaCreacion', 'fechaUltimoAcceso', 'idCentro', 'idUsuario', 'nombres', 'passwordHash'] as const
   $columns = UsuarioSchema.$columns
   @column()
   declare apellidos: string
@@ -1064,6 +1110,8 @@ export class UsuarioSchema extends BaseModel {
   declare fechaCreacion: DateTime
   @column.dateTime()
   declare fechaUltimoAcceso: DateTime | null
+  @column()
+  declare idCentro: bigint | number | null
   @column({ isPrimary: true })
   declare idUsuario: bigint | number
   @column()

@@ -30,8 +30,11 @@ export type ScannedRoutes = {
     'organizaciones.store': { paramsTuple?: []; params?: {} }
     'organizaciones.sedes.index': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'organizaciones.sedes.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'organizaciones.periodos.index': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'organizaciones.periodos.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'organizaciones.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'organizaciones.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'periodos.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'sedes.procesos.index': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'sedes.procesos.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'sedes.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -62,6 +65,12 @@ export type ScannedRoutes = {
     'metodologias.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'metodologias.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'factoresEmision.opciones': { paramsTuple?: []; params?: {} }
+    'factoresEmision.cobertura': { paramsTuple?: []; params?: {} }
+    'factoresEmision.importaciones.index': { paramsTuple?: []; params?: {} }
+    'factoresEmision.importaciones.previsualizar': { paramsTuple?: []; params?: {} }
+    'factoresEmision.importaciones.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'factoresEmision.importaciones.aplicar': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'factoresEmision.importaciones.rechazar': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'factoresEmision.index': { paramsTuple?: []; params?: {} }
     'factoresEmision.store': { paramsTuple?: []; params?: {} }
     'factoresEmision.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -79,6 +88,7 @@ export type ScannedRoutes = {
     'calculosCarbono.opciones': { paramsTuple?: []; params?: {} }
     'calculosCarbono.index': { paramsTuple?: []; params?: {} }
     'calculosCarbono.resumen': { paramsTuple?: []; params?: {} }
+    'calculosCarbono.coberturaFactores': { paramsTuple?: []; params?: {} }
     'calculosCarbono.store': { paramsTuple?: []; params?: {} }
     'calculosCarbono.informe': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'calculosCarbono.reduccion': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -99,6 +109,7 @@ export type ScannedRoutes = {
     'territorio.municipios': { paramsTuple?: []; params?: {} }
     'organizaciones.index': { paramsTuple?: []; params?: {} }
     'organizaciones.sedes.index': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'organizaciones.periodos.index': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'organizaciones.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'sedes.procesos.index': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'sedes.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -114,6 +125,9 @@ export type ScannedRoutes = {
     'metodologias.versiones': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'metodologias.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'factoresEmision.opciones': { paramsTuple?: []; params?: {} }
+    'factoresEmision.cobertura': { paramsTuple?: []; params?: {} }
+    'factoresEmision.importaciones.index': { paramsTuple?: []; params?: {} }
+    'factoresEmision.importaciones.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'factoresEmision.index': { paramsTuple?: []; params?: {} }
     'factoresEmision.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'parametrosHidricos.opciones': { paramsTuple?: []; params?: {} }
@@ -125,6 +139,7 @@ export type ScannedRoutes = {
     'calculosCarbono.opciones': { paramsTuple?: []; params?: {} }
     'calculosCarbono.index': { paramsTuple?: []; params?: {} }
     'calculosCarbono.resumen': { paramsTuple?: []; params?: {} }
+    'calculosCarbono.coberturaFactores': { paramsTuple?: []; params?: {} }
     'calculosCarbono.informe': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'calculosCarbono.reduccion': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'calculosCarbono.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -143,6 +158,7 @@ export type ScannedRoutes = {
     'territorio.municipios': { paramsTuple?: []; params?: {} }
     'organizaciones.index': { paramsTuple?: []; params?: {} }
     'organizaciones.sedes.index': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'organizaciones.periodos.index': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'organizaciones.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'sedes.procesos.index': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'sedes.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -158,6 +174,9 @@ export type ScannedRoutes = {
     'metodologias.versiones': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'metodologias.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'factoresEmision.opciones': { paramsTuple?: []; params?: {} }
+    'factoresEmision.cobertura': { paramsTuple?: []; params?: {} }
+    'factoresEmision.importaciones.index': { paramsTuple?: []; params?: {} }
+    'factoresEmision.importaciones.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'factoresEmision.index': { paramsTuple?: []; params?: {} }
     'factoresEmision.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'parametrosHidricos.opciones': { paramsTuple?: []; params?: {} }
@@ -169,6 +188,7 @@ export type ScannedRoutes = {
     'calculosCarbono.opciones': { paramsTuple?: []; params?: {} }
     'calculosCarbono.index': { paramsTuple?: []; params?: {} }
     'calculosCarbono.resumen': { paramsTuple?: []; params?: {} }
+    'calculosCarbono.coberturaFactores': { paramsTuple?: []; params?: {} }
     'calculosCarbono.informe': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'calculosCarbono.reduccion': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'calculosCarbono.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -181,6 +201,7 @@ export type ScannedRoutes = {
     'measurement-units.store': { paramsTuple?: []; params?: {} }
     'organizaciones.store': { paramsTuple?: []; params?: {} }
     'organizaciones.sedes.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'organizaciones.periodos.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'sedes.procesos.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'procesos.actividades.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'tiposAgua.store': { paramsTuple?: []; params?: {} }
@@ -188,6 +209,9 @@ export type ScannedRoutes = {
     'alcancesEmision.store': { paramsTuple?: []; params?: {} }
     'metodologias.store': { paramsTuple?: []; params?: {} }
     'metodologias.versiones.store': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'factoresEmision.importaciones.previsualizar': { paramsTuple?: []; params?: {} }
+    'factoresEmision.importaciones.aplicar': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'factoresEmision.importaciones.rechazar': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'factoresEmision.store': { paramsTuple?: []; params?: {} }
     'parametrosHidricos.store': { paramsTuple?: []; params?: {} }
     'datosActividadCarbono.store': { paramsTuple?: []; params?: {} }
@@ -204,6 +228,7 @@ export type ScannedRoutes = {
     'roles.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'measurement-units.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'organizaciones.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'periodos.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'sedes.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'procesos.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'actividades.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }

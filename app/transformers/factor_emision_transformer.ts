@@ -28,6 +28,7 @@ export default class FactorEmisionTransformer extends BaseTransformer<FactorEmis
       valor: decimalTexto(this.resource.valor),
       gas: this.resource.gas,
       gasEspecifico: normalizarEspecieGas(this.resource.gasEspecifico),
+      variante: this.resource.variante,
       estadoAprobacion: this.resource.estadoAprobacion,
       fuente: this.resource.fuente,
       region: this.resource.region,

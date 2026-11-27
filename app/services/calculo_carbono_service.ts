@@ -327,6 +327,89 @@ function conDetalle() {
 }
 
 export default class CalculoCarbonoService {
+  private opcionFactorDeclarada(
+    parametros: Record<string, string | number | boolean | null> | null
+  ) {
+    const valor = parametros?.opcionFactor
+    if (typeof valor !== 'string') return null
+    const texto = valor.trim()
+    return texto || null
+  }
+
+  /**
+   * Si el año del dato no tiene factor vigente, usa el que la persona aceptó
+   * para este registro: el último oficial, o un valor propio. No modifica el catálogo.
+   */
+  private async factoresAceptadosPorRegistro(
+    dato: DatoActividadCarbono,
+    versionId: number,
+    opcionFactor: string | null
+  ): Promise<{ factores: FactorEmision[]; error: string | null }> {
+    const parametros = dato.parametrosCalculo
+    const decision = parametros?.decisionFactor
+    if (decision !== 'USAR_ULTIMO' && decision !== 'VALOR_PROPIO') {
+      return { factores: [], error: null }
+    }
+    const factorId = Number(parametros?.factorReferenciaId)
+    if (!Number.isInteger(factorId) || factorId < 1) {
+      return {
+        factores: [],
+        error: 'Falta el factor de referencia para usarlo solo en este registro',
+      }
+    }
+    const referencia = await FactorEmision.query()
+      .where('id', factorId)
+      .where('versionId', versionId)
+      .where('fuenteEmisionId', dato.fuenteEmisionId)
+      .where('estado', true)
+      .where('estadoAprobacion', 'APROBADO')
+      .preload('unidadEntrada')
+      .preload('unidadSalida')
+      .preload('version')
+      .first()
+    if (!referencia) {
+      return {
+        factores: [],
+        error: 'El factor que elegiste ya no está aprobado para esta fuente',
+      }
+    }
+    if (opcionFactor && referencia.variante !== opcionFactor) {
+      return {
+        factores: [],
+        error: 'El factor elegido no corresponde a la opción de factor declarada',
+      }
+    }
+    if (decision === 'VALOR_PROPIO') {
+      const valor = String(parametros?.valorFactorPropio ?? '').trim()
+      if (!/^(?:0|[1-9]\d{0,11})(?:\.\d{1,12})?$/.test(valor) || !/[1-9]/.test(valor)) {
+        return {
+          factores: [],
+          error: 'El valor propio del factor debe ser un decimal mayor que cero',
+        }
+      }
+      referencia.valor = valor
+      referencia.gas = 'CO2E'
+      referencia.gasEspecifico = null
+      return { factores: [referencia], error: null }
+    }
+    const delAnio = FactorEmision.query()
+      .where('versionId', versionId)
+      .where('fuenteEmisionId', dato.fuenteEmisionId)
+      .where('estado', true)
+      .where('estadoAprobacion', 'APROBADO')
+      .preload('unidadEntrada')
+      .preload('unidadSalida')
+      .preload('version')
+    if (referencia.variante) delAnio.where('variante', referencia.variante)
+    if (referencia.anioAplicacion) delAnio.where('anioAplicacion', referencia.anioAplicacion)
+    else delAnio.where('fecha_inicio_vigencia', referencia.fechaInicioVigencia.toISODate()!)
+    const delAnioAplicables = (await delAnio).filter((factor) => {
+      if (!factor.region?.trim()) return true
+      return ['CO', 'COLOMBIA'].includes(factor.region.trim().toUpperCase())
+    })
+    return { factores: delAnioAplicables, error: null }
+  }
+
   private filaOmitida(dato: DatoActividadCarbono, motivo: string): FilaOmitida {
     return {
       datoId: dato.id,
@@ -584,7 +667,8 @@ export default class CalculoCarbonoService {
         .preload('unidadSalida')
         .preload('version', (metodologiaVersion) => metodologiaVersion.preload('metodologia'))
 
-      const factoresAplicables = factores.filter((factor) => {
+      const opcionFactor = this.opcionFactorDeclarada(dato.parametrosCalculo)
+      let factoresAplicables = factores.filter((factor) => {
         if (factor.region && !['CO', 'COLOMBIA'].includes(factor.region.trim().toUpperCase()))
           return false
         if (
@@ -595,22 +679,48 @@ export default class CalculoCarbonoService {
           return false
         return true
       })
-      if (!factoresAplicables.length) {
-        const hayNoAprobados = await FactorEmision.query()
-          .where('versionId', version.id)
-          .where('fuenteEmisionId', dato.fuenteEmisionId)
-          .where('estado', true)
-          .whereNot('estadoAprobacion', 'APROBADO')
-          .first()
-        omitidos.push(
-          this.filaOmitida(
-            dato,
-            hayNoAprobados
-              ? 'Hay factores para esta fuente, pero ninguno está aprobado'
-              : 'No hay factores aprobados vigentes y regionalmente aplicables para esta fuente'
+      if (opcionFactor) {
+        const deLaOpcion = factoresAplicables.filter((factor) => factor.variante === opcionFactor)
+        if (!deLaOpcion.length) {
+          omitidos.push(
+            this.filaOmitida(
+              dato,
+              `No hay factor aprobado para la opción ${opcionFactor}`
+            )
           )
+          continue
+        }
+        factoresAplicables = deLaOpcion
+      }
+      if (!factoresAplicables.length) {
+        const aceptados = await this.factoresAceptadosPorRegistro(
+          dato,
+          version.id,
+          opcionFactor
         )
-        continue
+        if (aceptados.error) {
+          omitidos.push(this.filaOmitida(dato, aceptados.error))
+          continue
+        }
+        if (aceptados.factores.length) {
+          factoresAplicables = aceptados.factores
+        } else {
+          const hayNoAprobados = await FactorEmision.query()
+            .where('versionId', version.id)
+            .where('fuenteEmisionId', dato.fuenteEmisionId)
+            .where('estado', true)
+            .whereNot('estadoAprobacion', 'APROBADO')
+            .first()
+          omitidos.push(
+            this.filaOmitida(
+              dato,
+              hayNoAprobados
+                ? 'Hay factores para esta fuente, pero ninguno está aprobado'
+                : 'No hay factores aprobados vigentes y regionalmente aplicables para esta fuente'
+            )
+          )
+          continue
+        }
       }
 
       const candidatos: {

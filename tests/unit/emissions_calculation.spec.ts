@@ -10,6 +10,8 @@ import {
 } from '#services/calculo_carbono_service'
 import {
   actividadParaFactor,
+  fichaConCatalogo,
+  requisitosCalculoFuente,
   resolverMetodologia,
 } from '#services/emissions/calculation_methodologies'
 import { agruparCandidatosPorGas } from '#services/emissions/factor_candidates'
@@ -77,6 +79,25 @@ test.group('motor de cálculo de emisiones (unitario)', () => {
     assert.equal(resolverMetodologia('A1').codigo, 'COMBUSTION_FIJA')
     assert.equal(resolverMetodologia('A2').codigo, 'COMBUSTION_MOVIL')
     assert.equal(resolverMetodologia('B1').codigo, 'ELECTRICIDAD')
+    const ficha = requisitosCalculoFuente(['B1'])
+    assert.equal(ficha.estado, 'EJECUTABLE')
+    assert.equal(ficha.datos, 'Energía eléctrica consumida')
+    const completa = fichaConCatalogo(ficha, {
+      variantes: ['ELECTRICIDAD_SIN'],
+      unidades: ['kWh'],
+      gases: ['CO2E'],
+      anios: [2024],
+    })
+    assert.include(completa.requisitos.factor, 'ELECTRICIDAD SIN')
+    assert.equal(completa.requisitos.unidades, 'kWh')
+    assert.equal(completa.camposParametros.length, 0)
+    const varias = fichaConCatalogo(ficha, {
+      variantes: ['GN_CUSIANA', 'GN_GENERICO'],
+      unidades: ['m³st'],
+      gases: ['CO2', 'CH4'],
+      anios: [2024, 2025],
+    })
+    assert.equal(varias.camposParametros[0]?.opciones.length, 2)
     assert.equal(resolverMetodologia('C3').codigo, 'RESIDUOS')
     assert.throws(() => resolverMetodologia('SIN-METODO'), /No hay una metodología ejecutable/)
   })
