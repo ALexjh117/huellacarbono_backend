@@ -2,6 +2,7 @@ import Actividad from '#models/actividad'
 import AlcanceEmision from '#models/alcance_emision'
 import ActividadEmision from '#models/actividad_emision'
 import DatoActividadCarbono from '#models/dato_actividad_carbono'
+import FactorEmision from '#models/factor_emision'
 import FuenteEmision from '#models/fuente_emision'
 import Organizacion from '#models/organizacion'
 import PeriodoMedicion from '#models/periodo_medicion'
@@ -25,7 +26,8 @@ type CrearPayload = {
   alcanceId: number
   actividadEmisionId: number
   subcategoriaEmisionId?: number | null
-  unidadId: number
+  /** Si no viene, la unidad se toma del factor de emisión. `null` pide esa misma resolución. */
+  unidadId?: number | null
   cantidad: string
   fechaDato?: string | null
   fuenteDato?: string | null
@@ -281,6 +283,7 @@ export default class DatoActividadCarbonoService {
                array_agg(DISTINCT entrada.simbolo) FILTER (WHERE entrada.simbolo IS NOT NULL),
                '{}'
              ) AS unidades,
+             COALESCE(array_agg(DISTINCT f.id_unidad_entrada), '{}') AS "unidadesIds",
              COALESCE(array_agg(DISTINCT f.gas) FILTER (WHERE f.gas IS NOT NULL), '{}') AS gases,
              COALESCE(
                array_agg(DISTINCT f.anio_aplicacion) FILTER (WHERE f.anio_aplicacion IS NOT NULL),
@@ -297,6 +300,7 @@ export default class DatoActividadCarbonoService {
       fuenteEmisionId: Number(fila.fuenteEmisionId),
       variantes: this.textos(fila.variantes).sort((a, b) => a.localeCompare(b)),
       unidades: this.textos(fila.unidades).sort((a, b) => a.localeCompare(b)),
+      unidadEntradaIds: this.numeros(fila.unidadesIds),
       gases: this.textos(fila.gases).sort((a, b) => a.localeCompare(b)),
       anios: this.textos(fila.anios)
         .map((anio) => Number(anio))
@@ -310,13 +314,31 @@ export default class DatoActividadCarbonoService {
     return valor.map((item) => String(item).trim()).filter(Boolean)
   }
 
+  private numeros(valor: unknown) {
+    const lista = Array.isArray(valor)
+      ? valor
+      : typeof valor === 'string'
+        ? valor.replace(/[{}]/g, '').split(',')
+        : []
+    return [
+      ...new Set(
+        lista.map((item) => Number(String(item).trim())).filter((n) => Number.isInteger(n) && n > 0)
+      ),
+    ]
+  }
+
   async crear(usuarioId: number, payload: CrearPayload) {
     const periodo = await periodoAbierto(payload.periodoId, usuarioId)
     await actividadDeLaOrganizacion(payload.actividadId, periodo.organizacionId)
+    const unidadId = await this.resolverUnidad(
+      payload.fuenteEmisionId,
+      payload.parametrosCalculo,
+      payload.unidadId
+    )
     await this.exigirCatalogos(
       payload.fuenteEmisionId,
       payload.alcanceId,
-      payload.unidadId,
+      unidadId,
       payload.actividadEmisionId,
       payload.subcategoriaEmisionId,
       payload.parametrosCalculo
@@ -332,7 +354,7 @@ export default class DatoActividadCarbonoService {
         alcanceId: payload.alcanceId,
         actividadEmisionId: payload.actividadEmisionId,
         subcategoriaEmisionId: payload.subcategoriaEmisionId ?? null,
-        unidadId: payload.unidadId,
+        unidadId,
         usuarioRegistroId: usuarioId,
         cantidad: payload.cantidad,
         fechaDato: fecha,
@@ -362,7 +384,12 @@ export default class DatoActividadCarbonoService {
       payload.subcategoriaEmisionId === undefined
         ? dato.subcategoriaEmisionId
         : payload.subcategoriaEmisionId
-    const unidadId = payload.unidadId ?? dato.unidadId
+    const unidadId = await this.resolverUnidad(
+      fuenteId,
+      payload.parametrosCalculo ?? this.parametrosGuardados(dato.parametrosCalculo),
+      payload.unidadId,
+      dato.unidadId
+    )
     if (!actividadEmisionId) {
       throw new Exception('Selecciona la actividad de emisión para este registro', {
         status: 422,
@@ -412,6 +439,84 @@ export default class DatoActividadCarbonoService {
     } catch (error) {
       rethrowDatabaseError(error, 'No fue posible actualizar el papel de carbono')
     }
+  }
+
+  private parametrosGuardados(
+    guardados: Record<string, string | number | boolean | null> | null
+  ): CrearPayload['parametrosCalculo'] {
+    if (!guardados) return undefined
+    const factor = Number(guardados.factorReferenciaId)
+    const decision = guardados.decisionFactor
+    const opcion = guardados.opcionFactor
+    return {
+      opcionFactor: typeof opcion === 'string' ? opcion : undefined,
+      factorReferenciaId: Number.isInteger(factor) && factor > 0 ? factor : undefined,
+      decisionFactor:
+        decision === 'USAR_ULTIMO' || decision === 'VALOR_PROPIO' ? decision : undefined,
+    }
+  }
+
+  /**
+   * Sin unidad explícita, la cantidad queda en la unidad de entrada del factor:
+   * 2500 y un factor de 0.00022 t CO2e por kWh se guardan como 2500 kWh.
+   * Un `unidadId` numérico es la corrección a mano y no se reemplaza.
+   * En una actualización, omitir la unidad conserva la ya guardada; `null` vuelve a tomarla del factor.
+   */
+  private async resolverUnidad(
+    fuenteId: number,
+    parametros: CrearPayload['parametrosCalculo'],
+    unidadExplicita: number | null | undefined,
+    unidadActual?: number
+  ) {
+    if (typeof unidadExplicita === 'number') return unidadExplicita
+    if (unidadExplicita === undefined && unidadActual !== undefined) return unidadActual
+    return this.unidadDelFactor(fuenteId, parametros)
+  }
+
+  private async unidadDelFactor(fuenteId: number, parametros: CrearPayload['parametrosCalculo']) {
+    const referenciaId = parametros?.factorReferenciaId
+    if (referenciaId) {
+      const factor = await FactorEmision.query()
+        .where('id', referenciaId)
+        .where('fuenteEmisionId', fuenteId)
+        .where('estado', true)
+        .where('estadoAprobacion', 'APROBADO')
+        .first()
+      if (!factor) {
+        throw new Exception('El factor elegido no está aprobado para esta fuente', {
+          status: 422,
+          code: 'E_VALIDATION',
+        })
+      }
+      if (parametros?.opcionFactor && factor.variante !== parametros.opcionFactor) {
+        throw new Exception('El factor elegido no corresponde a la opción de factor declarada', {
+          status: 422,
+          code: 'E_VALIDATION',
+        })
+      }
+      return factor.unidadEntradaId
+    }
+
+    const consulta = FactorEmision.query()
+      .where('fuenteEmisionId', fuenteId)
+      .where('estado', true)
+      .where('estadoAprobacion', 'APROBADO')
+    if (parametros?.opcionFactor) consulta.where('variante', parametros.opcionFactor)
+    const factores = await consulta
+    const unidades = [...new Set(factores.map((factor) => factor.unidadEntradaId))]
+    if (!unidades.length) {
+      throw new Exception(
+        'No hay un factor aprobado para colocar la unidad. Elige el factor o indícala a mano.',
+        { status: 422, code: 'E_VALIDATION' }
+      )
+    }
+    if (unidades.length > 1) {
+      throw new Exception(
+        'Hay factores con unidades distintas. Elige el factor de emisión o indica la unidad a mano.',
+        { status: 422, code: 'E_VALIDATION' }
+      )
+    }
+    return unidades[0]
   }
 
   private async exigirCatalogos(

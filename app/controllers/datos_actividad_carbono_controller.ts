@@ -1,3 +1,4 @@
+import type UnidadMedida from '#models/unidad_medida'
 import DatoActividadCarbonoService from '#services/dato_actividad_carbono_service'
 import { fechaTexto } from '#services/catalogo_reglas'
 import {
@@ -13,6 +14,16 @@ import {
 } from '#validators/dato_actividad_carbono'
 import { Exception } from '@adonisjs/core/exceptions'
 import type { HttpContext } from '@adonisjs/core/http'
+
+function unidadSugeridaDe(
+  resumen: { unidadEntradaIds: number[] } | null,
+  unidades: UnidadMedida[]
+) {
+  if (!resumen || resumen.unidadEntradaIds.length !== 1) return null
+  const unidad = unidades.find((item) => item.id === resumen.unidadEntradaIds[0])
+  if (!unidad) return null
+  return { id: unidad.id, simbolo: unidad.simbolo, nombre: unidad.nombre }
+}
 
 function resourceId(value: string) {
   const id = Number(value)
@@ -75,9 +86,10 @@ export default class DatosActividadCarbonoController {
         procesoNombre: actividad.proceso.nombre,
       })),
       fuentes: opciones.fuentes.map((fuente) => {
+        const resumen = resumenPorFuente.get(fuente.id) ?? null
         const ficha = fichaConCatalogo(
           requisitosCalculoFuente(actividadesPorFuente.get(fuente.id) ?? []),
-          resumenPorFuente.get(fuente.id) ?? null
+          resumen
         )
         return {
           id: fuente.id,
@@ -85,6 +97,7 @@ export default class DatosActividadCarbonoController {
           nombre: fuente.nombre,
           requisitosCalculo: ficha.requisitos,
           camposParametros: ficha.camposParametros,
+          unidadSugerida: unidadSugeridaDe(resumen, opciones.unidades),
         }
       }),
       alcances: opciones.alcances.map((alcance) => ({

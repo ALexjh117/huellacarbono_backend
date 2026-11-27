@@ -1107,10 +1107,10 @@ export interface Registry {
       body: {}
       paramsTuple: []
       params: {}
-      query: {}
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/calculo_carbono').coberturaFactoresValidator)>>
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['coberturaFactores']>>>
-      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['coberturaFactores']>>>
-      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['coberturaFactores']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['coberturaFactores']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/calculos_carbono_controller').default['coberturaFactores']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'calculosCarbono.store': {

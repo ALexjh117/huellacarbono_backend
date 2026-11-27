@@ -4,7 +4,10 @@ import Actividad from '#models/actividad'
 import ActividadEmision from '#models/actividad_emision'
 import AlcanceEmision from '#models/alcance_emision'
 import Departamento from '#models/departamento'
+import FactorEmision from '#models/factor_emision'
 import FuenteEmision from '#models/fuente_emision'
+import Metodologia from '#models/metodologia'
+import MetodologiaVersion from '#models/metodologia_version'
 import Municipio from '#models/municipio'
 import Organizacion from '#models/organizacion'
 import PeriodoMedicion from '#models/periodo_medicion'
@@ -422,5 +425,178 @@ test.group('Papeles de carbono', (group) => {
       .bearerToken(cuentaA.token)
     listaAjena.assertStatus(404)
     assert.equal((lecturaPropia.body() as { data: { cantidad: string } }).data.cantidad, '25')
+  })
+
+  test('coloca la unidad del factor y deja cambiarla a mano', async ({ client, assert }) => {
+    const { token, usuario } = await prepararCuenta(
+      client,
+      'admin.papel.unidad@huellacarbono.test',
+      'ADMINISTRADOR'
+    )
+    const datos = await escenario(usuario.id)
+    const marca = String(datos.organizacion.id)
+    const kwh = await UnidadMedida.create({
+      codigo: `KWH${marca}`,
+      nombre: 'Kilovatio hora papel',
+      simbolo: 'kWh',
+      magnitud: 'Energia',
+      factorBase: '1',
+      estado: true,
+    })
+    const mj = await UnidadMedida.create({
+      codigo: `MJ${marca}`,
+      nombre: 'Megajoule papel',
+      simbolo: 'MJ',
+      magnitud: 'Energia',
+      factorBase: '1',
+      estado: true,
+    })
+    const metodologia = await Metodologia.create({
+      codigo: `GHG${marca}`,
+      nombre: 'GHG papel',
+      tipo: 'CARBONO',
+      estado: true,
+    })
+    const version = await MetodologiaVersion.create({
+      metodologiaId: metodologia.id,
+      numeroVersion: '2026',
+      fechaInicioVigencia: DateTime.fromISO('2026-01-01'),
+      estado: true,
+    })
+    const factorKwh = await FactorEmision.create({
+      versionId: version.id,
+      fuenteEmisionId: datos.fuente.id,
+      unidadEntradaId: kwh.id,
+      unidadSalidaId: datos.unidad.id,
+      codigo: `FE-KWH-${marca}`,
+      nombre: 'Ultimo factor oficial',
+      valor: '0.00022',
+      gas: 'CO2E',
+      estadoAprobacion: 'APROBADO',
+      fuente: 'Factor de prueba',
+      institucionResponsable: 'Fixture',
+      anioPublicacion: 2026,
+      anioAplicacion: 2026,
+      origen: 'FIXTURE_TEST',
+      fechaInicioVigencia: DateTime.fromISO('2026-01-01'),
+      estado: true,
+    })
+
+    const base = {
+      actividadId: datos.actividad.id,
+      periodoId: datos.periodo.id,
+      fuenteEmisionId: datos.fuente.id,
+      alcanceId: datos.alcance.id,
+      actividadEmisionId: datos.actividadEmision.id,
+      cantidad: '2500',
+    }
+
+    const automatico = await client
+      .post('/api/v1/datos-actividad-carbono')
+      .bearerToken(token)
+      .json(base)
+    automatico.assertStatus(200)
+    const papel = (
+      automatico.body() as {
+        data: { id: number; unidadId: number; unidadSimbolo: string; cantidad: string }
+      }
+    ).data
+    assert.equal(papel.cantidad, '2500')
+    assert.equal(papel.unidadId, kwh.id)
+    assert.equal(papel.unidadSimbolo, 'kWh')
+
+    const opcionesUnicas = await client
+      .get(`/api/v1/datos-actividad-carbono/opciones?organizacionId=${datos.organizacion.id}`)
+      .bearerToken(token)
+    opcionesUnicas.assertStatus(200)
+    const fuentesUnicas = (
+      opcionesUnicas.body() as {
+        data: { fuentes: { id: number; unidadSugerida: { simbolo: string } | null }[] }
+      }
+    ).data.fuentes
+    assert.equal(
+      fuentesUnicas.find((fuente) => fuente.id === datos.fuente.id)?.unidadSugerida?.simbolo,
+      'kWh'
+    )
+
+    const manual = await client
+      .post('/api/v1/datos-actividad-carbono')
+      .bearerToken(token)
+      .json({ ...base, unidadId: datos.unidad.id })
+    manual.assertStatus(200)
+    assert.equal((manual.body() as { data: { unidadId: number } }).data.unidadId, datos.unidad.id)
+
+    const fuenteSinFactor = await FuenteEmision.create({
+      codigo: `SIN${marca}`,
+      nombre: 'Fuente sin factor papel',
+      estado: true,
+    })
+    await db.table('actividad_emision_fuente').insert({
+      id_actividad_emision: datos.actividadEmision.id,
+      id_fuente_emision: fuenteSinFactor.id,
+      id_subcategoria_emision: null,
+    })
+    const sinFactor = await client
+      .post('/api/v1/datos-actividad-carbono')
+      .bearerToken(token)
+      .json({ ...base, fuenteEmisionId: fuenteSinFactor.id })
+    sinFactor.assertStatus(422)
+
+    const sinTocarUnidad = await client
+      .patch(`/api/v1/datos-actividad-carbono/${papel.id}`)
+      .bearerToken(token)
+      .json({ cantidad: '2600' })
+    sinTocarUnidad.assertStatus(200)
+    assert.equal(
+      (sinTocarUnidad.body() as { data: { unidadId: number; cantidad: string } }).data.unidadId,
+      kwh.id
+    )
+
+    await FactorEmision.create({
+      versionId: version.id,
+      fuenteEmisionId: datos.fuente.id,
+      unidadEntradaId: mj.id,
+      unidadSalidaId: datos.unidad.id,
+      codigo: `FE-MJ-${marca}`,
+      nombre: 'Factor en megajoule',
+      valor: '0.00006',
+      gas: 'CO2E',
+      estadoAprobacion: 'APROBADO',
+      fuente: 'Factor de prueba',
+      institucionResponsable: 'Fixture',
+      anioPublicacion: 2026,
+      anioAplicacion: 2026,
+      origen: 'FIXTURE_TEST',
+      fechaInicioVigencia: DateTime.fromISO('2026-01-01'),
+      estado: true,
+    })
+
+    const ambiguo = await client
+      .post('/api/v1/datos-actividad-carbono')
+      .bearerToken(token)
+      .json(base)
+    ambiguo.assertStatus(422)
+
+    const elegido = await client
+      .post('/api/v1/datos-actividad-carbono')
+      .bearerToken(token)
+      .json({
+        ...base,
+        unidadId: null,
+        parametrosCalculo: { decisionFactor: 'USAR_ULTIMO', factorReferenciaId: factorKwh.id },
+      })
+    elegido.assertStatus(200)
+    assert.equal((elegido.body() as { data: { unidadId: number } }).data.unidadId, kwh.id)
+
+    const opciones = await client
+      .get(`/api/v1/datos-actividad-carbono/opciones?organizacionId=${datos.organizacion.id}`)
+      .bearerToken(token)
+    opciones.assertStatus(200)
+    const fuentes = (
+      opciones.body() as {
+        data: { fuentes: { id: number; unidadSugerida: { id: number; simbolo: string } | null }[] }
+      }
+    ).data.fuentes
+    assert.isNull(fuentes.find((fuente) => fuente.id === datos.fuente.id)?.unidadSugerida)
   })
 })
